@@ -1,0 +1,107 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# multiSelBiasMBound
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of multiSelBiasMBound is to calculate two different bounds for the
+selection bias for binary variables in the extended M structure and a bound
+for observed binary data. For the M structure, Smith and VanderWeeles and the
+assumption free bound, are calculated based on user input parameters.
+For the data, the assumption free bound is calculated with the data as input. 
+
+## Installation
+
+You can install the development version of multiSelBiasMBound from Github
+(https://github.com/stizet/Selection-bias-bound) with:
+
+``` r
+# install.packages("devtools") 
+# devtools::install_github("stizet/Selection-bias-bound")
+```
+
+## Examples
+
+Selections of the study population can be the source of bias. Here, two types'
+of bounds for the selection bias is calculated; the bound by Smith and
+VanderWeele (2019), which depends on untestable assumptions, and an assumption
+free bound. The SV bound can be calculated for the extended M structure.
+Below is a small example of how this is done:
+
+```{r}
+library(multiSelBiasMBound)
+pV = 0.1
+pU = 0.1
+pT = c(0,1)
+pY1 = c(0,1)
+pY0 = c(0,1)
+pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
+SVboundM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+```
+The output is the SV bound and an indicator if the treatment was recoded if the
+bias in the original coding was negative.
+
+The bias bound parameters may also be of interest. These can be extracted with
+the code:
+
+```{r}
+library(multiSelBiasMBound)
+pV = 0.1
+pU = 0.1
+pT = c(0,1)
+pY1 = c(0,1)
+pY0 = c(0,1)
+pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
+SVboundparametersM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+```
+The output is the bias bound parameters and an indicator if the treatment was
+recoded if the bias in the original coding was negative.
+
+The AF bound can also be calculated for the extended M structure:
+
+```{r}
+library(multiSelBiasMBound)
+pV = 0.1
+pU = 0.1
+pT = c(0,1)
+pY1 = c(0,1)
+pY0 = c(0,1)
+pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
+AFboundM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+```
+The output is the AF bound and an indicator if the treatment was recoded if the
+bias in the original coding was negative.
+
+The AF bound can be calculated for the observed data as well. That can be done
+in two ways, either if the selection indicator variable is observed or if
+the selection probability is known. That is done as:
+
+```{r}
+library(multiSelBiasMBound)
+y = c(0,0,0,0,1,1,1,1)
+tr = c(0,0,1,1,0,0,1,1)
+sel = c(0,1,0,1,0,1,0,1)
+AFboundData(y,tr,sel,"RR_tot")
+
+y = c(0,0,0,0,1,1,1,1)
+tr = c(0,0,1,1,0,0,1,1)
+selProb = 0.5
+AFboundData(y,tr,selProb,"RR_tot")
+```
+The output is the AF bound.
+
+
