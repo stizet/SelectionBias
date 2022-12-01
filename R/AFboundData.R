@@ -12,13 +12,13 @@
 #' y = c(0,0,0,0,1,1,1,1)
 #' tr = c(0,0,1,1,0,0,1,1)
 #' sel = c(0,1,0,1,0,1,0,1)
-#' AFboundData(y,tr,sel,"RR_tot")
+#' AFbounddata(y,tr,sel,"RR_tot")
 #'
 #' y = c(0,0,0,0,1,1,1,1)
 #' tr = c(0,0,1,1,0,0,1,1)
 #' selProb = 0.5
-#' AFboundData(y,tr,selProb,"RR_tot")
-AFboundData <- function(outcome,treatment,selection,whichPar)
+#' AFbounddata(y,tr,selProb,"RR_tot")
+AFbounddata <- function(outcome,treatment,selection,whichPar)
 {
   # A function that calculates the assumption free bound for the bias due to selection,
   # for multiple selection variables. The input is the data and which population
