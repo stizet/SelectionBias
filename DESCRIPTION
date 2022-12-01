@@ -1,6 +1,6 @@
 Package: SelectionBias
 Title: Calculates bounds for the selection bias for binary variables
-  in the extended M structure
+  in the extended M structure and observed data
 Version: 0.0.0.9000
 Authors@R: 
     person("Stina", "Zetterstrom", , "stina.zetterstrom@statistik.uu.se",

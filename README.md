@@ -36,10 +36,9 @@ library(SelectionBias)
 pV = 0.1
 pU = 0.1
 pT = c(0,1)
-pY1 = c(0,1)
-pY0 = c(0,1)
+pY = c(0,0,1)
 pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-SVboundM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+SVboundM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
 #>      [,1]                [,2] 
 #> [1,] "SV bound"          1    
 #> [2,] "Reverse treatment" FALSE
@@ -56,10 +55,9 @@ library(SelectionBias)
 pV = 0.1
 pU = 0.1
 pT = c(0,1)
-pY1 = c(0,1)
-pY0 = c(0,1)
+pY = c(0,0,1)
 pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-SVboundparametersM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+SVboundparametersM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
 #>      [,1]                [,2]    
 #> [1,] "BF_1"              1       
 #> [2,] "RR_SU|T=1"         1       
@@ -80,10 +78,9 @@ library(SelectionBias)
 pV = 0.1
 pU = 0.1
 pT = c(0,1)
-pY1 = c(0,1)
-pY0 = c(0,1)
+pY = c(0,0,1)
 pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-AFboundM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+AFboundM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
 #>      [,1]                [,2]   
 #> [1,] "AF bound"          4.95166
 #> [2,] "Reverse treatment" FALSE
@@ -101,13 +98,13 @@ library(SelectionBias)
 y = c(0,0,0,0,1,1,1,1)
 tr = c(0,0,1,1,0,0,1,1)
 sel = c(0,1,0,1,0,1,0,1)
-AFboundData(y,tr,sel,"RR_tot")
+AFbounddata(y,tr,sel,"RR_tot")
 #> [1] 8
 
 y = c(0,0,0,0,1,1,1,1)
 tr = c(0,0,1,1,0,0,1,1)
 selProb = 0.5
-AFboundData(y,tr,selProb,"RR_tot")
+AFbounddata(y,tr,selProb,"RR_tot")
 #> [1] 8
 ```
 
@@ -124,14 +121,14 @@ The zika data can be reached through
 
 ``` r
 # library(SelectionBias)
-# zika
+# zika.learner
 ```
 
 and used to calculate the AF bound as
 
 ``` r
 library(SelectionBias)
-AFboundData(zika$MC,1-zika$zika,zika$selIndicator,"RR_s")
+AFbounddata(zika.learner$MC,1-zika.learner$zika,zika.learner$selIndicator,"RR_s")
 #> [1] 3.002098
 ```
 

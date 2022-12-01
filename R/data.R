@@ -3,7 +3,7 @@
 #' The data set is simulated to mimic data from several sources.
 #' For the data generating process, see the corresponding article.
 #'
-#' @format ## `zika`
+#' @format ## `zika.learner`
 #' A data frame with 5,000 rows and 7 columns (all variables are binary):
 #' \describe{
 #'   \item{zika}{Indication if the mother is infected by zika (1=infected, 0=not infected)}
@@ -25,4 +25,4 @@
 #' <https://agenciabrasil.ebc.com.br/en/geral/noticia/2020-12/number-births-registered-brazil-down-2019>
 #' <https://www.angloinfo.com/how-to/brazil/healthcare/health-system>
 #'
-"zika"
+"zika.learner"
