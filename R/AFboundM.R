@@ -16,11 +16,10 @@
 #' pV = 0.1
 #' pU = 0.1
 #' pT = c(0,1)
-#' pY1 = c(0,1)
-#' pY0 = c(0,1)
+#' pY1 = c(0,0,1)
 #' pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
 #' AFboundM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
-AFboundM <- function(pVprob,pUprob,pTcoef,pY1coef,pY0coef,pScoef,whichPar,probit)
+AFboundM <- function(pVprob,pUprob,pTcoef,pYcoef,pScoef,whichPar,probit)
 {
   # A function that calculates the assumption free bound for the bias due to selection,
   # for multiple selection variables. The input is the hyper parameters used in the M
@@ -41,6 +40,9 @@ AFboundM <- function(pVprob,pUprob,pTcoef,pY1coef,pY0coef,pScoef,whichPar,probit
   slopeSV = pScoef[,2]
   slopeSU = pScoef[,3]
   slopeST = pScoef[,4]
+  
+  pY1coef = c(pYcoef[1]+pYcoef[2],pYcoef[3])
+  pY0coef = c(pYcoef[1],pYcoef[3])
 
   # Using the data generating function to get the probabilities in the model.
   dataProb = dataGenMultS(pVprob,pUprob,pTcoef,pY1coef,pY0coef,constS,slopeSV,slopeSU,slopeST,probit)
