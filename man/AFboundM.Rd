@@ -4,7 +4,7 @@
 \alias{AFboundM}
 \title{Calculate the assumption free bound for the M structure.}
 \usage{
-AFboundM(pVprob, pUprob, pTcoef, pY1coef, pY0coef, pScoef, whichPar, probit)
+AFboundM(pVprob, pUprob, pTcoef, pYcoef, pScoef, whichPar, probit)
 }
 \arguments{
 \item{pVprob}{A scalar that represents the probability that V=1.}
@@ -13,9 +13,7 @@ AFboundM(pVprob, pUprob, pTcoef, pY1coef, pY0coef, pScoef, whichPar, probit)
 
 \item{pTcoef}{A numerical vector with two elements. The first element is the intercept in the model for the treatment (as the defined by the input "probit"). The second element is the slope in the model for the treatment (as defined by the input "probit").}
 
-\item{pY1coef}{A numerical vector with two elements. The first element is the intercept in the model for the potential outcome Y(1) (as the defined by the input "probit"). The second element is the slope in the model for the potential outcome Y(1) (as defined by the input "probit").}
-
-\item{pY0coef}{A numerical vector with two elements. The first element is the intercept in the model for the potential outcome Y(0) (as the defined by the input "probit"). The second element is the slope in the model for the potential outcome Y(0) (as defined by the input "probit").}
+\item{pYcoef}{A numerical vector with three elements. The first element is the intercept in the model for the outcome (as the defined by the input "probit"). The second element is the slope for T in the model for the outcome (as defined by the input "probit"). The third element is the slope for U in the model for the outcome (as defined by the input "probit").}
 
 \item{pScoef}{A matrix of size K by 4, where K is the number of selection variables. The first column is the intercepts in the models for the selection variables (as defined by the input "probit"). The second column is the slopes for V in the models for the selection variables (as defined by the input "probit"). The third column is the slopes for U in the models for the selection variables (as defined by the input "probit"). The fourth column is the slopes for T in the models for the selection variables (as defined by the input "probit").}
 
@@ -33,8 +31,7 @@ Calculate the assumption free bound for the M structure.
 pV = 0.1
 pU = 0.1
 pT = c(0,1)
-pY1 = c(0,1)
-pY0 = c(0,1)
+pY = c(0,0,1)
 pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-AFboundM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+AFboundM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
 }

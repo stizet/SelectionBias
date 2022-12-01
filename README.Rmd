@@ -47,10 +47,9 @@ library(SelectionBias)
 pV = 0.1
 pU = 0.1
 pT = c(0,1)
-pY1 = c(0,1)
-pY0 = c(0,1)
+pY = c(0,0,1)
 pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-SVboundM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+SVboundM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
 ```
 The output is the SV bound and an indicator if the treatment was recoded if the
 bias in the original coding was negative.
@@ -63,10 +62,9 @@ library(SelectionBias)
 pV = 0.1
 pU = 0.1
 pT = c(0,1)
-pY1 = c(0,1)
-pY0 = c(0,1)
+pY = c(0,0,1)
 pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-SVboundparametersM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+SVboundparametersM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
 ```
 The output is the bias bound parameters and an indicator if the treatment was
 recoded if the bias in the original coding was negative.
@@ -78,10 +76,9 @@ library(SelectionBias)
 pV = 0.1
 pU = 0.1
 pT = c(0,1)
-pY1 = c(0,1)
-pY0 = c(0,1)
+pY = c(0,0,1)
 pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-AFboundM(pV,pU,pT,pY1,pY0,pS,"RR_tot",TRUE)
+AFboundM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
 ```
 The output is the AF bound and an indicator if the treatment was recoded if the
 bias in the original coding was negative.
@@ -106,18 +103,18 @@ The output is the AF bound.
 
 ## Data example
 For the purpose of illustration of the bounds we construct the simulated dataset
-\texttt{zika}. The zika example is based on studies of a zika outbreak in Brazil. 
+\texttt{zika-learner}. The zika example is based on studies of a zika outbreak in Brazil. 
 See references in corresponding article and the data documentation.
 
 The zika data can be reached through
 ```{r}
 # library(SelectionBias)
-# zika
+# zika-learner
 ```
 and used to calculate the AF bound as
 ```{r}
 library(SelectionBias)
-AFboundData(zika$MC,1-zika$zika,zika$selIndicator,"RR_s")
+AFbounddata(zika-learner$MC,1-zika-learner$zika,zika-learner$selIndicator,"RR_s")
 ```
 Note that in this example the treatment is reversed as discussed in the
 corresponding article.
