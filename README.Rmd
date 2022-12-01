@@ -92,29 +92,29 @@ library(SelectionBias)
 y = c(0,0,0,0,1,1,1,1)
 tr = c(0,0,1,1,0,0,1,1)
 sel = c(0,1,0,1,0,1,0,1)
-AFboundData(y,tr,sel,"RR_tot")
+AFbounddata(y,tr,sel,"RR_tot")
 
 y = c(0,0,0,0,1,1,1,1)
 tr = c(0,0,1,1,0,0,1,1)
 selProb = 0.5
-AFboundData(y,tr,selProb,"RR_tot")
+AFbounddata(y,tr,selProb,"RR_tot")
 ```
 The output is the AF bound.
 
 ## Data example
 For the purpose of illustration of the bounds we construct the simulated dataset
-\texttt{zika-learner}. The zika example is based on studies of a zika outbreak in Brazil. 
+\texttt{zika.learner}. The zika example is based on studies of a zika outbreak in Brazil. 
 See references in corresponding article and the data documentation.
 
 The zika data can be reached through
 ```{r}
 # library(SelectionBias)
-# zika-learner
+# zika.learner
 ```
 and used to calculate the AF bound as
 ```{r}
 library(SelectionBias)
-AFbounddata(zika-learner$MC,1-zika-learner$zika,zika-learner$selIndicator,"RR_s")
+AFbounddata(zika.learner$MC,1-zika.learner$zika,zika.learner$selIndicator,"RR_s")
 ```
 Note that in this example the treatment is reversed as discussed in the
 corresponding article.
