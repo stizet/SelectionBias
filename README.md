@@ -19,8 +19,8 @@ You can install the development version of SelectionBias from Github
 (<https://github.com/stizet/SelectionBias>) with:
 
 ``` r
-#install.packages("devtools") 
-#devtools::install_github("stizet/SelectionBias")
+# install.packages("devtools") 
+# devtools::install_github("stizet/SelectionBias")
 ```
 
 ## Examples
