@@ -103,18 +103,18 @@ The output is the AF bound.
 
 ## Data example
 For the purpose of illustration of the bounds we construct the simulated dataset
-\texttt{zika.learner}. The zika example is based on studies of a zika outbreak in Brazil. 
+\texttt{zika_learner}. The zika example is based on studies of a zika outbreak in Brazil. 
 See references in corresponding article and the data documentation.
 
 The zika data can be reached through
 ```{r}
 # library(SelectionBias)
-# zika.learner
+# zika_learner
 ```
 and used to calculate the AF bound as
 ```{r}
 library(SelectionBias)
-AFbounddata(zika.learner$MC,1-zika.learner$zika,zika.learner$selIndicator,"RR_s")
+AFbounddata(zika_learner$MC,1-zika_learner$zika,zika_learner$selIndicator,"RR_s")
 ```
 Note that in this example the treatment is reversed as discussed in the
 corresponding article.
