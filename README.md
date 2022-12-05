@@ -121,14 +121,14 @@ The zika data can be reached through
 
 ``` r
 # library(SelectionBias)
-# zika.learner
+# zika_learner
 ```
 
 and used to calculate the AF bound as
 
 ``` r
 library(SelectionBias)
-AFbounddata(zika.learner$MC,1-zika.learner$zika,zika.learner$selIndicator,"RR_s")
+AFbounddata(zika_learner$MC,1-zika_learner$zika,zika_learner$selIndicator,"RR_s")
 #> [1] 3.002098
 ```
 
