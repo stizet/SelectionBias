@@ -23,7 +23,7 @@ You can install the development version of SelectionBias from Github
 # devtools::install_github("stizet/SelectionBias")
 ```
 
-## Examples
+## Bound examples
 
 Selections of the study population can be the source of bias. Here, two
 types of bounds for the selection bias is calculated; the bound by Smith
@@ -47,7 +47,7 @@ SVboundM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
 The output is the SV bound and an indicator if the treatment was recoded
 if the bias in the original coding was negative.
 
-The bias bound parameters may also be of interest. These can be
+The sensitivity parameters may also be of interest. These can be
 extracted with the code:
 
 ``` r
@@ -68,7 +68,7 @@ SVboundparametersM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
 #> [7,] "Reverse treatment" FALSE
 ```
 
-The output is the bias bound parameters and an indicator if the
+The output is the sensitivity parameters and an indicator if the
 treatment was recoded if the bias in the original coding was negative.
 
 The AF bound can also be calculated for the extended M structure:
@@ -113,8 +113,8 @@ The output is the AF bound.
 ## Data example
 
 For the purpose of illustration of the bounds we construct the simulated
-dataset . The zika example is based on studies of a zika outbreak in
-Brazil. See references in corresponding article and the data
+dataset zika_learner. The zika example is based on studies of a zika
+outbreak in Brazil. See references in corresponding article and the data
 documentation.
 
 The zika data can be reached through
@@ -134,3 +134,18 @@ AFbounddata(zika_learner$MC,1-zika_learner$zika,zika_learner$selIndicator,"RR_s"
 
 Note that in this example the treatment is reversed as discussed in the
 corresponding article.
+
+## Sharp example
+
+The sharpness of the SV bound in the subpopulation can be assessed.
+
+``` r
+library(SelectionBias)
+BF = 2
+success = 0.4
+SVboundsharp(BF,success)
+#> [1] "SV bound is sharp."
+```
+
+Note that the eventual recoding of the treatment has to be done
+manually, as discussed in the corresponding article.
