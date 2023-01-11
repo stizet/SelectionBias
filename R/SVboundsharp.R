@@ -1,4 +1,4 @@
-#' Title
+#' Calculate if the Smith and VanderWeele bound in the subpopulation is sharp (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
 #'
 #' @param BF_U The bounding factor for the SV bounds in the subpopulation. Can be any number equal to or above 1.
 #' @param prob The probability P(Y=1|T=0,I_S=1). The eventual recoding has to be done manually.

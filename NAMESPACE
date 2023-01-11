@@ -3,5 +3,4 @@
 export(AFboundM)
 export(AFbounddata)
 export(SVboundM)
-export(SVboundparametersM)
 export(SVboundsharp)

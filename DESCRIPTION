@@ -1,6 +1,6 @@
 Package: SelectionBias
-Title: Calculates bounds for the selection bias for binary variables
-  in the extended M structure and observed data
+Title: Calculates bounds for the selection bias for binary treatment
+  and outcome variables in the extended M-structure and observed data
 Version: 0.0.0.9000
 Authors@R: 
     person("Stina", "Zetterstrom", , "stina.zetterstrom@statistik.uu.se",
@@ -8,10 +8,10 @@ Authors@R:
     person("Ingeborg", "Waernbaum", , "ingeborg.waernbaum@statistik.uu.se",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0002-4457-5311"))
 Description: Calculates two different bounds for the selection bias for binary
-    variables in the extended M structure and a bound for observed binary data.
-    For the M structure, Smith and VanderWeeles and the assumption free bound,
-    are calculated based on user input parameters. For the data, the assumption
-    free bound is calculated with the data as input. 
+    treatment and outcome variables in the extended M-structure and a bound for
+    observed binary data. For the M-structure, Smith and VanderWeeles and the
+    assumption free bound, are calculated based on user input parameters. For
+    the data, the assumption free bound is calculated with the data as input. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

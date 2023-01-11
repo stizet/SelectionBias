@@ -2,7 +2,7 @@
 % Please edit documentation in R/SVboundsharp.R
 \name{SVboundsharp}
 \alias{SVboundsharp}
-\title{Title}
+\title{Calculate if the Smith and VanderWeele bound in the subpopulation is sharp (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).}
 \usage{
 SVboundsharp(BF_U, prob)
 }
@@ -15,7 +15,7 @@ SVboundsharp(BF_U, prob)
 A string stating if the SV bound is sharp, or if it is inconclusive.
 }
 \description{
-Title
+Calculate if the Smith and VanderWeele bound in the subpopulation is sharp (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
 }
 \examples{
 BF = 2

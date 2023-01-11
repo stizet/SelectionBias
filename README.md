@@ -33,54 +33,37 @@ structure. Below is a small example of how this is done:
 
 ``` r
 library(SelectionBias)
-pV = 0.1
-pU = 0.1
+pV = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
+pU = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
 pT = c(0,1)
 pY = c(0,0,1)
 pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-SVboundM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
-#>      [,1]                [,2] 
-#> [1,] "SV bound"          1    
-#> [2,] "Reverse treatment" FALSE
-```
-
-The output is the SV bound and an indicator if the treatment was recoded
-if the bias in the original coding was negative.
-
-The sensitivity parameters may also be of interest. These can be
-extracted with the code:
-
-``` r
-library(SelectionBias)
-pV = 0.1
-pU = 0.1
-pT = c(0,1)
-pY = c(0,0,1)
-pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-SVboundparametersM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
+SVboundM(pV,pU,pT,pY,pS,"RR_tot","P")
 #>      [,1]                [,2]    
-#> [1,] "BF_1"              1       
-#> [2,] "RR_SU|T=1"         1       
-#> [3,] "RR_UY|T=1"         1.682689
-#> [4,] "BF_0"              1       
+#> [1,] "SV bound"          1       
+#> [2,] "BF_1"              1       
+#> [3,] "BF_0"              1       
+#> [4,] "RR_SU|T=1"         1       
 #> [5,] "RR_SU|T=0"         1       
-#> [6,] "RR_UY|T=0"         1.682689
-#> [7,] "Reverse treatment" FALSE
+#> [6,] "RR_UY|T=1"         1.682689
+#> [7,] "RR_UY|T=0"         1.682689
+#> [8,] "Reverse treatment" FALSE
 ```
 
-The output is the sensitivity parameters and an indicator if the
-treatment was recoded if the bias in the original coding was negative.
+The output is the SV bound and the sensitivity parameters and an
+indicator if the treatment was recoded if the bias in the original
+coding was negative.
 
 The AF bound can also be calculated for the extended M structure:
 
 ``` r
 library(SelectionBias)
-pV = 0.1
-pU = 0.1
+pV = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
+pU = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
 pT = c(0,1)
 pY = c(0,0,1)
 pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-AFboundM(pV,pU,pT,pY,pS,"RR_tot",TRUE)
+AFboundM(pV,pU,pT,pY,pS,"RR_tot","P")
 #>      [,1]                [,2]   
 #> [1,] "AF bound"          4.95166
 #> [2,] "Reverse treatment" FALSE
