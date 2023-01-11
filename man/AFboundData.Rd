@@ -4,7 +4,7 @@
 \alias{AFbounddata}
 \title{Calculate the assumption free bound for a data set.}
 \usage{
-AFbounddata(outcome, treatment, selection, whichPar)
+AFbounddata(outcome, treatment, selection, whichEst)
 }
 \arguments{
 \item{outcome}{A vector with the binary outcome variable.}
@@ -13,7 +13,7 @@ AFbounddata(outcome, treatment, selection, whichPar)
 
 \item{selection}{A vector with the binary selection variable or a scalar representing the probability of being selected.}
 
-\item{whichPar}{A string defining the population parameter of interest. Available options are as follows. (1) Relative risk in the total population: "RR_tot", (2) Risk difference in the total population: "RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk difference in the subpopulation: "RD_s".}
+\item{whichEst}{A string defining the population parameter of interest. Available options are as follows. (1) Relative risk in the total population: "RR_tot", (2) Risk difference in the total population: "RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk difference in the subpopulation: "RD_s".}
 }
 \value{
 A scalar with the assumption free bound.
