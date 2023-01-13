@@ -2,24 +2,30 @@
 % Please edit documentation in R/AFbounddata.R
 \name{AFbounddata}
 \alias{AFbounddata}
-\title{Calculate the assumption free bound for a data set.}
+\title{Calculate the assumption free bound for a data set}
 \usage{
 AFbounddata(outcome, treatment, selection, whichEst)
 }
 \arguments{
-\item{outcome}{A vector with the binary outcome variable.}
+\item{outcome}{Input vector. A binary outcome variable.}
 
-\item{treatment}{A vector with the binary treatment variable.}
+\item{treatment}{Input vector. A binary treatment variable.}
 
-\item{selection}{A vector with the binary selection variable or a scalar representing the probability of being selected.}
+\item{selection}{Input vector or input scalar. A binary selection variable or
+a selection probability.}
 
-\item{whichEst}{A string defining the population parameter of interest. Available options are as follows. (1) Relative risk in the total population: "RR_tot", (2) Risk difference in the total population: "RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk difference in the subpopulation: "RD_s".}
+\item{whichEst}{Input string. Defining the population parameter of interest.
+Available options are as follows. (1) Relative risk in the total
+population: "RR_tot", (2) Risk difference in the total population:
+"RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk
+difference in the subpopulation: "RD_s".}
 }
 \value{
 A scalar with the assumption free bound.
 }
 \description{
-Calculate the assumption free bound for a data set.
+\code{AFbounddata()} returns the assumption free bound for an observed data set
+that consists of an outcome, a treatment and a selection variable.
 }
 \examples{
 y = c(0,0,0,0,1,1,1,1)

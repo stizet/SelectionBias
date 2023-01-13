@@ -1,9 +1,17 @@
-#' Calculate the assumption free bound for a data set.
+#' Calculate the assumption free bound for a data set
 #'
-#' @param outcome A vector with the binary outcome variable.
-#' @param treatment A vector with the binary treatment variable.
-#' @param selection A vector with the binary selection variable or a scalar representing the probability of being selected.
-#' @param whichEst A string defining the population parameter of interest. Available options are as follows. (1) Relative risk in the total population: "RR_tot", (2) Risk difference in the total population: "RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk difference in the subpopulation: "RD_s".
+#' `AFbounddata()` returns the assumption free bound for an observed data set
+#' that consists of an outcome, a treatment and a selection variable.
+#'
+#' @param outcome Input vector. A binary outcome variable.
+#' @param treatment Input vector. A binary treatment variable.
+#' @param selection Input vector or input scalar. A binary selection variable or
+#'   a selection probability.
+#' @param whichEst Input string. Defining the population parameter of interest.
+#'   Available options are as follows. (1) Relative risk in the total
+#'   population: "RR_tot", (2) Risk difference in the total population:
+#'   "RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk
+#'   difference in the subpopulation: "RD_s".
 #'
 #' @return A scalar with the assumption free bound.
 #' @export

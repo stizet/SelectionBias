@@ -2,30 +2,52 @@
 % Please edit documentation in R/SVboundM.R
 \name{SVboundM}
 \alias{SVboundM}
-\title{Calculate the Smith and VanderWeele bound for the M-structure (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).}
+\title{Calculate the Smith and VanderWeele bound for the M-structure}
 \usage{
-SVboundM(pVval, pUval, pTcoef, pYcoef, pScoef, whichEst, Mmodel)
+SVboundM(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
 }
 \arguments{
-\item{pVval}{A matrix where the first column is the values and the second column is the probabilities of the categories of V. If V is continuous, use a fine grid of values and probabilities.}
+\item{Vval}{Input matrix. The first column is the values of the categories of
+V. The second column is the probabilities of the categories of V. If V is
+continuous, use a fine grid of values and probabilities.}
 
-\item{pUval}{A matrix where the first column is the values and the second column is the probabilities of the categories of V. If V is continuous, use a fine grid of values and probabilities.}
+\item{Uval}{Input matrix. The first column is the values of the categories of
+U. The second column is the probabilities of the categories of U. If U is
+continuous, use a fine grid of values and probabilities.}
 
-\item{pTcoef}{A numerical vector with two elements. The first element is the intercept in the model for the treatment (as the defined by the input "probit"). The second element is the slope in the model for the treatment (as defined by the input "probit").}
+\item{Tcoef}{Input vector. Two numerical elements. The first element is the
+intercept in the model for the treatment. The second element is the slope
+in the model for the treatment.}
 
-\item{pYcoef}{A numerical vector with three elements. The first element is the intercept in the model for the outcome (as the defined by the input "probit"). The second element is the slope for T in the model for the outcome (as defined by the input "probit"). The third element is the slope for U in the model for the outcome (as defined by the input "probit").}
+\item{Ycoef}{Ycoef Input vector. Three numerical elements. The first element is the
+intercept in the model for the outcome. The second element is the slope for
+T in the model for the outcome. The third element is the slope for U in the
+model for the outcome.}
 
-\item{pScoef}{A matrix of size K by 4, where K is the number of selection variables. The first column is the intercepts in the models for the selection variables (as defined by the input "probit"). The second column is the slopes for V in the models for the selection variables (as defined by the input "probit"). The third column is the slopes for U in the models for the selection variables (as defined by the input "probit"). The fourth column is the slopes for T in the models for the selection variables (as defined by the input "probit").}
+\item{Scoef}{Input matrix. Numerical matrix of size K by 4, where K is the
+number of selection variables. Each row is the coefficients for one
+selection variable. The first column is the intercepts in the models for
+the selection variables. The second column is the slopes for V in the
+models for the selection variables. The third column is the slopes for U in
+the models for the selection variables. The fourth column is the slopes for
+T in the models for the selection variables.}
 
-\item{whichEst}{A string defining the population parameter of interest. Available options are as follows. (1) Relative risk in the total population: "RR_tot", (2) Risk difference in the total population: "RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk difference in the subpopulation: "RD_s".}
+\item{whichEst}{Input string. Defining the causal estimand of interest.
+Available options are as follows. (1) Relative risk in the total
+population: "RR_tot", (2) Risk difference in the total population:
+"RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk
+difference in the subpopulation: "RD_s".}
 
-\item{Mmodel}{A string defining the models for the variables in the M structure. If "P", the probit model is used. If "L", the logit model is used.}
+\item{Mmodel}{Input string. Defining the models for the variables in the M
+structure. If "P", the probit model is used. If "L", the logit model is
+used.}
 }
 \value{
 A list containing the Smith and VanderWeele bound and an indicator if the treatment has been reversed.
 }
 \description{
-Calculate the Smith and VanderWeele bound for the M-structure (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
+\code{SVboundM()} returns a list with the SV bound, the sensititivity parameters and an indicator if
+the treatment coding is reversed for an assumed model (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
 }
 \examples{
 pV = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)

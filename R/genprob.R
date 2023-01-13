@@ -2,6 +2,7 @@ genprob <- function(pVcoef,pUcoef,pTcoef,pY1coef,pY0coef,constS,slopeSV,slopeSU,
 {
   # A function that takes the coefficients of the data generating process as
   # input, and then calculates the conditional probabilities of the DGP.
+  # The output is a matrix with all the conditional probabilities.
 
   # Create vectors of the values and probabilities from the matrices of U and V.
   Vval = pVcoef[,1]

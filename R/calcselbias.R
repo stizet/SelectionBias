@@ -1,5 +1,9 @@
 calcselbias <- function(Y1,Y0,Tr,S,U,V,estimand)
 {
+  # A function that calculates the selection bias. The input is the conditional
+  # probabilities necessary for the calculations and the causal estimand of
+  # interest. The output is the selection bias and P(Y=1|T=t,I_s=1), t=0,1.
+
   # Create the matrices for the calculations.
   # The number of categories in U and V, used to define the matrices.
   Ulen = length(U)

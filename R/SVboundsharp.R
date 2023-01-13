@@ -1,7 +1,12 @@
-#' Calculate if the Smith and VanderWeele bound in the subpopulation is sharp (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
+#' Check if the Smith and VanderWeele bound in the subpopulation is sharp
 #'
-#' @param BF_U The bounding factor for the SV bounds in the subpopulation. Can be any number equal to or above 1.
-#' @param prob The probability P(Y=1|T=0,I_S=1). The eventual recoding has to be done manually.
+#' `SVboundsharp()` returns a string that indicates if the SV bound is sharp or
+#' if its inconclusive.
+#'
+#' @param BF_U Input scalar. The bounding factor for the SV bounds in the
+#'   subpopulation. Must be equal to or above 1.
+#' @param prob Input scalar. The probability P(Y=1|T=0,I_S=1). The eventual
+#'   recoding has to be done manually.
 #'
 #' @return A string stating if the SV bound is sharp, or if it is inconclusive.
 #' @export
@@ -18,7 +23,7 @@ SVboundsharp <- function(BF_U,prob)
 
   # Check if 0<P(Y=1|T=0,I_S=1)<1 and BF_U>=1. If not, throw an error.
   if( any(prob < 0 | prob > 1) ) stop('P(Y=1|T=0,I_S=1) not between 0 and 1.')
-  if( any(BF_U < 1) ) stop('BF_U smaller than 1.')
+  if(BF_U < 1) stop('BF_U smaller than 1.')
 
   # Calculate the sharp limit.
   sharpLim = 1/prob

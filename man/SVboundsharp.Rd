@@ -2,20 +2,23 @@
 % Please edit documentation in R/SVboundsharp.R
 \name{SVboundsharp}
 \alias{SVboundsharp}
-\title{Calculate if the Smith and VanderWeele bound in the subpopulation is sharp (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).}
+\title{Check if the Smith and VanderWeele bound in the subpopulation is sharp}
 \usage{
 SVboundsharp(BF_U, prob)
 }
 \arguments{
-\item{BF_U}{The bounding factor for the SV bounds in the subpopulation. Can be any number equal to or above 1.}
+\item{BF_U}{Input scalar. The bounding factor for the SV bounds in the
+subpopulation. Must be equal to or above 1.}
 
-\item{prob}{The probability P(Y=1|T=0,I_S=1). The eventual recoding has to be done manually.}
+\item{prob}{Input scalar. The probability P(Y=1|T=0,I_S=1). The eventual
+recoding has to be done manually.}
 }
 \value{
 A string stating if the SV bound is sharp, or if it is inconclusive.
 }
 \description{
-Calculate if the Smith and VanderWeele bound in the subpopulation is sharp (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
+\code{SVboundsharp()} returns a string that indicates if the SV bound is sharp or
+if its inconclusive.
 }
 \examples{
 BF = 2

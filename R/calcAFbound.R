@@ -1,5 +1,9 @@
 calcAFbound <- function(Y1,Y0,Tr,S,U,V,estimand,obsProb)
 {
+  # A function that calculates the AF bound. The input is the conditional
+  # probabilities necessary for the calculations and the causal estimand
+  # of interest. The output is the AF bound.
+
   # Create the matrices for the calculations.
   # The number of categories in U and V, used to define the matrices.
   Ulen = length(U)
