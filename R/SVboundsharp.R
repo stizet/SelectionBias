@@ -14,19 +14,19 @@
 #' @examples
 #' BF = 2
 #' success = 0.4
-#' SVboundsharp(BF,success)
+#' SVboundsharp(BF_U = BF, prob = success)
 #'
 #'
-SVboundsharp <- function(BF_U,prob)
+SVboundsharp <- function(BF_U, prob)
 {
   # A function that tests if the SV bound is sharp.
 
   # Check if 0<P(Y=1|T=0,I_S=1)<1 and BF_U>=1. If not, throw an error.
-  if( any(prob < 0 | prob > 1) ) stop('P(Y=1|T=0,I_S=1) not between 0 and 1.')
+  if(any(prob < 0 | prob > 1)) stop('P(Y=1|T=0,I_S=1) not between 0 and 1.')
   if(BF_U < 1) stop('BF_U smaller than 1.')
 
   # Calculate the sharp limit.
-  sharpLim = 1/prob
+  sharpLim = 1 / prob
 
   # Test if the SV bound is sharp. If it is smaller than the limit, return
   # the message that it is sharp, and if it larger return the message

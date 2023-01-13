@@ -19,10 +19,10 @@ continuous, use a fine grid of values and probabilities.}
 intercept in the model for the treatment. The second element is the slope
 in the model for the treatment.}
 
-\item{Ycoef}{Ycoef Input vector. Three numerical elements. The first element is the
-intercept in the model for the outcome. The second element is the slope for
-T in the model for the outcome. The third element is the slope for U in the
-model for the outcome.}
+\item{Ycoef}{Ycoef Input vector. Three numerical elements. The first element
+is the intercept in the model for the outcome. The second element is the
+slope for T in the model for the outcome. The third element is the slope
+for U in the model for the outcome.}
 
 \item{Scoef}{Input matrix. Numerical matrix of size K by 4, where K is the
 number of selection variables. Each row is the coefficients for one
@@ -43,17 +43,20 @@ structure. If "P", the probit model is used. If "L", the logit model is
 used.}
 }
 \value{
-A list containing the Smith and VanderWeele bound and an indicator if the treatment has been reversed.
+A list containing the Smith and VanderWeele bound and an indicator if
+the treatment has been reversed.
 }
 \description{
-\code{SVboundparametersM()} returns a list with the sensititivity parameters and an indicator if
-the treatment coding is reversed for an assumed model (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
+\code{SVboundparametersM()} returns a list with the sensititivity parameters and
+an indicator if the treatment coding is reversed for an assumed model (Smith,
+L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
 }
 \examples{
-pV = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-pU = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-pT = c(0,1)
-pY = c(0,0,1)
-pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-SVboundparametersM(pV,pU,pT,pY,pS,"RR_tot","P")
+pV = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+pU = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+pT = c(0, 1)
+pY = c(0, 0, 1)
+pS = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
+SVboundparametersM(Vval = pV, Uval = pU, Tcoef = pT, Ycoef = pY,
+ Scoef = pS, whichEst = "RR_tot", Mmodel = "P")
 }

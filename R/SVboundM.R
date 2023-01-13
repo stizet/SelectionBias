@@ -36,13 +36,14 @@
 #' @export
 #'
 #' @examples
-#' pV = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-#' pU = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-#' pT = c(0,1)
-#' pY = c(0,0,1)
-#' pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-#' SVboundM(pV,pU,pT,pY,pS,"RR_tot","P")
-SVboundM <- function(Vval,Uval,Tcoef,Ycoef,Scoef,whichEst,Mmodel)
+#' pV = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+#' pU = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+#' pT = c(0, 1)
+#' pY = c(0, 0, 1)
+#' pS = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2,byrow = TRUE)
+#' SVboundM(Vval = pV, Uval = pU, Tcoef = pT, Ycoef = pY,
+#'  Scoef = pS, whichEst = "RR_tot", Mmodel = "P")
+SVboundM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
 {
   # A function that calculates the SV bound for the bias due to selection, for
   # multiple selection variables. The input is the hyper parameters used in the
@@ -59,95 +60,97 @@ SVboundM <- function(Vval,Uval,Tcoef,Ycoef,Scoef,whichEst,Mmodel)
   ### RUN SOME CHECKS OF THE INPUT ###
 
   # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_s", "RD_s".
-  if( any(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s") ) stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
+  if(any(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s")) stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
 
   # Check if the probabilities of V and U sum to 1. If not, throw an error.
-  if( any((sum(Vval[,2]) > 1) | (sum(Vval[,2]) < 1))) stop('The probabilities of the categories of V do not sum to 1.')
-  if( any((sum(Uval[,2]) > 1) | (sum(Uval[,2]) < 1))) stop('The probabilities of the categories of U do not sum to 1.')
+  if(any((sum(Vval[ , 2]) > 1) | (sum(Vval[ , 2]) < 1))) stop('The probabilities of the categories of V do not sum to 1.')
+  if(any((sum(Uval[ , 2]) > 1) | (sum(Uval[ , 2]) < 1))) stop('The probabilities of the categories of U do not sum to 1.')
 
   # Check if the probabilities of V and U are positive. If not, throw an error.
-  if( any(Vval[,2] < 0) ) stop('At least one of the categories of V has a negative probability.')
-  if( any(Uval[,2] < 0) ) stop('At least one of the categories of U has a negative probability.')
+  if(any(Vval[ , 2] < 0)) stop('At least one of the categories of V has a negative probability.')
+  if(any(Uval[ , 2] < 0)) stop('At least one of the categories of U has a negative probability.')
 
   ### END CHECKS OF THE INPUT ###
 
 
   ### GETTING THE DATA PROBABILITIES ###
 
-  constS = Scoef[,1]
-  slopeSV = Scoef[,2]
-  slopeSU = Scoef[,3]
-  slopeST = Scoef[,4]
+  constS = Scoef[ , 1]
+  slopeSV = Scoef[ , 2]
+  slopeSU = Scoef[ , 3]
+  slopeST = Scoef[ , 4]
 
-  pY1coef = c(Ycoef[1]+Ycoef[2],Ycoef[3])
-  pY0coef = c(Ycoef[1],Ycoef[3])
+  Y1coef = c(Ycoef[1] + Ycoef[2], Ycoef[3])
+  Y0coef = c(Ycoef[1], Ycoef[3])
 
   # Using the data generating function to get the probabilities in the model.
-  dataProb = genprob(Vval,Uval,Tcoef,pY1coef,pY0coef,constS,slopeSV,slopeSU,slopeST,Mmodel)
+  dataProb = genprob(Vval, Uval, Tcoef, Y1coef, Y0coef, constS, slopeSV, slopeSU, slopeST, Mmodel)
   # Extracting the vectors/matrices/array from the data frame.
   pV = stats::na.omit(dataProb$pV)
   pU = stats::na.omit(dataProb$pU)
-  pT = matrix(stats::na.omit(dataProb$pT),nrow=2,byrow=TRUE)
-  pY1 = matrix(stats::na.omit(dataProb$pY1),ncol=2,byrow=TRUE)
-  pY0 = matrix(stats::na.omit(dataProb$pY0),ncol=2,byrow=TRUE)
-  pSmat = as.data.frame(dataProb[,6:length(dataProb[1,])])
+  pT = matrix(stats::na.omit(dataProb$pT), nrow = 2, byrow = TRUE)
+  pY1 = matrix(stats::na.omit(dataProb$pY1), ncol = 2, byrow = TRUE)
+  pY0 = matrix(stats::na.omit(dataProb$pY0), ncol = 2, byrow = TRUE)
+  pSmat = as.data.frame(dataProb[ , 6 : length(dataProb[1, ])])
 
   ### END GETTING THE DATA PROBABILITIES ###
 
   ### CALCULATING THE BIAS AND THE OBSERVED PROBABILITIES ###
 
   # Calculate the bias and treatment effect for the parameter of interest
-  biasAndObsProb = calcselbias(pY1,pY0,pT,pSmat,pU,pV,whichEst)
+  biasAndObsProb = calcselbias(pY1, pY0, pT, pSmat, pU, pV, whichEst)
 
   # To check if the bias is negative and re-coding of the treatment is needed.
   testSelBias = biasAndObsProb[1]
 
   # Check if the selection bias is a numerical value. If not, throw an error.
-  if( is.nan(testSelBias) ) stop('Input parameters result in 0/0. This can for instance happen if P(T=t|V)=0 or P(I_S=1|U,V)=0.')
+  if(is.nan(testSelBias)) stop('Input parameters result in 0/0. This can for instance happen if P(T=t|V)=0 or P(I_S=1|U,V)=0.')
 
-  biasLimit = ifelse(whichEst=="RD_s"|whichEst=="RD_tot",0,1)
+  biasLimit = ifelse(whichEst == "RD_s" | whichEst == "RD_tot", 0, 1)
 
   # Check if the bias is negative, and if it is re-code treatment and calculate the new bias and treatment effect.
-  if(testSelBias<biasLimit)
+  if(testSelBias < biasLimit)
   {
     revTreat = TRUE
-    pTnew = rbind(pT[2,],pT[1,])
-    lenS = length(pSmat[,1])
-    pSmatNew = as.data.frame(matrix(rbind(as.matrix(pSmat[(lenS/4+1):(lenS/2),]),as.matrix(pSmat[1:(lenS/4),]),as.matrix(pSmat[(3*lenS/4+1):lenS,]),as.matrix(pSmat[(lenS/2+1):(3*lenS/4),])),nrow=lenS))
-    biasAndObsProbnew = calcselbias(pY0,pY1,pTnew,pSmatNew,pU,pV,whichEst)
+    pTnew = rbind(pT[2, ], pT[1, ])
+    lenS = length(pSmat[ , 1])
+    pSmatNew = as.data.frame(matrix(rbind(as.matrix(pSmat[(lenS / 4 + 1) : (lenS / 2), ]),
+                                          as.matrix(pSmat[1 : (lenS / 4), ]),
+                                          as.matrix(pSmat[(3 * lenS / 4 + 1) : lenS, ]),
+                                          as.matrix(pSmat[(lenS / 2 + 1) : (3 * lenS / 4), ])), nrow = lenS))
+    biasAndObsProbnew = calcselbias(pY0, pY1, pTnew, pSmatNew, pU, pV, whichEst)
     selBias = biasAndObsProbnew[1]
-    obsProb = biasAndObsProbnew[2:3]
+    obsProb = biasAndObsProbnew[2 : 3]
   }else {selBias = biasAndObsProb[1]
-  obsProb = biasAndObsProb[2:3]
+  obsProb = biasAndObsProb[2 : 3]
   revTreat = FALSE}
 
   ### END CALCULATING THE BIAS AND THE OBSERVED PROBABILITIES ###
 
   ### CALCULATING THE SV BOUND ###
 
-  if(testSelBias<biasLimit)
+  if(testSelBias < biasLimit)
   {
-    SVbound = calcSVbound(pY0,pY1,pTnew,pSmatNew,pU,pV,whichEst,obsProb)
-  }else{SVbound = calcSVbound(pY1,pY0,pT,pSmat,pU,pV,whichEst,obsProb)}
+    SVbound = calcSVbound(pY0, pY1, pTnew, pSmatNew, pU, pV, whichEst, obsProb)
+  }else{SVbound = calcSVbound(pY1, pY0, pT, pSmat, pU, pV, whichEst, obsProb)}
 
   ### END CALCULATING THE SV BOUND ###
 
   # The return list.
-  if(whichEst=="RR_tot"){
-    heading = c("SV bound","BF_1","BF_0","RR_SU|T=1","RR_SU|T=0","RR_UY|T=1","RR_UY|T=0","Reverse treatment")
-    values = list(SVbound[1],SVbound[2],SVbound[3],SVbound[4],SVbound[5],SVbound[6],SVbound[7],as.logical(revTreat))
-  }else if(whichEst=="RD_tot"){
-    heading = c("SV bound","BF_1","BF_0","RR_SU|T=1","RR_SU|T=0","RR_UY|T=1","RR_UY|T=0","P(Y=1|T=1,I_S=1)","P(Y=1|T=0,I_S=1)","Reverse treatment")
-    values = list(SVbound[1],SVbound[2],SVbound[3],SVbound[4],SVbound[5],SVbound[6],SVbound[7],SVbound[8],SVbound[9],as.logical(revTreat))
-  }else if(whichEst=="RR_s"){
-    heading = c("SV bound","BF_U","RR_TU|S=1","RR_UY|S=1","Reverse treatment")
-    values = list(SVbound[1],SVbound[2],SVbound[3],SVbound[4],as.logical(revTreat))
+  if(whichEst == "RR_tot"){
+    heading = c("SV bound", "BF_1", "BF_0", "RR_SU|T=1", "RR_SU|T=0", "RR_UY|T=1", "RR_UY|T=0", "Reverse treatment")
+    values = list(SVbound[1], SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], as.logical(revTreat))
+  }else if(whichEst == "RD_tot"){
+    heading = c("SV bound", "BF_1", "BF_0", "RR_SU|T=1", "RR_SU|T=0", "RR_UY|T=1", "RR_UY|T=0", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
+    values = list(SVbound[1], SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], SVbound[8], SVbound[9], as.logical(revTreat))
+  }else if(whichEst == "RR_s"){
+    heading = c("SV bound", "BF_U", "RR_TU|S=1", "RR_UY|S=1", "Reverse treatment")
+    values = list(SVbound[1], SVbound[2], SVbound[3], SVbound[4], as.logical(revTreat))
   }else{
-    heading = c("SV bound","BF_U","RR_TU|S=1","RR_UY|S=1","P(Y=1|T=1,I_S=1)","P(Y=1|T=0,I_S=1)","Reverse treatment")
-    values = list(SVbound[1],SVbound[2],SVbound[3],SVbound[4],SVbound[5],SVbound[6],as.logical(revTreat))
+    heading = c("SV bound", "BF_U", "RR_TU|S=1", "RR_UY|S=1", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
+    values = list(SVbound[1], SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], as.logical(revTreat))
   }
 
-  returnDat = matrix(cbind(heading,values),ncol=2)
+  returnDat = matrix(cbind(heading, values), ncol = 2)
   return(returnDat)
-
 }

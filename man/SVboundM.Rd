@@ -50,10 +50,11 @@ A list containing the Smith and VanderWeele bound and an indicator if the treatm
 the treatment coding is reversed for an assumed model (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
 }
 \examples{
-pV = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-pU = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-pT = c(0,1)
-pY = c(0,0,1)
-pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-SVboundM(pV,pU,pT,pY,pS,"RR_tot","P")
+pV = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+pU = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+pT = c(0, 1)
+pY = c(0, 0, 1)
+pS = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2,byrow = TRUE)
+SVboundM(Vval = pV, Uval = pU, Tcoef = pT, Ycoef = pY,
+ Scoef = pS, whichEst = "RR_tot", Mmodel = "P")
 }

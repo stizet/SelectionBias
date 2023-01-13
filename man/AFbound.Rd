@@ -28,13 +28,13 @@ A scalar with the assumption free bound.
 that consists of an outcome, a treatment and a selection variable.
 }
 \examples{
-y = c(0,0,0,0,1,1,1,1)
-tr = c(0,0,1,1,0,0,1,1)
-sel = c(0,1,0,1,0,1,0,1)
-AFbound(y,tr,sel,"RR_tot")
+y = c(0, 0, 0, 0, 1, 1, 1, 1)
+tr = c(0, 0, 1, 1, 0, 0, 1, 1)
+sel = c(0, 1, 0, 1, 0, 1, 0, 1)
+AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
 
-y = c(0,0,0,0,1,1,1,1)
-tr = c(0,0,1,1,0,0,1,1)
-selProb = 0.5
-AFbound(y,tr,selProb,"RR_tot")
+y = c(0, 0, 0, 0, 1, 1, 1, 1)
+tr = c(0, 0, 1, 1, 0, 0, 1, 1)
+selprob = 0.5
+AFbound(outcome = y, treatment = tr, selection = selprob, whichEst = "RR_tot")
 }

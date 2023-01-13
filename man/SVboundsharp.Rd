@@ -23,7 +23,7 @@ if its inconclusive.
 \examples{
 BF = 2
 success = 0.4
-SVboundsharp(BF,success)
+SVboundsharp(BF_U = BF, prob = success)
 
 
 }
