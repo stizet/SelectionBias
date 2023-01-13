@@ -1,6 +1,6 @@
 #' Calculate the assumption free bound for a data set
 #'
-#' `AFbounddata()` returns the assumption free bound for an observed data set
+#' `AFbound()` returns the assumption free bound for an observed data set
 #' that consists of an outcome, a treatment and a selection variable.
 #'
 #' @param outcome Input vector. A binary outcome variable.
@@ -20,13 +20,13 @@
 #' y = c(0,0,0,0,1,1,1,1)
 #' tr = c(0,0,1,1,0,0,1,1)
 #' sel = c(0,1,0,1,0,1,0,1)
-#' AFbounddata(y,tr,sel,"RR_tot")
+#' AFbound(y,tr,sel,"RR_tot")
 #'
 #' y = c(0,0,0,0,1,1,1,1)
 #' tr = c(0,0,1,1,0,0,1,1)
 #' selProb = 0.5
-#' AFbounddata(y,tr,selProb,"RR_tot")
-AFbounddata <- function(outcome,treatment,selection,whichEst)
+#' AFbound(y,tr,selProb,"RR_tot")
+AFbound <- function(outcome,treatment,selection,whichEst)
 {
   # A function that calculates the assumption free bound for the bias due to selection,
   # for multiple selection variables. The input is the data and which population

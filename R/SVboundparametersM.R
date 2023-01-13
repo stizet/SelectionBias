@@ -1,7 +1,7 @@
-#' Calculate the assumption free bound for the M-structure
+#' Calculate the Smith and VanderWeele bound for the M-structure
 #'
-#' `AFboundM()` returns a list with the assumption free bound and an indicator
-#' if the treatment coding is reversed for an assumed model.
+#' `SVboundparametersM()` returns a list with the sensititivity parameters and an indicator if
+#' the treatment coding is reversed for an assumed model (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
 #'
 #' @param Vval Input matrix. The first column is the values of the categories of
 #'   V. The second column is the probabilities of the categories of V. If V is
@@ -12,7 +12,7 @@
 #' @param Tcoef Input vector. Two numerical elements. The first element is the
 #'   intercept in the model for the treatment. The second element is the slope
 #'   in the model for the treatment.
-#' @param Ycoef Input vector. Three numerical elements. The first element is the
+#' @param Ycoef Ycoef Input vector. Three numerical elements. The first element is the
 #'   intercept in the model for the outcome. The second element is the slope for
 #'   T in the model for the outcome. The third element is the slope for U in the
 #'   model for the outcome.
@@ -32,29 +32,29 @@
 #'   structure. If "P", the probit model is used. If "L", the logit model is
 #'   used.
 #'
-#' @return A list containing the assumption free bound and an indicator if the
-#'   treatment has been reversed.
+#' @return A list containing the Smith and VanderWeele bound and an indicator if the treatment has been reversed.
 #' @export
 #'
 #' @examples
-#' pV = matrix(c(1,0,0.1,0.9),nrow=2)
-#' pU = matrix(c(1,0,0.1,0.9),nrow=2)
+#' pV = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
+#' pU = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
 #' pT = c(0,1)
 #' pY = c(0,0,1)
 #' pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-#' AFboundM(pV,pU,pT,pY,pS,"RR_tot","P")
-AFboundM <- function(Vval,Uval,Tcoef,Ycoef,Scoef,whichEst,Mmodel)
+#' SVboundparametersM(pV,pU,pT,pY,pS,"RR_tot","P")
+SVboundparametersM <- function(Vval,Uval,Tcoef,Ycoef,Scoef,whichEst,Mmodel)
 {
-  # A function that calculates the assumption free bound for the bias due to
-  # selection, for multiple selection variables. The input is the hyper
-  # parameters used in the M-structure and which causal estimand the
-  # calculations are performed for. The output is the AF bound and an indicator
-  # for coding of treatment.
+  # A function that calculates the sensitivity parameters for the SV bound
+  # for multiple selection variables. The input is the hyper parameters used
+  # in the M-structure and which causal estimand the calculations are performed
+  # for. The output is the sensitivity parameters and an indicator for
+  # coding of treatment.
 
   # Functions used in the code.
   #genprob()
   #calcselbias()
-  #calcAFbound()
+  #calcSVbound())
+
 
   ### RUN SOME CHECKS OF THE INPUT ###
 
@@ -62,14 +62,15 @@ AFboundM <- function(Vval,Uval,Tcoef,Ycoef,Scoef,whichEst,Mmodel)
   if( any(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s") ) stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
 
   # Check if the probabilities of V and U sum to 1. If not, throw an error.
-  if( sum(Vval[,2]) > 1) stop('The probabilities of the categories of V do not sum to 1.')
-  if( sum(Uval[,2]) > 1) stop('The probabilities of the categories of U do not sum to 1.')
+  if( any((sum(Vval[,2]) > 1) | (sum(Vval[,2]) < 1))) stop('The probabilities of the categories of V do not sum to 1.')
+  if( any((sum(Uval[,2]) > 1) | (sum(Uval[,2]) < 1))) stop('The probabilities of the categories of U do not sum to 1.')
 
   # Check if the probabilities of V and U are positive. If not, throw an error.
   if( any(Vval[,2] < 0) ) stop('At least one of the categories of V has a negative probability.')
   if( any(Uval[,2] < 0) ) stop('At least one of the categories of U has a negative probability.')
 
   ### END CHECKS OF THE INPUT ###
+
 
   ### GETTING THE DATA PROBABILITIES ###
 
@@ -95,7 +96,7 @@ AFboundM <- function(Vval,Uval,Tcoef,Ycoef,Scoef,whichEst,Mmodel)
 
   ### CALCULATING THE BIAS AND THE OBSERVED PROBABILITIES ###
 
-  # Calculate the bias and treatment effect for the estimand of interest
+  # Calculate the bias and treatment effect for the parameter of interest
   biasAndObsProb = calcselbias(pY1,pY0,pT,pSmat,pU,pV,whichEst)
 
   # To check if the bias is negative and re-coding of the treatment is needed.
@@ -122,18 +123,29 @@ AFboundM <- function(Vval,Uval,Tcoef,Ycoef,Scoef,whichEst,Mmodel)
 
   ### END CALCULATING THE BIAS AND THE OBSERVED PROBABILITIES ###
 
-  ### CALCULATE THE ASSUMPTION FREE BOUND ###
+  ### CALCULATING THE SV BOUND ###
 
   if(testSelBias<biasLimit)
   {
-    AFbound = calcAFbound(pY0,pY1,pTnew,pSmatNew,pU,pV,whichEst,obsProb)
-  }else{AFbound = calcAFbound(pY1,pY0,pT,pSmat,pU,pV,whichEst,obsProb)}
+    SVbound = calcSVbound(pY0,pY1,pTnew,pSmatNew,pU,pV,whichEst,obsProb)
+  }else{SVbound = calcSVbound(pY1,pY0,pT,pSmat,pU,pV,whichEst,obsProb)}
 
-  ### END CALCULATE THE ASSUMPTION FREE BOUND ###
+  ### END CALCULATING THE SV BOUND ###
 
   # The return list.
-  heading = c("AF bound","Reverse treatment")
-  values = list(AFbound,as.logical(revTreat))
+  if(whichEst=="RR_tot"){
+    heading = c("SV bound","BF_1","BF_0","RR_SU|T=1","RR_SU|T=0","RR_UY|T=1","RR_UY|T=0","Reverse treatment")
+    values = list(SVbound[1],SVbound[2],SVbound[3],SVbound[4],SVbound[5],SVbound[6],SVbound[7],as.logical(revTreat))
+  }else if(whichEst=="RD_tot"){
+    heading = c("SV bound","BF_1","BF_0","RR_SU|T=1","RR_SU|T=0","RR_UY|T=1","RR_UY|T=0","P(Y=1|T=1,I_S=1)","P(Y=1|T=0,I_S=1)","Reverse treatment")
+    values = list(SVbound[1],SVbound[2],SVbound[3],SVbound[4],SVbound[5],SVbound[6],SVbound[7],SVbound[8],SVbound[9],as.logical(revTreat))
+  }else if(whichEst=="RR_s"){
+    heading = c("SV bound","BF_U","RR_TU|S=1","RR_UY|S=1","Reverse treatment")
+    values = list(SVbound[1],SVbound[2],SVbound[3],SVbound[4],as.logical(revTreat))
+  }else{
+    heading = c("SV bound","BF_U","RR_TU|S=1","RR_UY|S=1","P(Y=1|T=1,I_S=1)","P(Y=1|T=0,I_S=1)","Reverse treatment")
+    values = list(SVbound[1],SVbound[2],SVbound[3],SVbound[4],SVbound[5],SVbound[6],as.logical(revTreat))
+  }
 
   returnDat = matrix(cbind(heading,values),ncol=2)
   return(returnDat)
