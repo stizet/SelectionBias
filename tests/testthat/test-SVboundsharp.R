@@ -1,13 +1,18 @@
+
 ##########################################################################################################################################
 
-test_that("The SV bound in the subpopulation is sharp when BFU=2 and P(Y=1|T=0,I_S=1)=0.4", {
+test_that("SVsharp works for correct input.", {
+  expect_equal(SVboundsharp(2,0.4), "SV bound is sharp.")
   expect_equal(SVboundsharp(2,0.4), "SV bound is sharp.")
 })
 
+
 ##########################################################################################################################################
 
-test_that("The SV bound in the subpopulation is inconclusive when BFU=2 and P(Y=1|T=0,I_S=1)=0.8", {
-  expect_equal(SVboundsharp(2,0.8), "Inconclusive.")
+test_that("SVboundsharp throws an error for wrong input.", {
+  expect_error(SVboundsharp(0.5,0.8), "greater than or equal to 1")
+  expect_error(SVboundsharp(2,2), "not between 0 and 1")
+  expect_error(SVboundsharp(2,-2), "not between 0 and 1")
 })
 
 ##########################################################################################################################################

@@ -1,50 +1,57 @@
 
 ##########################################################################################################################################
 
-test_that("RR_tot AF bound equals 8 when all probabilities are equal to 0.5 and selection is given as a vector", {
-  expect_equal(AFbound(c(0,0,0,0,1,1,1,1),c(0,0,1,1,0,0,1,1),c(0,1,0,1,0,1,0,1),"RR_tot"), 8)
+test_that("AFbound works for a small dataset for all estimands.", {
+
+  # The small dataset.
+  y = c(0,0,0,0,1,1,1,1)
+  tr = c(0,0,1,1,0,0,1,1)
+  sel = c(0,1,0,1,0,1,0,1)
+  selprob = 0.5
+
+  # Should equal 8 for "RR_tot".
+  expect_equal(AFbound(y, tr, sel, "RR_tot"), 8)
+  expect_equal(AFbound(y, tr, 0.5, "RR_tot"), 8)
+
+  # Should equal 0.875 for "RD_tot".
+  expect_equal(AFbound(y, tr, sel, "RD_tot"), 0.875)
+  expect_equal(AFbound(y, tr, selprob, "RD_tot"), 0.875)
+
+  # Should equal 3 for "RR_s".
+  expect_equal(AFbound(y, tr, sel, "RR_s"), 3)
+  expect_equal(AFbound(y, tr, selprob, "RR_s"), 3)
+
+  # Should equal 0.5 for "RD_s".
+  expect_equal(AFbound(y, tr, sel, "RD_s"), 0.5)
+  expect_equal(AFbound(y, tr, selprob, "RD_s"), 0.5)
+
 })
 
 ##########################################################################################################################################
 
-test_that("RR_tot AF bound equals 8 when all probabilities are equal to 0.5 and selection is given as a probability", {
-  expect_equal(AFbound(c(0,0,0,0,1,1,1,1),c(0,0,1,1,0,0,1,1),0.5,"RR_tot"), 8)
+test_that("AFbound throws an error if the selection probability is not between 0 and 1.", {
+
+  # The small dataset.
+  y = c(0,0,0,0,1,1,1,1)
+  tr = c(0,0,1,1,0,0,1,1)
+
+  expect_error(AFbound(y, tr, 2, "RR_tot"), 'not between 0 and 1.')
+  expect_error(AFbound(y, tr, -2, "RR_tot"), 'not between 0 and 1.')
+
 })
 
 ##########################################################################################################################################
 
-test_that("RD_tot AF bound equals 0.875 when all probabilities are equal to 0.5 and selection is given as a vector", {
-  expect_equal(AFbound(c(0,0,0,0,1,1,1,1),c(0,0,1,1,0,0,1,1),c(0,1,0,1,0,1,0,1),"RD_tot"), 0.875)
+test_that("AFbound throws an error if the estimand is not correctly specified.", {
+
+  # The small dataset.
+  y = c(0,0,0,0,1,1,1,1)
+  tr = c(0,0,1,1,0,0,1,1)
+  selprob = 0.5
+
+  expect_error(AFbound(y, tr, selprob, "RR_t"), 'The estimand must be')
+
 })
 
 ##########################################################################################################################################
 
-test_that("RD_tot AF bound equals 0.875 when all probabilities are equal to 0.5 and selection is given as a probability", {
-  expect_equal(AFbound(c(0,0,0,0,1,1,1,1),c(0,0,1,1,0,0,1,1),0.5,"RD_tot"), 0.875)
-})
-
-##########################################################################################################################################
-
-test_that("RR_s AF bound equals 3 when all probabilities are equal to 0.5 and selection is given as a vector", {
-  expect_equal(AFbound(c(0,0,0,0,1,1,1,1),c(0,0,1,1,0,0,1,1),c(0,1,0,1,0,1,0,1),"RR_s"), 3)
-})
-
-##########################################################################################################################################
-
-test_that("RR_s AF bound equals 3 when all probabilities are equal to 0.5 and selection is given as a probability", {
-  expect_equal(AFbound(c(0,0,0,0,1,1,1,1),c(0,0,1,1,0,0,1,1),0.5,"RR_s"), 3)
-})
-
-##########################################################################################################################################
-
-test_that("RD_s AF bound equals 0.5 when all probabilities are equal to 0.5 and selection is given as a vector", {
-  expect_equal(AFbound(c(0,0,0,0,1,1,1,1),c(0,0,1,1,0,0,1,1),c(0,1,0,1,0,1,0,1),"RD_s"), 0.5)
-})
-
-##########################################################################################################################################
-
-test_that("RD_s AF bound equals 0.5 when all probabilities are equal to 0.5 and selection is given as a probability", {
-  expect_equal(AFbound(c(0,0,0,0,1,1,1,1),c(0,0,1,1,0,0,1,1),0.5,"RD_s"), 0.5)
-})
-
-##########################################################################################################################################

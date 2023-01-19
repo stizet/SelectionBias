@@ -23,7 +23,7 @@ SVboundsharp <- function(BF_U, prob)
 
   # Check if 0<P(Y=1|T=0,I_S=1)<1 and BF_U>=1. If not, throw an error.
   if(any(prob < 0 | prob > 1)) stop('P(Y=1|T=0,I_S=1) not between 0 and 1.')
-  if(BF_U < 1) stop('BF_U smaller than 1.')
+  if(BF_U < 1) stop('BF_U must be greater than or equal to 1.')
 
   # Calculate the sharp limit.
   sharpLim = 1 / prob

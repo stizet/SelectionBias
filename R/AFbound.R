@@ -32,6 +32,9 @@ AFbound <- function(outcome, treatment, selection, whichEst)
   # selection, for multiple selection variables. The input is the data and
   # which causal estimand the calculations are performed for.
 
+  # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_s", "RD_s".
+  if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s") stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
+
   y = outcome
   tr = treatment
   Is = selection

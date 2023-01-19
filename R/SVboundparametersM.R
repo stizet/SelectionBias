@@ -33,18 +33,18 @@
 #'   structure. If "P", the probit model is used. If "L", the logit model is
 #'   used.
 #'
-#' @return A list containing the Smith and VanderWeele bound and an indicator if
+#' @return A list containing the sensitivity parameters and an indicator if
 #'   the treatment has been reversed.
 #' @export
 #'
 #' @examples
-#' pV = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
-#' pU = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
-#' pT = c(0, 1)
-#' pY = c(0, 0, 1)
-#' pS = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
-#' SVboundparametersM(Vval = pV, Uval = pU, Tcoef = pT, Ycoef = pY,
-#'  Scoef = pS, whichEst = "RR_tot", Mmodel = "P")
+#' V = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+#' U = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+#' Tr = c(0, 1)
+#' Y = c(0, 0, 1)
+#' S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
+#' SVboundparametersM(Vval = V, Uval = U, Tcoef = T, Ycoef = Y,
+#'  Scoef = S, whichEst = "RR_tot", Mmodel = "P")
 SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
 {
   # A function that calculates the sensitivity parameters for the SV bound
@@ -62,7 +62,14 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   ### RUN SOME CHECKS OF THE INPUT ###
 
   # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_s", "RD_s".
-  if(any(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s")) stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
+  if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s") stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
+
+  # Check dimensions of the input arguments.
+  if(length(Vval[1, ]) != 2) stop('The number of columns in Vval must be equal to 2.')
+  if(length(Uval[1, ]) != 2) stop('The number of columns in Uval must be equal to 2.')
+  if(length(Tcoef) != 2) stop('The number of parameters in Tcoef must be equal to 2.')
+  if(length(Ycoef) != 3) stop('The number of parameters in Ycoef must be equal to 3.')
+  if(length(Scoef[1,]) != 4) stop('The number of columns in Scoef must be equal to 4.')
 
   # Check if the probabilities of V and U sum to 1. If not, throw an error.
   if(any((sum(Vval[ , 2]) > 1) | (sum(Vval[ , 2]) < 1))) stop('The probabilities of the categories of V do not sum to 1.')

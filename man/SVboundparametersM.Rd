@@ -43,7 +43,7 @@ structure. If "P", the probit model is used. If "L", the logit model is
 used.}
 }
 \value{
-A list containing the Smith and VanderWeele bound and an indicator if
+A list containing the sensitivity parameters and an indicator if
 the treatment has been reversed.
 }
 \description{
@@ -52,11 +52,11 @@ an indicator if the treatment coding is reversed for an assumed model (Smith,
 L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
 }
 \examples{
-pV = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
-pU = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
-pT = c(0, 1)
-pY = c(0, 0, 1)
-pS = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
-SVboundparametersM(Vval = pV, Uval = pU, Tcoef = pT, Ycoef = pY,
- Scoef = pS, whichEst = "RR_tot", Mmodel = "P")
+V = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+U = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+Tr = c(0, 1)
+Y = c(0, 0, 1)
+S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
+SVboundparametersM(Vval = V, Uval = U, Tcoef = T, Ycoef = Y,
+ Scoef = S, whichEst = "RR_tot", Mmodel = "P")
 }
