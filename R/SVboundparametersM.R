@@ -98,8 +98,8 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   pV = stats::na.omit(dataProb$pV)
   pU = stats::na.omit(dataProb$pU)
   pT = matrix(stats::na.omit(dataProb$pT), nrow = 2, byrow = TRUE)
-  pY1 = matrix(stats::na.omit(dataProb$pY1), ncol = 2, byrow = TRUE)
-  pY0 = matrix(stats::na.omit(dataProb$pY0), ncol = 2, byrow = TRUE)
+  pY1 = matrix(stats::na.omit(dataProb$pY1), nrow = 2, byrow = TRUE)
+  pY0 = matrix(stats::na.omit(dataProb$pY0), nrow = 2, byrow = TRUE)
   pSmat = as.data.frame(dataProb[ , 6 : length(dataProb[1, ])])
 
   ### END GETTING THE DATA PROBABILITIES ###

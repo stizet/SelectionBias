@@ -9,7 +9,7 @@ test_that("SVsharp works for correct input.", {
 
 ##########################################################################################################################################
 
-test_that("SVboundsharp throws an error for wrong input.", {
+test_that("SVboundsharp throws an error for incorrect input.", {
   expect_error(SVboundsharp(0.5,0.8), "greater than or equal to 1")
   expect_error(SVboundsharp(2,2), "not between 0 and 1")
   expect_error(SVboundsharp(2,-2), "not between 0 and 1")

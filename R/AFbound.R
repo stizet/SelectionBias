@@ -89,5 +89,9 @@ AFbound <- function(outcome, treatment, selection, whichEst)
     AFbound = min((pT1_Is1 + pY1_T0_Is1 * pT0_Is1), 1) +
       pY1_T1_Is1 * (1 - pT1_Is1) - pY1_T0_Is1
   }
-  return(AFbound)
+
+  heading = "AF bound"
+  returnDat = matrix(cbind(heading, AFbound), ncol = 2)
+
+  return(returnDat)
 }
