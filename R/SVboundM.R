@@ -1,7 +1,7 @@
 #' Calculate the Smith and VanderWeele bound for the M-structure
 #'
-#' `SVboundM()` returns a list with the SV bound, the sensititivity parameters and an indicator if
-#' the treatment coding is reversed for an assumed model (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
+#' `SVboundM()` returns a list with the SV bound, the sensititivity parameters
+#' and an indicator if the treatment coding is reversed for an assumed model.
 #'
 #' @param Vval Input matrix. The first column is the values of the categories of
 #'   V. The second column is the probabilities of the categories of V. If V is
@@ -12,10 +12,10 @@
 #' @param Tcoef Input vector. Two numerical elements. The first element is the
 #'   intercept in the model for the treatment. The second element is the slope
 #'   in the model for the treatment.
-#' @param Ycoef Ycoef Input vector. Three numerical elements. The first element is the
-#'   intercept in the model for the outcome. The second element is the slope for
-#'   T in the model for the outcome. The third element is the slope for U in the
-#'   model for the outcome.
+#' @param Ycoef Ycoef Input vector. Three numerical elements. The first element
+#'   is the intercept in the model for the outcome. The second element is the
+#'   slope for T in the model for the outcome. The third element is the slope
+#'   for U in the model for the outcome.
 #' @param Scoef Input matrix. Numerical matrix of size K by 4, where K is the
 #'   number of selection variables. Each row is the coefficients for one
 #'   selection variable. The first column is the intercepts in the models for
@@ -32,7 +32,8 @@
 #'   structure. If "P", the probit model is used. If "L", the logit model is
 #'   used.
 #'
-#' @return A list containing the Smith and VanderWeele bound and an indicator if the treatment has been reversed.
+#' @return A list containing the Smith and VanderWeele bound and an indicator if
+#'   the treatment has been reversed.
 #' @export
 #'
 #' @examples
@@ -43,6 +44,14 @@
 #' pS = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2,byrow = TRUE)
 #' SVboundM(Vval = pV, Uval = pU, Tcoef = pT, Ycoef = pY,
 #'  Scoef = pS, whichEst = "RR_tot", Mmodel = "P")
+#'
+#' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
+#'   to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
+#'
+#'   Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
+#'   inclusion criteria in observational studies" Epidemiologic Methods 11, no.
+#'   1 (2022): 20220108.
+#'
 SVboundM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
 {
   # A function that calculates the SV bound for the bias due to selection, for

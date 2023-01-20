@@ -4,7 +4,7 @@
 \alias{SVboundsharp}
 \title{Check if the Smith and VanderWeele bound in the subpopulation is sharp}
 \usage{
-SVboundsharp(BF_U, prob)
+SVboundsharp(BF_U, prob, SVbound = NULL, AFbound = NULL)
 }
 \arguments{
 \item{BF_U}{Input scalar. The bounding factor for the SV bounds in the

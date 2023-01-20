@@ -1,7 +1,8 @@
 #' Calculate the assumption free bound for a data set
 #'
-#' `AFbound()` returns the assumption free bound for an observed data set
-#' that consists of an outcome, a treatment and a selection variable.
+#' `AFbound()` returns the assumption free bound for an observed data set that
+#' consists of an outcome, a treatment and a selection variable. The eventual
+#' recoding of the treatment has to be done manually.
 #'
 #' @param outcome Input vector. A binary outcome variable.
 #' @param treatment Input vector. A binary treatment variable.
@@ -13,7 +14,7 @@
 #'   "RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk
 #'   difference in the subpopulation: "RD_s".
 #'
-#' @return A scalar with the assumption free bound.
+#' @return A list with the assumption free bound.
 #' @export
 #'
 #' @examples
@@ -26,6 +27,11 @@
 #' tr = c(0, 0, 1, 1, 0, 0, 1, 1)
 #' selprob = 0.5
 #' AFbound(outcome = y, treatment = tr, selection = selprob, whichEst = "RR_tot")
+#'
+#' @references Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
+#'   inclusion criteria in observational studies" Epidemiologic Methods 11, no.
+#'   1 (2022): 20220108.
+#'
 AFbound <- function(outcome, treatment, selection, whichEst)
 {
   # A function that calculates the assumption free bound for the bias due to
@@ -33,7 +39,8 @@ AFbound <- function(outcome, treatment, selection, whichEst)
   # which causal estimand the calculations are performed for.
 
   # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_s", "RD_s".
-  if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s") stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
+  if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s")
+    stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
 
   y = outcome
   tr = treatment

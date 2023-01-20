@@ -33,8 +33,8 @@
 #'   structure. If "P", the probit model is used. If "L", the logit model is
 #'   used.
 #'
-#' @return A list containing the sensitivity parameters and an indicator if
-#'   the treatment has been reversed.
+#' @return A list containing the sensitivity parameters and an indicator if the
+#'   treatment has been reversed.
 #' @export
 #'
 #' @examples
@@ -45,6 +45,14 @@
 #' S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
 #' SVboundparametersM(Vval = V, Uval = U, Tcoef = T, Ycoef = Y,
 #'  Scoef = S, whichEst = "RR_tot", Mmodel = "P")
+#'
+#' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
+#'   to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
+#'
+#'   Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
+#'   inclusion criteria in observational studies" Epidemiologic Methods 11, no.
+#'   1 (2022): 20220108.
+#'
 SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
 {
   # A function that calculates the sensitivity parameters for the SV bound
@@ -62,7 +70,8 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   ### RUN SOME CHECKS OF THE INPUT ###
 
   # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_s", "RD_s".
-  if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s") stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
+  if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s")
+    stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
 
   # Check dimensions of the input arguments.
   if(length(Vval[1, ]) != 2) stop('The number of columns in Vval must be equal to 2.')
@@ -78,6 +87,10 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   # Check if the probabilities of V and U are positive. If not, throw an error.
   if(any(Vval[ , 2] < 0)) stop('At least one of the categories of V has a negative probability.')
   if(any(Uval[ , 2] < 0)) stop('At least one of the categories of U has a negative probability.')
+
+  # Check if the probabilities of V and U are equal to 0. If they are, throw an error.
+  if(any(Vval[ , 2] == 0)) stop('At least one of the categories of V has a probability equal to 0. Remove that category, or change to a positive value.')
+  if(any(Uval[ , 2] == 0)) stop('At least one of the categories of U has a probability equal to 0. Remove that category, or change to a positive value.')
 
   ### END CHECKS OF THE INPUT ###
 
