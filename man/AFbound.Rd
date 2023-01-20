@@ -21,11 +21,12 @@ population: "RR_tot", (2) Risk difference in the total population:
 difference in the subpopulation: "RD_s".}
 }
 \value{
-A scalar with the assumption free bound.
+A list with the assumption free bound.
 }
 \description{
-\code{AFbound()} returns the assumption free bound for an observed data set
-that consists of an outcome, a treatment and a selection variable.
+\code{AFbound()} returns the assumption free bound for an observed data set that
+consists of an outcome, a treatment and a selection variable. The eventual
+recoding of the treatment has to be done manually.
 }
 \examples{
 y = c(0, 0, 0, 0, 1, 1, 1, 1)
@@ -37,4 +38,10 @@ y = c(0, 0, 0, 0, 1, 1, 1, 1)
 tr = c(0, 0, 1, 1, 0, 0, 1, 1)
 selprob = 0.5
 AFbound(outcome = y, treatment = tr, selection = selprob, whichEst = "RR_tot")
+
+}
+\references{
+Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
+inclusion criteria in observational studies" Epidemiologic Methods 11, no.
+1 (2022): 20220108.
 }

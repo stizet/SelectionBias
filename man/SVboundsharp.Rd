@@ -12,18 +12,28 @@ subpopulation. Must be equal to or above 1.}
 
 \item{prob}{Input scalar. The probability P(Y=1|T=0,I_S=1). The eventual
 recoding has to be done manually.}
+
+\item{SVbound}{Optional input scalar. The SV bound (calculated in another
+place). Only necessary if one wants to know if the SV bound is not sharp.}
+
+\item{AFbound}{Optional input scalar. The AF bound (calculated in another
+place). Only necessary if one wants to know if the SV bound is not sharp.}
 }
 \value{
 A string stating if the SV bound is sharp, or if it is inconclusive.
 }
 \description{
-\code{SVboundsharp()} returns a string that indicates if the SV bound is sharp or
-if its inconclusive.
+\code{SVboundsharp()} returns a string that indicates if the SV bound is sharp, if
+it's inconclusive or if it's not sharp.
 }
 \examples{
-BF = 2
-success = 0.4
-SVboundsharp(BF_U = BF, prob = success)
+SVboundsharp(BF_U = 2, prob = 0.4, SVbound = 2, AFbound = 3)
+SVboundsharp(BF_U = 2, prob = 0.9, SVbound = 2, AFbound = 1.8)
 
+}
+\references{
+Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due to
+selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
 
+Zetterstrom, Stina and Waernbaum, Ingeborg. MANUSCRIPT XXX
 }

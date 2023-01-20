@@ -19,10 +19,10 @@ continuous, use a fine grid of values and probabilities.}
 intercept in the model for the treatment. The second element is the slope
 in the model for the treatment.}
 
-\item{Ycoef}{Ycoef Input vector. Three numerical elements. The first element is the
-intercept in the model for the outcome. The second element is the slope for
-T in the model for the outcome. The third element is the slope for U in the
-model for the outcome.}
+\item{Ycoef}{Ycoef Input vector. Three numerical elements. The first element
+is the intercept in the model for the outcome. The second element is the
+slope for T in the model for the outcome. The third element is the slope
+for U in the model for the outcome.}
 
 \item{Scoef}{Input matrix. Numerical matrix of size K by 4, where K is the
 number of selection variables. Each row is the coefficients for one
@@ -43,11 +43,12 @@ structure. If "P", the probit model is used. If "L", the logit model is
 used.}
 }
 \value{
-A list containing the Smith and VanderWeele bound and an indicator if the treatment has been reversed.
+A list containing the Smith and VanderWeele bound and an indicator if
+the treatment has been reversed.
 }
 \description{
-\code{SVboundM()} returns a list with the SV bound, the sensititivity parameters and an indicator if
-the treatment coding is reversed for an assumed model (Smith, L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
+\code{SVboundM()} returns a list with the SV bound, the sensititivity parameters
+and an indicator if the treatment coding is reversed for an assumed model.
 }
 \examples{
 pV = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
@@ -57,4 +58,13 @@ pY = c(0, 0, 1)
 pS = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2,byrow = TRUE)
 SVboundM(Vval = pV, Uval = pU, Tcoef = pT, Ycoef = pY,
  Scoef = pS, whichEst = "RR_tot", Mmodel = "P")
+
+}
+\references{
+Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
+to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
+
+Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
+inclusion criteria in observational studies" Epidemiologic Methods 11, no.
+1 (2022): 20220108.
 }

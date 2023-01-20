@@ -43,8 +43,8 @@ structure. If "P", the probit model is used. If "L", the logit model is
 used.}
 }
 \value{
-A list containing the sensitivity parameters and an indicator if
-the treatment has been reversed.
+A list containing the sensitivity parameters and an indicator if the
+treatment has been reversed.
 }
 \description{
 \code{SVboundparametersM()} returns a list with the sensititivity parameters and
@@ -57,6 +57,15 @@ U = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
 Tr = c(0, 1)
 Y = c(0, 0, 1)
 S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
-SVboundparametersM(Vval = V, Uval = U, Tcoef = T, Ycoef = Y,
+SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y,
  Scoef = S, whichEst = "RR_tot", Mmodel = "P")
+
+}
+\references{
+Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
+to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
+
+Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
+inclusion criteria in observational studies" Epidemiologic Methods 11, no.
+1 (2022): 20220108.
 }
