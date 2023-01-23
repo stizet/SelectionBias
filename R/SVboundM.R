@@ -26,8 +26,8 @@
 # @param whichEst Input string. Defining the causal estimand of interest.
 #   Available options are as follows. (1) Relative risk in the total
 #   population: "RR_tot", (2) Risk difference in the total population:
-#   "RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk
-#   difference in the subpopulation: "RD_s".
+#   "RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
+#   difference in the subpopulation: "RD_sub".
 # @param Mmodel Input string. Defining the models for the variables in the M
 #   structure. If "P", the probit model is used. If "L", the logit model is
 #   used.
@@ -69,8 +69,9 @@ SVboundM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
 
   ### RUN SOME CHECKS OF THE INPUT ###
 
-  # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_s", "RD_s".
-  if(any(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s")) stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
+  # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_sub", "RD_sub".
+  if(any(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_sub" & whichEst != "RD_sub"))
+    stop('The estimand must be "RR_tot", "RD_tot", "RR_sub" or "RD_sub".')
 
   # Check if the probabilities of V and U sum to 1. If not, throw an error.
   if(any((sum(Vval[ , 2]) > 1) | (sum(Vval[ , 2]) < 1))) stop('The probabilities of the categories of V do not sum to 1.')
@@ -116,7 +117,7 @@ SVboundM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
   # Check if the selection bias is a numerical value. If not, throw an error.
   if(is.nan(testSelBias)) stop('Input parameters result in 0/0. This can for instance happen if P(T=t|V)=0 or P(I_S=1|U,V)=0.')
 
-  biasLimit = ifelse(whichEst == "RD_s" | whichEst == "RD_tot", 0, 1)
+  biasLimit = ifelse(whichEst == "RD_sub" | whichEst == "RD_tot", 0, 1)
 
   # Check if the bias is negative, and if it is re-code treatment and calculate the new bias and treatment effect.
   if(testSelBias < biasLimit)
@@ -153,7 +154,7 @@ SVboundM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
   }else if(whichEst == "RD_tot"){
     heading = c("SV bound", "BF_1", "BF_0", "RR_SU|T=1", "RR_SU|T=0", "RR_UY|T=1", "RR_UY|T=0", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
     values = list(SVbound[1], SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], SVbound[8], SVbound[9], as.logical(revTreat))
-  }else if(whichEst == "RR_s"){
+  }else if(whichEst == "RR_sub"){
     heading = c("SV bound", "BF_U", "RR_TU|S=1", "RR_UY|S=1", "Reverse treatment")
     values = list(SVbound[1], SVbound[2], SVbound[3], SVbound[4], as.logical(revTreat))
   }else{

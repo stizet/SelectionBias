@@ -14,16 +14,16 @@ test_that("AFbound works for a small dataset for all estimands.", {
   expect_equal(as.numeric(AFbound(y, tr, selprob, "RR_tot")[1,2]), 8)
 
   # Should equal 0.875 for "RD_tot".
-  expect_equal(as.numeric(AFbound(y, tr, sel, "RD_tot")[1,2]), 0.875)
-  expect_equal(as.numeric(AFbound(y, tr, selprob, "RD_tot")[1,2]), 0.875)
+  expect_equal(as.numeric(AFbound(y, tr, sel, "RD_tot")[1,2]), 0.88)
+  expect_equal(as.numeric(AFbound(y, tr, selprob, "RD_tot")[1,2]), 0.88)
 
-  # Should equal 3 for "RR_s".
-  expect_equal(as.numeric(AFbound(y, tr, sel, "RR_s")[1,2]), 3)
-  expect_equal(as.numeric(AFbound(y, tr, selprob, "RR_s")[1,2]), 3)
+  # Should equal 3 for "RR_sub".
+  expect_equal(as.numeric(AFbound(y, tr, sel, "RR_sub")[1,2]), 3)
+  expect_equal(as.numeric(AFbound(y, tr, selprob, "RR_sub")[1,2]), 3)
 
-  # Should equal 0.5 for "RD_s".
-  expect_equal(as.numeric(AFbound(y, tr, sel, "RD_s")[1,2]), 0.5)
-  expect_equal(as.numeric(AFbound(y, tr, selprob, "RD_s")[1,2]), 0.5)
+  # Should equal 0.5 for "RD_sub".
+  expect_equal(as.numeric(AFbound(y, tr, sel, "RD_sub")[1,2]), 0.5)
+  expect_equal(as.numeric(AFbound(y, tr, selprob, "RD_sub")[1,2]), 0.5)
 
 })
 

@@ -1,19 +1,18 @@
 Package: SelectionBias
 Title: Calculates bounds for the selection bias for binary treatment
-  and outcome variables in the extended M-structure and observed data
+  and outcome variables
 Version: 0.0.0.9000
 Authors@R: 
     person("Stina", "Zetterstrom", , "stina.zetterstrom@statistik.uu.se",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0003-0730-9425"))
     person("Ingeborg", "Waernbaum", , "ingeborg.waernbaum@statistik.uu.se",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0002-4457-5311"))
-Description: Calculates bounds and sensitivity parameters. The sensitivity 
-    parameters is calculated for user specified parameters in the generalized
-    M-structure. Smith and VanderWeeles (SV) bound is calculated for user
-    specified sensitivity parameters. These can either come from the 
-    generlized M-structure, or another souce. The sharpness of the SV bound can
-    be assessed. The assumption free bound is calculated for observed data
-    (outcome, treatment and selection variables).
+Description: Computes bounds and sensitivity parameters as part of sensitivity
+    analysis for selection bias. Two bounds are provided: SV bound and AF bound.
+    The SV bound assumes an additional dependence structure in form of a
+    generalized M-structure (Smith and VanderWeeles, 2019) whereas the AF bound
+    holds for general assumptions in the potential outcomes framework 
+    (Zetterstrom and Waernbaum, 2022).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

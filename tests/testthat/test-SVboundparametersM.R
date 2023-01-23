@@ -14,7 +14,7 @@ test_that("BFs are equal to 1 when no collider is present.", {
   expect_equal(round(as.numeric(SVboundparametersM(V, U, Tr, Y, S, "RR_tot", "P")[2, 2]), 4), 1)
 
   # BF_U should equal 1.
-  expect_equal(round(as.numeric(SVboundparametersM(V, U, Tr, Y, S, "RR_s", "P")[1, 2]), 4), 1)
+  expect_equal(round(as.numeric(SVboundparametersM(V, U, Tr, Y, S, "RR_sub", "P")[1, 2]), 4), 1)
 })
 
 ##########################################################################################################################################
@@ -33,7 +33,7 @@ test_that("BFs take specific values with one selection variable and U and V are 
   expect_equal(round(as.numeric(SVboundparametersM(V, U, Tr, Y, S, "RR_tot", "P")[2, 2]), 4), 1.0021)
 
   # BF_U should equal 1.0153.
-  expect_equal(round(as.numeric(SVboundparametersM(V, U, Tr, Y, S, "RR_s", "P")[1, 2]), 4), 1.0153)
+  expect_equal(round(as.numeric(SVboundparametersM(V, U, Tr, Y, S, "RR_sub", "P")[1, 2]), 4), 1.0153)
 })
 
 ##########################################################################################################################################
@@ -52,7 +52,7 @@ test_that("BFs take specific values with two selection variables and U and V are
   expect_equal(round(as.numeric(SVboundparametersM(V, U, Tr, Y, S, "RR_tot", "P")[2, 2]), 2), 1.76)
 
   # BF_U should equal 1.29.
-  expect_equal(round(as.numeric(SVboundparametersM(V, U, Tr, Y, S, "RR_s", "P")[1, 2]), 2), 1.29)
+  expect_equal(round(as.numeric(SVboundparametersM(V, U, Tr, Y, S, "RR_sub", "P")[1, 2]), 2), 1.29)
 })
 
 ##########################################################################################################################################

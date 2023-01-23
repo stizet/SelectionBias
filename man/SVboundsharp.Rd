@@ -8,33 +8,42 @@ SVboundsharp(BF_U, prob, SVbound = NULL, AFbound = NULL)
 }
 \arguments{
 \item{BF_U}{Input scalar. The bounding factor for the SV bounds in the
-subpopulation. Must be equal to or above 1.}
+subpopulation. Must be equal to or above 1. Can be inserted directly or as
+output from \code{SVboundparametersM()}.}
 
-\item{prob}{Input scalar. The probability P(Y=1|T=0,I_S=1). The eventual
-recoding has to be done manually.}
+\item{prob}{Input scalar. The probability P(Y=1|T=0,I_S=1).}
 
-\item{SVbound}{Optional input scalar. The SV bound (calculated in another
-place). Only necessary if one wants to know if the SV bound is not sharp.}
+\item{SVbound}{Optional input scalar. The SV bound, can be inserted directly
+or as output from \code{SVbound()}. Only necessary if one wants to know if the
+SV bound is not sharp.}
 
-\item{AFbound}{Optional input scalar. The AF bound (calculated in another
-place). Only necessary if one wants to know if the SV bound is not sharp.}
+\item{AFbound}{Optional input scalar. The AF bound, can be inserted directly
+or as output from \code{AFbound()}. Only necessary if one wants to know if the
+SV bound is not sharp.}
 }
 \value{
-A string stating if the SV bound is sharp, or if it is inconclusive.
+A string stating if the SV bound is sharp, inconclusive or not sharp.
 }
 \description{
 \code{SVboundsharp()} returns a string that indicates if the SV bound is sharp, if
-it's inconclusive or if it's not sharp.
+it's inconclusive or if it's not sharp. If the bias is negative, the recoding
+of the treatment has to be done manually.
 }
 \examples{
+
+# Example where the SV bound is sharp.
 SVboundsharp(BF_U = 1.56, prob = 0.33, SVbound = 1.56, AFbound = 3.0)
+
+# Example where the SV bound is not sharp.
 SVboundsharp(BF_U = 2, prob = 0.9, SVbound = 2, AFbound = 1.8)
+
+# Example where the SV bound is inconclusive.
 SVboundsharp(BF_U = 2, prob = 0.8, SVbound = 2, AFbound = 3)
 
 }
 \references{
-Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due to
-selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
+Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
+to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
 
 Zetterstrom, Stina and Waernbaum, Ingeborg. MANUSCRIPT XXX
 }

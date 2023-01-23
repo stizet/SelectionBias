@@ -2,7 +2,7 @@
 % Please edit documentation in R/SVboundparametersM.R
 \name{SVboundparametersM}
 \alias{SVboundparametersM}
-\title{Calculate the Smith and VanderWeele bound for the M-structure}
+\title{Sensitivity parameters for the Smith and VanderWeele bound}
 \usage{
 SVboundparametersM(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
 }
@@ -19,10 +19,10 @@ continuous, use a fine grid of values and probabilities.}
 intercept in the model for the treatment. The second element is the slope
 in the model for the treatment.}
 
-\item{Ycoef}{Ycoef Input vector. Three numerical elements. The first element
-is the intercept in the model for the outcome. The second element is the
-slope for T in the model for the outcome. The third element is the slope
-for U in the model for the outcome.}
+\item{Ycoef}{Input vector. Three numerical elements. The first element is the
+intercept in the model for the outcome. The second element is the slope for
+T in the model for the outcome. The third element is the slope for U in the
+model for the outcome.}
 
 \item{Scoef}{Input matrix. Numerical matrix of size K by 4, where K is the
 number of selection variables. Each row is the coefficients for one
@@ -35,8 +35,8 @@ T in the models for the selection variables.}
 \item{whichEst}{Input string. Defining the causal estimand of interest.
 Available options are as follows. (1) Relative risk in the total
 population: "RR_tot", (2) Risk difference in the total population:
-"RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk
-difference in the subpopulation: "RD_s".}
+"RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
+difference in the subpopulation: "RD_sub".}
 
 \item{Mmodel}{Input string. Defining the models for the variables in the M
 structure. If "P", the probit model is used. If "L", the logit model is
@@ -47,11 +47,13 @@ A list containing the sensitivity parameters and an indicator if the
 treatment has been reversed.
 }
 \description{
-\code{SVboundparametersM()} returns a list with the sensititivity parameters and
-an indicator if the treatment coding is reversed for an assumed model (Smith,
-L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
+\code{SVboundparametersM()} returns a list with the sensitivity parameters and an
+indicator if bias is negative and the treatment coding is reversed for an
+assumed model.
 }
 \examples{
+
+# Example with no selection bias.
 V = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
 U = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
 Tr = c(0, 1)
@@ -60,15 +62,14 @@ S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
 SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y,
  Scoef = S, whichEst = "RR_tot", Mmodel = "P")
 
-
+# Example with selection bias. DGP from the zika example.
 V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
 U = matrix(c(1, 0, 0.5, 0.5), ncol =2 )
 Tr = c(-6.2, 1.75)
 Y = c(-5.2, 5.0, -1.0)
 S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
-
 SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
- whichEst = "RR_s", Mmodel = "L")
+ whichEst = "RR_sub", Mmodel = "L")
 
 }
 \references{

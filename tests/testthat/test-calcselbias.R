@@ -17,9 +17,9 @@ test_that("No selection bias when no collider is present.", {
   # The bias should be 0.
   expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RD_tot")[1], 0)
   # The bias should be 1.
-  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RR_s")[1], 1)
+  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RR_sub")[1], 1)
   # The bias should be 0.
-  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RD_s")[1], 0)
+  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RD_sub")[1], 0)
 })
 
 ##########################################################################################################################################

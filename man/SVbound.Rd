@@ -2,8 +2,7 @@
 % Please edit documentation in R/SVbound.R
 \name{SVbound}
 \alias{SVbound}
-\title{Calculate the Smith and VanderWeele bound for user specified sensitivity
-parameters}
+\title{Smith and VanderWeele bound}
 \usage{
 SVbound(
   whichEst,
@@ -21,8 +20,8 @@ SVbound(
 \item{whichEst}{Input string. Defining the causal estimand of interest.
 Available options are as follows. (1) Relative risk in the total
 population: "RR_tot", (2) Risk difference in the total population:
-"RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk
-difference in the subpopulation: "RD_s".}
+"RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
+difference in the subpopulation: "RD_sub".}
 
 \item{RR_UY_T1}{Input value. The sensitivity parameter RR_{UY|T=1}. Must be
 greater than or equal to 1. Used in the bounds for the total population.}
@@ -52,24 +51,32 @@ between 0 and 1. Used in the bounds for the risk difference estimands.}
 A list containing the Smith and VanderWeele bound.
 }
 \description{
-\code{SVbound()} returns a list with the SV bound. The eventual recoding of the
-treatment has to be done manually. The input values can be calculated for a
-DGP in \code{SVboundparametersM()}.
+\code{SVbound()} returns a list with the SV bound. All sensitivity parameters for
+the population of interest must be set to numbers, and the rest can be left
+as \code{NULL}. The sensitivity parameters can be inserted directly or as output
+from \code{SVboundparametersM()}. If the bias is negative, the recoding of the
+treatment has to be done manually.
 }
 \examples{
-
+# Example for relative risk in the total population.
 SVbound(whichEst = "RR_tot", RR_UY_T1 = 2, RR_UY_T0 = 2,
  RR_SU_T1 = 1.7, RR_SU_T0 = 1.5)
+
+# Example for risk difference in the total population.
 SVbound(whichEst = "RD_tot", RR_UY_T1 = 2, RR_UY_T0 = 2,
  RR_SU_T1 = 1.7, RR_SU_T0 = 1.5, pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01)
-SVbound(whichEst = "RR_s", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
-SVbound(whichEst = "RD_s", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33,
+
+# Example for relative risk in the subpopulation.
+SVbound(whichEst = "RR_sub", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
+
+# Example for risk difference in the subpopulation.
+SVbound(whichEst = "RD_sub", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33,
  pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01)
 
 }
 \references{
-Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due to
-selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
+Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
+to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
 
 Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
 inclusion criteria in observational studies" Epidemiologic Methods 11, no.

@@ -69,8 +69,8 @@ calcselbias <- function(Y1, Y0, Tr, S, U, V, estimand)
   totRD = pY11 - pY01
 
   # Calculate the selection bias, a difference for RD and a ratio for RR.
-  if(estimand == "RD_s"){selbias = obsRD - subRD
-  }else if(estimand == "RR_s"){selbias = obsRR / subRR
+  if(estimand == "RD_sub"){selbias = obsRD - subRD
+  }else if(estimand == "RR_sub"){selbias = obsRR / subRR
   }else if(estimand == "RD_tot"){selbias = obsRD - totRD
   }else{selbias = obsRR / totRR}
 

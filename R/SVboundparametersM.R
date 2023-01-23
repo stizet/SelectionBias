@@ -1,8 +1,8 @@
-#' Calculate the Smith and VanderWeele bound for the M-structure
+#' Sensitivity parameters for the Smith and VanderWeele bound
 #'
-#' `SVboundparametersM()` returns a list with the sensititivity parameters and
-#' an indicator if the treatment coding is reversed for an assumed model (Smith,
-#' L. H., & VanderWeele, T. J. (2019). Bounding bias due to selection.).
+#' `SVboundparametersM()` returns a list with the sensitivity parameters and an
+#' indicator if bias is negative and the treatment coding is reversed for an
+#' assumed model.
 #'
 #' @param Vval Input matrix. The first column is the values of the categories of
 #'   V. The second column is the probabilities of the categories of V. If V is
@@ -13,10 +13,10 @@
 #' @param Tcoef Input vector. Two numerical elements. The first element is the
 #'   intercept in the model for the treatment. The second element is the slope
 #'   in the model for the treatment.
-#' @param Ycoef Ycoef Input vector. Three numerical elements. The first element
-#'   is the intercept in the model for the outcome. The second element is the
-#'   slope for T in the model for the outcome. The third element is the slope
-#'   for U in the model for the outcome.
+#' @param Ycoef Input vector. Three numerical elements. The first element is the
+#'   intercept in the model for the outcome. The second element is the slope for
+#'   T in the model for the outcome. The third element is the slope for U in the
+#'   model for the outcome.
 #' @param Scoef Input matrix. Numerical matrix of size K by 4, where K is the
 #'   number of selection variables. Each row is the coefficients for one
 #'   selection variable. The first column is the intercepts in the models for
@@ -27,8 +27,8 @@
 #' @param whichEst Input string. Defining the causal estimand of interest.
 #'   Available options are as follows. (1) Relative risk in the total
 #'   population: "RR_tot", (2) Risk difference in the total population:
-#'   "RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk
-#'   difference in the subpopulation: "RD_s".
+#'   "RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
+#'   difference in the subpopulation: "RD_sub".
 #' @param Mmodel Input string. Defining the models for the variables in the M
 #'   structure. If "P", the probit model is used. If "L", the logit model is
 #'   used.
@@ -38,6 +38,8 @@
 #' @export
 #'
 #' @examples
+#'
+#' # Example with no selection bias.
 #' V = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
 #' U = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
 #' Tr = c(0, 1)
@@ -46,15 +48,14 @@
 #' SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y,
 #'  Scoef = S, whichEst = "RR_tot", Mmodel = "P")
 #'
-#'
+#' # Example with selection bias. DGP from the zika example.
 #' V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
 #' U = matrix(c(1, 0, 0.5, 0.5), ncol =2 )
 #' Tr = c(-6.2, 1.75)
 #' Y = c(-5.2, 5.0, -1.0)
 #' S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
-#'
 #' SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
-#'  whichEst = "RR_s", Mmodel = "L")
+#'  whichEst = "RR_sub", Mmodel = "L")
 #'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
 #'   to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
@@ -79,9 +80,9 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
 
   ### RUN SOME CHECKS OF THE INPUT ###
 
-  # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_s", "RD_s".
-  if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_s" & whichEst != "RD_s")
-    stop('The estimand must be "RR_tot", "RD_tot", "RR_s" or "RD_s".')
+  # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_sub", "RD_sub".
+  if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_sub" & whichEst != "RD_sub")
+    stop('The estimand must be "RR_tot", "RD_tot", "RR_sub" or "RD_sub".')
 
   # Check dimensions of the input arguments.
   if(length(Vval[1, ]) != 2) stop('The number of columns in Vval must be equal to 2.')
@@ -138,7 +139,7 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   # Check if the selection bias is a numerical value. If not, throw an error.
   if(is.nan(testSelBias)) stop('Input parameters result in 0/0. This can for instance happen if P(T=t|V)=0 or P(I_S=1|U,V)=0.')
 
-  biasLimit = ifelse(whichEst == "RD_s" | whichEst == "RD_tot", 0, 1)
+  biasLimit = ifelse(whichEst == "RD_sub" | whichEst == "RD_tot", 0, 1)
 
   # Check if the bias is negative, and if it is re-code treatment and calculate the new bias and treatment effect.
   if(testSelBias < biasLimit)
@@ -175,7 +176,7 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   }else if(whichEst == "RD_tot"){
     heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
     values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], SVbound[8], SVbound[9], as.logical(revTreat))
-  }else if(whichEst == "RR_s"){
+  }else if(whichEst == "RR_sub"){
     heading = c("BF_U", "RR_UY|S=1", "RR_TU|S=1", "Reverse treatment")
     values = list(SVbound[2], SVbound[3], SVbound[4], as.logical(revTreat))
   }else{

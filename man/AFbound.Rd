@@ -2,7 +2,7 @@
 % Please edit documentation in R/AFbound.R
 \name{AFbound}
 \alias{AFbound}
-\title{Calculate the assumption free bound for a data set}
+\title{Assumption free bound for a data set}
 \usage{
 AFbound(outcome, treatment, selection, whichEst)
 }
@@ -17,25 +17,30 @@ a selection probability.}
 \item{whichEst}{Input string. Defining the population parameter of interest.
 Available options are as follows. (1) Relative risk in the total
 population: "RR_tot", (2) Risk difference in the total population:
-"RD_tot", (3) Relative risk in the subpopulation: "RR_s", (4) Risk
-difference in the subpopulation: "RD_s".}
+"RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
+difference in the subpopulation: "RD_sub".}
 }
 \value{
 A list with the assumption free bound.
 }
 \description{
-\code{AFbound()} returns the assumption free bound for an observed data set that
-consists of an outcome, a treatment and a selection variable. The eventual
-recoding of the treatment has to be done manually.
+\code{AFbound()} returns the assumption free bound for a dataset that consists of
+an outcome, a treatment and a selection variable. If the bias is negative,
+the recoding of the treatment has to be done manually.
 }
 \examples{
+# Example with selection indicator variable.
 y = c(0, 0, 0, 0, 1, 1, 1, 1)
 tr = c(0, 0, 1, 1, 0, 0, 1, 1)
 sel = c(0, 1, 0, 1, 0, 1, 0, 1)
-selprob = mean(sel)
 AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
-AFbound(outcome = y, treatment = tr, selection = selprob, whichEst = "RR_tot")
 
+# Example with selection probability.
+selprob = mean(sel)
+AFbound(outcome = y[sel==1], treatment = tr[sel==1],
+ selection = selprob, whichEst = "RR_tot")
+
+# Example with simulated data.
 n = 1000
 tr = rbinom(n, 1, 0.5)
 y = rbinom(n, 1, 0.2 + 0.05 * tr)
