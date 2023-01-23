@@ -57,8 +57,6 @@ test_that("BFs take specific values with two selection variables and U and V are
 
 ##########################################################################################################################################
 
-
-
 test_that("SVboundparametersM throws an error if the estimand is not correctly specified.", {
 
   V = matrix(c(1, 0.1, 0, 0.9), nrow=2, byrow=TRUE)
