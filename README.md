@@ -28,91 +28,103 @@ You can install the development version of SelectionBias from Github
 Selections of the study population can be the source of bias. Here, two
 types of bounds for the selection bias is calculated; the bound by Smith
 and VanderWeele (2019), which depends on untestable assumptions, and an
-assumption free bound. The SV bound can be calculated for the extended M
-structure. Below is a small example of how this is done:
+assumption free bound.
+
+The sensitivity parameters in the SV bound is calculated in
+`SVboundparametersM()` for user defined parameters in the extended
+M-structure, where causal dependencies are modeled with either probit or
+logit models. Below is an example with binary unobserved variables and
+two selection variables (zika example in corresponding article):
 
 ``` r
 library(SelectionBias)
-pV = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-pU = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-pT = c(0,1)
-pY = c(0,0,1)
-pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-SVboundM(pV,pU,pT,pY,pS,"RR_tot","P")
+V = matrix(c(1, 0, 0.85, 0.15), nrow = 2)
+U = matrix(c(1, 0, 0.5, 0.5), nrow = 2)
+Tr = c(-6.2, 1.75)
+Y = c(-5.2, 5, -1)
+S = matrix(c(1.2, 2.2, 0, 0.5, 2, -2.75, -4, 0), ncol = 4)
+
+SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
+         whichEst = "RR_s", Mmodel = "L")
 #>      [,1]                [,2]    
-#> [1,] "SV bound"          1       
-#> [2,] "BF_1"              1       
-#> [3,] "BF_0"              1       
-#> [4,] "RR_SU|T=1"         1       
-#> [5,] "RR_SU|T=0"         1       
-#> [6,] "RR_UY|T=1"         1.682689
-#> [7,] "RR_UY|T=0"         1.682689
-#> [8,] "Reverse treatment" FALSE
+#> [1,] "BF_U"              1.562533
+#> [2,] "RR_TU|S=1"         2.329313
+#> [3,] "RR_UY|S=1"         2.708855
+#> [4,] "Reverse treatment" TRUE
 ```
 
-The output is the SV bound and the sensitivity parameters and an
-indicator if the treatment was recoded if the bias in the original
-coding was negative.
+The output is the sensitivity parameters and an indicator that states if
+the treatment was recoded, i.e. that the bias in the original coding was
+negative. (See original article for details.)
 
-The AF bound can also be calculated for the extended M structure:
+The SV bound is calculated in `SVbound()` where the user input is the
+sensitivity parameters. These can either be found for the extended
+M-structure in `SVboundparametersM()`, or from another source. Below is
+an example where the input from is the output from
+`SVboundparametersM()` above:
 
 ``` r
 library(SelectionBias)
-pV = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-pU = matrix(c(1,0.1,0,0.9),nrow=2,byrow=TRUE)
-pT = c(0,1)
-pY = c(0,0,1)
-pS = matrix(c(1,0,0,0,1,0,0,0),nrow=2,byrow=TRUE)
-AFboundM(pV,pU,pT,pY,pS,"RR_tot","P")
-#>      [,1]                [,2]   
-#> [1,] "AF bound"          4.95166
-#> [2,] "Reverse treatment" FALSE
+SVbound(whichEst = "RR_s", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
+#>      [,1]       [,2]    
+#> [1,] "SV bound" 1.562946
 ```
 
-The output is the AF bound and an indicator if the treatment was recoded
-if the bias in the original coding was negative.
+The output is the SV bound. Note that the eventual recoding of the
+treatment has to be done manually, as discussed in the corresponding
+article.
 
-The AF bound can be calculated for the observed data as well. That can
-be done in two ways, either if the selection indicator variable is
-observed or if the selection probability is known. That is done as:
+The AF bound is calculated for the observed data. That can be done in
+two ways, either if the selection indicator variable is observed or if
+the selection probability is known. The input is the outcome vector,
+treatment vector, the selection vector or probability, and which causal
+estimand is of interest. Below is an ecample illustrating both the
+selection vector and probability:
 
 ``` r
 library(SelectionBias)
-y = c(0,0,0,0,1,1,1,1)
-tr = c(0,0,1,1,0,0,1,1)
-sel = c(0,1,0,1,0,1,0,1)
-AFbounddata(y,tr,sel,"RR_tot")
-#> [1] 8
+y = c(0, 0, 0, 0, 1, 1, 1, 1)
+tr = c(0, 0, 1, 1, 0, 0, 1, 1)
+sel = c(0, 1, 0, 1, 0, 1, 0, 1)
+AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
+#>      [,1]       [,2]
+#> [1,] "AF bound" "8"
 
-y = c(0,0,0,0,1,1,1,1)
-tr = c(0,0,1,1,0,0,1,1)
+y = c(0, 0, 0, 0, 1, 1, 1, 1)
+tr = c(0, 0, 1, 1, 0, 0, 1, 1)
 selProb = 0.5
-AFbounddata(y,tr,selProb,"RR_tot")
-#> [1] 8
+AFbound(outcome = y, treatment = tr, selection = selProb, whichEst = "RR_tot")
+#>      [,1]       [,2]
+#> [1,] "AF bound" "8"
 ```
 
-The output is the AF bound.
+The output is the AF bound. Note that the eventual recoding of the
+treatment has to be done manually, as discussed in the corresponding
+article.
 
 ## Data example
 
-For the purpose of illustration of the bounds we construct the simulated
-dataset zika_learner. The zika example is based on studies of a zika
-outbreak in Brazil. See references in corresponding article and the data
-documentation.
+The simulated dataset `zika_learner` is included for the purpose of
+illustration of the bounds. The simulated dataset is created to emulate
+real data as well as a previoys example. See references in corresponding
+article and the data documentation.
 
 The zika data can be reached through
 
 ``` r
 # library(SelectionBias)
-# zika_learner
+data(zika_learner)
 ```
 
 and used to calculate the AF bound as
 
 ``` r
-library(SelectionBias)
-AFbounddata(zika_learner$MC,1-zika_learner$zika,zika_learner$selIndicator,"RR_s")
-#> [1] 3.002098
+# library(SelectionBias)
+attach(zika_learner)
+AFbound(outcome = mic_ceph, treatment = 1-zika, selection = sel_ind,
+        whichEst = "RR_s")
+#>      [,1]       [,2]             
+#> [1,] "AF bound" "3.0020979020979"
 ```
 
 Note that in this example the treatment is reversed as discussed in the
@@ -120,15 +132,27 @@ corresponding article.
 
 ## Sharp example
 
-The sharpness of the SV bound in the subpopulation can be assessed.
+The sharpness of the SV bound in the subpopulation can be assessed in
+the function `SVboundsharp()`. The input is $BF_U$ and the probability
+$P(Y=1|T=0,I_S=1)$. Below is an example where the input is the output
+from previous functions:
 
 ``` r
-library(SelectionBias)
-BF = 2
-success = 0.4
-SVboundsharp(BF,success)
+# library(SelectionBias)
+SVboundsharp(BF_U = 1.56, prob = 0.33)
 #> [1] "SV bound is sharp."
 ```
 
-Note that the eventual recoding of the treatment has to be done
-manually, as discussed in the corresponding article.
+The output states if the bound is sharp, or if it is inconclusive. There
+are two optional arguments as well, SVbound and AFbound. These must be
+entered if one wish to know if the bound is *not* sharp.
+
+``` r
+# library(SelectionBias)
+SVboundsharp(BF_U = 1.56, prob = 0.33, SVbound = 1.56, AFbound = 3)
+#> [1] "SV bound is sharp."
+```
+
+The output states if the bound is sharp, inconclusive or not sharp. Note
+that the eventual recoding of the treatment has to be done manually, as
+discussed in the corresponding article.
