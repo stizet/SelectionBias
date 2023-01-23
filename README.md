@@ -48,8 +48,8 @@ SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
          whichEst = "RR_s", Mmodel = "L")
 #>      [,1]                [,2]    
 #> [1,] "BF_U"              1.562533
-#> [2,] "RR_TU|S=1"         2.329313
-#> [3,] "RR_UY|S=1"         2.708855
+#> [2,] "RR_UY|S=1"         2.708855
+#> [3,] "RR_TU|S=1"         2.329313
 #> [4,] "Reverse treatment" TRUE
 ```
 
@@ -78,24 +78,24 @@ The AF bound is calculated for the observed data. That can be done in
 two ways, either if the selection indicator variable is observed or if
 the selection probability is known. The input is the outcome vector,
 treatment vector, the selection vector or probability, and which causal
-estimand is of interest. Below is an ecample illustrating both the
+estimand is of interest. Below is an example illustrating both the
 selection vector and probability:
 
 ``` r
 library(SelectionBias)
-y = c(0, 0, 0, 0, 1, 1, 1, 1)
-tr = c(0, 0, 1, 1, 0, 0, 1, 1)
-sel = c(0, 1, 0, 1, 0, 1, 0, 1)
-AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
-#>      [,1]       [,2]
-#> [1,] "AF bound" "8"
+n = 1000
+tr = rbinom(n, 1, 0.5)
+y = rbinom(n, 1, 0.2 + 0.05 * tr)
+sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
+selprob = mean(sel)
 
-y = c(0, 0, 0, 0, 1, 1, 1, 1)
-tr = c(0, 0, 1, 1, 0, 0, 1, 1)
-selProb = 0.5
-AFbound(outcome = y, treatment = tr, selection = selProb, whichEst = "RR_tot")
-#>      [,1]       [,2]
-#> [1,] "AF bound" "8"
+AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
+#>      [,1]       [,2]             
+#> [1,] "AF bound" "12.502753910553"
+AFbound(outcome = y[sel==1], treatment = tr[sel==1],
+        selection = selprob, whichEst = "RR_tot")
+#>      [,1]       [,2]             
+#> [1,] "AF bound" "12.502753910553"
 ```
 
 The output is the AF bound. Note that the eventual recoding of the

@@ -21,12 +21,16 @@
 #' y = c(0, 0, 0, 0, 1, 1, 1, 1)
 #' tr = c(0, 0, 1, 1, 0, 0, 1, 1)
 #' sel = c(0, 1, 0, 1, 0, 1, 0, 1)
+#' selprob = mean(sel)
 #' AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
+#' AFbound(outcome = y[sel==1], treatment = tr[sel==1],
+#'  selection = selprob, whichEst = "RR_tot")
 #'
-#' y = c(0, 0, 0, 0, 1, 1, 1, 1)
-#' tr = c(0, 0, 1, 1, 0, 0, 1, 1)
-#' selprob = 0.5
-#' AFbound(outcome = y, treatment = tr, selection = selprob, whichEst = "RR_tot")
+#' n = 1000
+#' tr = rbinom(n, 1, 0.5)
+#' y = rbinom(n, 1, 0.2 + 0.05 * tr)
+#' sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
+#' AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RD_tot")
 #'
 #' @references Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
 #'   inclusion criteria in observational studies" Epidemiologic Methods 11, no.

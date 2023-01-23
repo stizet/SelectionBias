@@ -27,8 +27,9 @@ A string stating if the SV bound is sharp, or if it is inconclusive.
 it's inconclusive or if it's not sharp.
 }
 \examples{
-SVboundsharp(BF_U = 2, prob = 0.4, SVbound = 2, AFbound = 3)
+SVboundsharp(BF_U = 1.56, prob = 0.33, SVbound = 1.56, AFbound = 3.0)
 SVboundsharp(BF_U = 2, prob = 0.9, SVbound = 2, AFbound = 1.8)
+SVboundsharp(BF_U = 2, prob = 0.8, SVbound = 2, AFbound = 3)
 
 }
 \references{

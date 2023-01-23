@@ -71,8 +71,8 @@ calcSVbound <- function(Y1, Y0, Tr, S, U, V, estimand, obsProb)
     boundRD_s = round(max(pY_T0 * (BF_U - 1), pY_T1 * (1 - 1 / BF_U)), digits = 14)
 
     # The return vector.
-    if(estimand == "RD_s"){returnVec = c(boundRD_s, BF_U, RR_TU_S1, RR_UY_S1, pY_T1,pY_T0)
-    }else{returnVec = c(boundRR_s, BF_U, RR_TU_S1, RR_UY_S1)}
+    if(estimand == "RD_s"){returnVec = c(boundRD_s, BF_U, RR_UY_S1, RR_TU_S1, pY_T1,pY_T0)
+    }else{returnVec = c(boundRR_s, BF_U, RR_UY_S1, RR_TU_S1)}
   }else{ #The total population.
     # RR_(UY|T=1), max_u(P(Y=1|T=1,U=u))/min_u(P(Y=1|T=1,U=u))
     RR_UY_T1 = max(Y1[1, ]) / min(Y1[1, ])
@@ -93,8 +93,8 @@ calcSVbound <- function(Y1, Y0, Tr, S, U, V, estimand, obsProb)
     boundRD_tot = BF1 - pY_T1 / BF1 + pY_T0 * BF0
 
     # The return vector.
-    if(estimand=="RR_tot"){returnVec = c(boundRR_tot, BF1, BF0, RR_SU_T1, RR_SU_T0, RR_UY_T1, RR_UY_T0)
-    }else{returnVec = c(boundRD_tot, BF1, BF0, RR_SU_T1, RR_SU_T0, RR_UY_T1, RR_UY_T0, pY_T1, pY_T0)}
+    if(estimand=="RR_tot"){returnVec = c(boundRR_tot, BF1, BF0, RR_UY_T1, RR_UY_T0, RR_SU_T1, RR_SU_T0)
+    }else{returnVec = c(boundRD_tot, BF1, BF0, RR_UY_T1, RR_UY_T0, RR_SU_T1, RR_SU_T0, pY_T1, pY_T0)}
   }
 
   return(returnVec)

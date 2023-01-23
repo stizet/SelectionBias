@@ -60,6 +60,16 @@ S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
 SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y,
  Scoef = S, whichEst = "RR_tot", Mmodel = "P")
 
+
+V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
+U = matrix(c(1, 0, 0.5, 0.5), ncol =2 )
+Tr = c(-6.2, 1.75)
+Y = c(-5.2, 5.0, -1.0)
+S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
+
+SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
+ whichEst = "RR_s", Mmodel = "L")
+
 }
 \references{
 Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due

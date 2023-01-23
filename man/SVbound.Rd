@@ -62,8 +62,8 @@ SVbound(whichEst = "RR_tot", RR_UY_T1 = 2, RR_UY_T0 = 2,
  RR_SU_T1 = 1.7, RR_SU_T0 = 1.5)
 SVbound(whichEst = "RD_tot", RR_UY_T1 = 2, RR_UY_T0 = 2,
  RR_SU_T1 = 1.7, RR_SU_T0 = 1.5, pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01)
-SVbound(whichEst = "RR_s", RR_UY_S1 = 2, RR_TU_S1 = 2.3)
-SVbound(whichEst = "RD_s", RR_UY_S1 = 2, RR_TU_S1 = 2.3,
+SVbound(whichEst = "RR_s", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
+SVbound(whichEst = "RD_s", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33,
  pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01)
 
 }

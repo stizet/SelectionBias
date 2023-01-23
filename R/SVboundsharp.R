@@ -16,8 +16,9 @@
 #' @export
 #'
 #' @examples
-#' SVboundsharp(BF_U = 2, prob = 0.4, SVbound = 2, AFbound = 3)
+#' SVboundsharp(BF_U = 1.56, prob = 0.33, SVbound = 1.56, AFbound = 3.0)
 #' SVboundsharp(BF_U = 2, prob = 0.9, SVbound = 2, AFbound = 1.8)
+#' SVboundsharp(BF_U = 2, prob = 0.8, SVbound = 2, AFbound = 3)
 #'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due to
 #'   selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.

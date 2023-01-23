@@ -46,6 +46,16 @@
 #' SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y,
 #'  Scoef = S, whichEst = "RR_tot", Mmodel = "P")
 #'
+#'
+#' V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
+#' U = matrix(c(1, 0, 0.5, 0.5), ncol =2 )
+#' Tr = c(-6.2, 1.75)
+#' Y = c(-5.2, 5.0, -1.0)
+#' S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
+#'
+#' SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
+#'  whichEst = "RR_s", Mmodel = "L")
+#'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
 #'   to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
 #'
@@ -160,16 +170,16 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
 
   # The return list.
   if(whichEst == "RR_tot"){
-    heading = c("BF_1", "BF_0", "RR_SU|T=1", "RR_SU|T=0", "RR_UY|T=1", "RR_UY|T=0", "Reverse treatment")
+    heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0", "Reverse treatment")
     values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], as.logical(revTreat))
   }else if(whichEst == "RD_tot"){
-    heading = c("BF_1", "BF_0", "RR_SU|T=1", "RR_SU|T=0", "RR_UY|T=1", "RR_UY|T=0", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
+    heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
     values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], SVbound[8], SVbound[9], as.logical(revTreat))
   }else if(whichEst == "RR_s"){
-    heading = c("BF_U", "RR_TU|S=1", "RR_UY|S=1", "Reverse treatment")
+    heading = c("BF_U", "RR_UY|S=1", "RR_TU|S=1", "Reverse treatment")
     values = list(SVbound[2], SVbound[3], SVbound[4], as.logical(revTreat))
   }else{
-    heading = c("BF_U", "RR_TU|S=1", "RR_UY|S=1", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
+    heading = c("BF_U", "RR_UY|S=1", "RR_TU|S=1", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
     values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], as.logical(revTreat))
   }
 

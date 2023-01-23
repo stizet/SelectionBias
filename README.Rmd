@@ -76,18 +76,18 @@ The AF bound is calculated for the observed data. That can be done in two ways,
 either if the selection indicator variable is observed or if the selection
 probability is known. The input is the outcome vector, treatment vector, the
 selection vector or probability, and which causal estimand is of interest. 
-Below is an ecample illustrating both the selection vector and probability:
+Below is an example illustrating both the selection vector and probability:
 ```{r}
 library(SelectionBias)
-y = c(0, 0, 0, 0, 1, 1, 1, 1)
-tr = c(0, 0, 1, 1, 0, 0, 1, 1)
-sel = c(0, 1, 0, 1, 0, 1, 0, 1)
-AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
+n = 1000
+tr = rbinom(n, 1, 0.5)
+y = rbinom(n, 1, 0.2 + 0.05 * tr)
+sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
+selprob = mean(sel)
 
-y = c(0, 0, 0, 0, 1, 1, 1, 1)
-tr = c(0, 0, 1, 1, 0, 0, 1, 1)
-selProb = 0.5
-AFbound(outcome = y, treatment = tr, selection = selProb, whichEst = "RR_tot")
+AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
+AFbound(outcome = y[sel==1], treatment = tr[sel==1],
+        selection = selprob, whichEst = "RR_tot")
 ```
 The output is the AF bound. Note that the eventual recoding of the treatment
 has to be done manually, as discussed in the corresponding article.
