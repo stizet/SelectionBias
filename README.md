@@ -45,7 +45,7 @@ Y = c(-5.2, 5, -1)
 S = matrix(c(1.2, 2.2, 0, 0.5, 2, -2.75, -4, 0), ncol = 4)
 
 SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
-         whichEst = "RR_s", Mmodel = "L")
+         whichEst = "RR_sub", Mmodel = "L")
 #>      [,1]                [,2]    
 #> [1,] "BF_U"              1.562533
 #> [2,] "RR_UY|S=1"         2.708855
@@ -65,7 +65,7 @@ an example where the input from is the output from
 
 ``` r
 library(SelectionBias)
-SVbound(whichEst = "RR_s", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
+SVbound(whichEst = "RR_sub", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
 #>      [,1]       [,2]    
 #> [1,] "SV bound" 1.562946
 ```
@@ -90,12 +90,12 @@ sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
 selprob = mean(sel)
 
 AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
-#>      [,1]       [,2]             
-#> [1,] "AF bound" "12.502753910553"
+#>      [,1]       [,2] 
+#> [1,] "AF bound" 10.88
 AFbound(outcome = y[sel==1], treatment = tr[sel==1],
         selection = selprob, whichEst = "RR_tot")
-#>      [,1]       [,2]             
-#> [1,] "AF bound" "12.502753910553"
+#>      [,1]       [,2] 
+#> [1,] "AF bound" 10.88
 ```
 
 The output is the AF bound. Note that the eventual recoding of the
@@ -122,9 +122,9 @@ and used to calculate the AF bound as
 # library(SelectionBias)
 attach(zika_learner)
 AFbound(outcome = mic_ceph, treatment = 1-zika, selection = sel_ind,
-        whichEst = "RR_s")
-#>      [,1]       [,2]             
-#> [1,] "AF bound" "3.0020979020979"
+        whichEst = "RR_sub")
+#>      [,1]       [,2]
+#> [1,] "AF bound" 3
 ```
 
 Note that in this example the treatment is reversed as discussed in the

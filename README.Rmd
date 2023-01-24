@@ -55,7 +55,7 @@ Y = c(-5.2, 5, -1)
 S = matrix(c(1.2, 2.2, 0, 0.5, 2, -2.75, -4, 0), ncol = 4)
 
 SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
-         whichEst = "RR_s", Mmodel = "L")
+         whichEst = "RR_sub", Mmodel = "L")
 ```
 The output is the sensitivity parameters and an indicator that states if the
 treatment was recoded, i.e. that the bias in the original coding was negative.
@@ -67,7 +67,7 @@ in `SVboundparametersM()`, or from another source. Below is an example where the
 input from is the output from `SVboundparametersM()` above:
 ```{r}
 library(SelectionBias)
-SVbound(whichEst = "RR_s", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
+SVbound(whichEst = "RR_sub", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
 ```
 The output is the SV bound. Note that the eventual recoding of the treatment
 has to be done manually, as discussed in the corresponding article.
@@ -108,7 +108,7 @@ and used to calculate the AF bound as
 # library(SelectionBias)
 attach(zika_learner)
 AFbound(outcome = mic_ceph, treatment = 1-zika, selection = sel_ind,
-        whichEst = "RR_s")
+        whichEst = "RR_sub")
 ```
 Note that in this example the treatment is reversed as discussed in the
 corresponding article.
