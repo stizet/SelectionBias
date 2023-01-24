@@ -5,6 +5,7 @@ vignette: >
   %\VignetteIndexEntry{SelectionBias}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: "references.bib"
 ---
 
 ```{r, include = FALSE}
@@ -17,3 +18,30 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(SelectionBias)
 ```
+# Introduction
+
+Selecting a study population from a larger source population is a common procedure, for example in an observational study with data from a population register. When targeting the research question, the study population is constructed from one or, more common in practice, several inclusion/exclusion criteria. This implies that a specific subpopulation of individuals eventually comprises the selected study population. Subjects who fulfill all the criteria are included in the study population, and subjects who do not fulfill at least one criterion are excluded from the study population. The construction of the study population from these selection criteria might alter the causal effect between an exposure and outcome of interest (Hernán, Hernández-Díaz and Robins 2004). This systematic error is commonly referred to as selection bias and can occur even for causal estimands in the selected study population. Selection bias can also arise if the selections are involuntary, for example, if there are dropouts or other missing values for some individuals in the study. 
+
+In an applied study, it is often of interest to assess the magnitude of potential biases using a sensitivity analysis. One type of sensitivity analysis is bounding the selection bias. When constructing bias bounds, there are two main strategies. The first strategy is to make additional assumptions of the causal structure and strengths of the dependencies, and then make educated guesses on sensitivity parameters describing parts of the causal structure. The other strategy is to calculate bounds based on the data, without any additional assumptions. Thus, these bounds can be referred to as assumption free (AF) bounds. [@zetterstrom2022selection]
+
+# Functions
+
+```{r eval=FALSE}
+SVboundparametersM(Vval = matrix(c(1, 0, 0.85, 0.15), ncol = 2),
+                   Uval = matrix(c(1, 0, 0.5, 0.5), ncol =2 ),
+                   Tcoef = c(-6.2, 1.75),
+                   Ycoef = c(-5.2, 5.0, -1.0),
+                   Scoef = matrix(c(1.2, 2.2, 0.0, 0.5,
+                                    2.0, -2.75, -4.0, 0.0),
+                                  ncol = 4),
+                   whichEst = "RR_sub",
+                   Mmodel = "L")
+```
+```{r}
+summary(cars$dist)
+summary(cars$speed)
+```
+
+Inline R Code
+
+# References
