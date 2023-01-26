@@ -173,9 +173,9 @@ zika_learner2 = zika_learner
 
 zika_learner2$zika = ifelse(zika_learner2$zika==1, "Zika infected", "Not zika infected")
 
-Hmisc::label(zika_learner2$mic_ceph) = "Microcephaly"
-Hmisc::label(zika_learner2$urban) = "Living area"
-Hmisc::label(zika_learner2$SES) = "SES"
+table1::label(zika_learner2$mic_ceph) = "Microcephaly"
+table1::label(zika_learner2$urban) = "Living area"
+table1::label(zika_learner2$SES) = "SES"
 
 rndr <- function(x, name, ...) {
     if (!is.numeric(x)) return(render.categorical.default(x))
@@ -195,8 +195,6 @@ table1::table1(~ mic_ceph + urban + SES | zika, data=zika_learner2, render=rndr,
 zika_learner2 = subset(zika_learner2,zika_learner2$sel_ind!=0)
 
 table1::table1(~ mic_ceph + urban + SES | zika, data=zika_learner2, render=rndr, caption = "Table 6. Proportions for the simulated dataset, by treatment status and overall, after both selections.")
-
-
 ```
 The dataset and data generating process (DGP) can be used to test the functions in `SelectionBias`.
 
@@ -236,9 +234,9 @@ The function `AFbound()` takes data as input. Using the `zika_learner` data as i
 ```{r eval = TRUE}
 attach(zika_learner)
 
-AFbound(outcome=mic_ceph,
-        treatment=1-zika,
-        selection=sel_ind,
+AFbound(outcome = mic_ceph,
+        treatment = 1 - zika,
+        selection = sel_ind,
         whichEst = "RR_sub")
 ```
 Four inputs are given to the code: the outcome variable, the treatment variable, the selection indicator, and the relevant causal estimand (`RR_tot`, `RD_tot`, `RR_sub` or `RD_sub`). Here, the outcome, treatment, and selection are the variables microcephaly, zika and the selection indicator formed from the selection variables birth and public hospital, and the causal estimand of interest is the relative risk in the subpopulation. In this setting, the bias is negative, and we have reversed the coding of the treatment. Note that the coding has to be done manually since no causal structure is assumed, and the sign of the bias is unknown. The output is the AF bound, which is 3.00 in this example.
@@ -249,9 +247,9 @@ mean(sel_ind)
 ```
 In this case, the code and output are:
 ```{r eval = TRUE}
-AFbound(outcome=mic_ceph[sel_ind==1],
-        treatment=1-zika[sel_ind==1], 
-        selection=mean(sel_ind), 
+AFbound(outcome = mic_ceph[sel_ind == 1],
+        treatment = 1 - zika[sel_ind == 1], 
+        selection = mean(sel_ind), 
         whichEst = "RR_sub")
 ```
 This setting is supposed to mimic the case when there is no data available on the non-selected subjects, and thus only the subjects with $I_S=1$ are included. The result is the same for both functions, since, in this example, the selection probability is calculated from the complete dataset.
