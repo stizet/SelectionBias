@@ -1,7 +1,11 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^.Rhistory
-^README.md
-^README.Rmd
-^LICENSE.md
-
+^.Rhistory$
+^README.md$
+^LICENSE\.md$
+^README\.Rmd$
+^cran-comments\.md$
+^data-raw$
+^pkgdown$
+^_pkgdown\.yml$
+^\.github$
