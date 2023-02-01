@@ -20,8 +20,10 @@ test_that("SVboundsharp throws an error for incorrect input.", {
 ##########################################################################################################################################
 
 test_that("SVboundsharp throws a warning when missing one of AFbound and SVbound.", {
-  expect_warning(SVboundsharp(BF_U = 2, prob = 0.9, AFbound = 1.5), "to check if the SV bound is not sharp")
-  expect_warning(SVboundsharp(BF_U = 2, prob = 0.9, SVbound = 1.5), "to check if the SV bound is not sharp")
+  expect_warning(SVboundsharp(BF_U = 2, prob = 0.9, AFbound = 1.5),
+                 "to check if the SV bound is not sharp")
+  expect_warning(SVboundsharp(BF_U = 2, prob = 0.9, SVbound = 1.5),
+                 "to check if the SV bound is not sharp")
 })
 
 ##########################################################################################################################################

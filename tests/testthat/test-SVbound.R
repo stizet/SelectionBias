@@ -33,7 +33,7 @@ test_that("SVbound throws an error if the estimand is not correctly specified.",
 ##########################################################################################################################################
 
 
-test_that("SVbound throws an error if the wrong sensitivity parameter is eqaul to NULL.", {
+test_that("SVbound throws an error if the wrong sensitivity parameter is equal to NULL.", {
 
   #Sensitivity parameters missing.
   expect_error(SVbound(whichEst = "RR_tot", RR_UY_T1 = NULL, RR_UY_T0 = 1,

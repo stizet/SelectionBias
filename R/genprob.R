@@ -27,20 +27,20 @@ genprob <- function(Vcoef, Ucoef, Tcoef, Y1coef, Y0coef, constS, slopeSV, slopeS
   # Use different calculations if the models are probit or logit.
   if(model == "P")
   {
-    # The probabilities P(T=t|V=v).
+    # The probabilities P(T = t|V = v).
     pT1 = stats::pnorm(Tcoef[1] + Tcoef[2] * Vval)
     pT = c(pT1, 1 - pT1)
 
-    # The probabilities P(Y(1)=y|U=u).
+    # The probabilities P(Y(1) = y|U = u).
     pY11 = stats::pnorm(Y1coef[1] + Y1coef[2] * Uval)
     pY1 = c(pY11, 1 - pY11)
 
-    # The probabilities P(Y(0)=y|U=u).
+    # The probabilities P(Y(0) = y|U = u).
     pY01 = stats::pnorm(Y0coef[1] + Y0coef[2] * Uval)
     pY0 = c(pY01, 1 - pY01)
 
-    # The probabilities P(S=s|V=v,U=u,T=t), where each iteration in the loop
-    # is one selection variable.
+    # The probabilities P(S = s|V = v, U = u, T = t), where each iteration in
+    # the loop is one selection variable.
     for (sss in 1 : numS)
     {
       pS1 = c(stats::pnorm(constS[sss] + slopeST[sss] + slopeSV[sss] * Vvec + slopeSU[sss] * Uvec),
@@ -50,20 +50,20 @@ genprob <- function(Vcoef, Ucoef, Tcoef, Y1coef, Y0coef, constS, slopeSV, slopeS
       sMat[ , sss] = pS
     }
   }else if(model == "L"){
-    # The probabilities P(T=t|V=v).
+    # The probabilities P(T = t|V = v).
     pT1 = arm::invlogit(Tcoef[1] + Tcoef[2] * Vval)
     pT = c(pT1, 1 - pT1)
 
-    # The probabilities P(Y(1)=y|U=u).
+    # The probabilities P(Y(1) = y|U = u).
     pY11 = arm::invlogit(Y1coef[1] + Y1coef[2] * Uval)
     pY1 = c(pY11, 1 - pY11)
 
-    # The probabilities P(Y(0)=y|U=u).
+    # The probabilities P(Y(0) = y|U = u).
     pY01 = arm::invlogit(Y0coef[1] + Y0coef[2] * Uval)
     pY0 = c(pY01, 1 - pY01)
 
-    # The probabilities P(S=s|V=v,U=u,T=t), where each iteration in the loop
-    # is one selection variable.
+    # The probabilities P(S = s|V = v, U = u, T = t), where each iteration in
+    # the loop is one selection variable.
     for (sss in 1 : numS)
     {
       pS1 = c(arm::invlogit(constS[sss] + slopeST[sss] + slopeSV[sss] * Vvec + slopeSU[sss] * Uvec),

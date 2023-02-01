@@ -36,9 +36,9 @@
 #' sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
 #' AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RD_tot")
 #'
-#' @references Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
-#'   inclusion criteria in observational studies" Epidemiologic Methods 11, no.
-#'   1 (2022): 20220108.
+#' @references Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and
+#'   multiple inclusion criteria in observational studies" Epidemiologic
+#'   Methods 11, no. 1 (2022): 20220108.
 #'
 AFbound <- function(outcome, treatment, selection, whichEst)
 {
@@ -57,33 +57,34 @@ AFbound <- function(outcome, treatment, selection, whichEst)
   # If the selection indicator variable is included.
   if(length(Is) > 1)
   {
-    # P(I_s=1) and P(I_s=0).
-    pIs1 = length(Is[Is==1]) / length(Is)
+    # P(I_s = 1) and P(I_s = 0).
+    pIs1 = length(Is[Is == 1]) / length(Is)
     pIs0 = 1 - pIs1
 
-    # P(T=1|I_s=1) and P(T=0|I_s=1).
-    pT1_Is1 = length(tr[tr==1 & Is==1]) / length(Is[Is==1])
-    pT0_Is1 = length(tr[tr==0 & Is==1]) / length(Is[Is==1])
+    # P(T = 1|I_s = 1) and P(T = 0|I_s = 1).
+    pT1_Is1 = length(tr[tr == 1 & Is == 1]) / length(Is[Is == 1])
+    pT0_Is1 = length(tr[tr == 0 & Is == 1]) / length(Is[Is == 1])
 
-    # P(Y=1|T=1,I_s=1) and P(Y=1|T=0,I_s=1).
-    pY1_T1_Is1 = length(y[y==1 & tr==1 & Is==1]) / length(tr[tr==1 & Is==1])
-    pY1_T0_Is1 = length(y[y==1 & tr==0 & Is==1]) / length(tr[tr==0 & Is==1])
+    # P(Y = 1|T = 1, I_s = 1) and P(Y = 1|T = 0, I_s = 1).
+    pY1_T1_Is1 = length(y[y == 1 & tr == 1 & Is == 1]) / length(tr[tr == 1 & Is == 1])
+    pY1_T0_Is1 = length(y[y == 1 & tr == 0 & Is == 1]) / length(tr[tr == 0 & Is == 1])
   }else{
     # If the selection probability is included.
 
+    # Check if the selection probability is valid, else stop.
     if(any(Is < 0 | Is > 1)) stop('P(I_s=1) not between 0 and 1.')
 
-    # P(I_s=1) and P(I_s=0).
+    # P(I_s = 1) and P(I_s = 0).
     pIs1 = Is
     pIs0 = 1 - pIs1
 
-    # P(T=1|I_s=1) and P(T=0|I_s=1).
-    pT1_Is1 = length(tr[tr==1]) / length(tr)
-    pT0_Is1 = length(tr[tr==0]) / length(tr)
+    # P(T = 1|I_s = 1) and P(T = 0|I_s = 1).
+    pT1_Is1 = length(tr[tr == 1]) / length(tr)
+    pT0_Is1 = length(tr[tr == 0]) / length(tr)
 
-    # P(Y=1|T=1,I_s=1) and P(Y=1|T=0,I_s=1).
-    pY1_T1_Is1 = length(y[y==1 & tr==1]) / length(tr[tr==1])
-    pY1_T0_Is1 = length(y[y==1 & tr==0]) / length(tr[tr==0])
+    # P(Y = 1|T = 1, I_s = 1) and P(Y = 1|T = 0, I_s = 1).
+    pY1_T1_Is1 = length(y[y == 1 & tr == 1]) / length(tr[tr == 1])
+    pY1_T0_Is1 = length(y[y == 1 & tr == 0]) / length(tr[tr == 0])
   }
 
   if(is.nan(pY1_T1_Is1)) stop('Input data result in 0/0. This can for instance happen if P(T=t|I_s=1)=0 or P(Y=1|T=t,I_s=1)=0.')

@@ -132,7 +132,7 @@ Table: Table 3. Data generating process for the dataset `zika_learner`. Models g
 | $P(S_1=1|T,U)=g[(V,U,T)'\theta_{S1}]$ | $(1.20,0.00,2.00,-4.00)$            | `Scoef`              |
 | $P(S_2=1|T,U)=g[(V,U,T)'\theta_{S1}]$ | $(2.20,0.50,-2.75,0.00)$            | `Scoef`              |
 
-The data was generated on R version 4.2.0 with the following code:
+The data was generated on R, version 4.2.0, using the package arm, version 1.13-1, with the following code:
 
 ```{r eval = FALSE}
 # Seed.

@@ -67,7 +67,8 @@ SVbound <- function(whichEst, RR_UY_T1 = NULL, RR_UY_T0 = NULL, RR_SU_T1 = NULL,
   {
     # Check if the correct sensitivity parameters are specified.
     if(is.null(RR_UY_T1) | is.null(RR_UY_T0) | is.null(RR_SU_T1) | is.null(RR_SU_T0))
-      stop("When the total population is of interest, RR_UY_T1, RR_UY_T0, RR_SU_T1 and RR_SU_T0 cannot be equal to NULL." )
+      stop("When the total population is of interest, RR_UY_T1, RR_UY_T0,
+           RR_SU_T1 and RR_SU_T0 cannot be equal to NULL." )
 
     # Check if the sensitivity parameters are valid.
     if(RR_UY_T1 < 1 | RR_UY_T0 < 1 | RR_SU_T1 < 1 | RR_SU_T0 < 1)
@@ -78,20 +79,21 @@ SVbound <- function(whichEst, RR_UY_T1 = NULL, RR_UY_T0 = NULL, RR_SU_T1 = NULL,
     BF0 = (RR_UY_T0 * RR_SU_T0) / (RR_UY_T0 + RR_SU_T0 - 1)
 
     # SV bound for RR in tot pop.
-    boundRRtot = BF1 * BF0
+    boundRRtot = round((BF1 * BF0), 2)
 
     if(whichEst == "RD_tot")
     {
       # Check if the observed probabilities are specified.
       if((is.null(pY1_T1_S1) | is.null(pY1_T0_S1)))
-        stop("When the risk difference is of interest, P(Y=1|T=,I_S=1) and P(Y=1|T=0,I_S=1) cannot be NULL.")
+        stop("When the risk difference is of interest, P(Y=1|T=,I_S=1)
+             and P(Y=1|T=0,I_S=1) cannot be NULL.")
 
       # Check if the probabilities are valid.
       if((pY1_T1_S1 < 0 | pY1_T1_S1 > 1 | pY1_T0_S1 < 0 | pY1_T0_S1 > 1))
         stop("P(Y=1|T=1,I_S=1) and P(Y=1|T=1,I_S=1) cannot be smaller than 0 or larger than 1.")
 
       # SV bound for RD in tot pop.
-      boundRDtot = BF1 - pY1_T1_S1 / BF1 + pY1_T0_S1 * BF0
+      boundRDtot = round((BF1 - pY1_T1_S1 / BF1 + pY1_T0_S1 * BF0), 2)
     }
   }else
   {
@@ -107,19 +109,20 @@ SVbound <- function(whichEst, RR_UY_T1 = NULL, RR_UY_T0 = NULL, RR_SU_T1 = NULL,
     BFU = (RR_UY_S1 * RR_TU_S1) / (RR_UY_S1 + RR_TU_S1 - 1)
 
     # SV bound for RR in subpop.
-    boundRRs = BFU
+    boundRRs = round(BFU, 2)
 
     if(whichEst == "RD_sub")
     {
       # Check if the observed probabilities are specified.
       if((is.null(pY1_T1_S1) | is.null(pY1_T0_S1)))
-        stop("When the risk difference is of interest, P(Y=1|T=,I_S=1) and P(Y=1|T=0,I_S=1) cannot be NULL.")
+        stop("When the risk difference is of interest, P(Y=1|T=,I_S=1) and
+             P(Y=1|T=0,I_S=1) cannot be NULL.")
 
       # Check if the probabilities are valid.
       if(pY1_T1_S1 < 0 | pY1_T1_S1 >1 | pY1_T0_S1 < 0 | pY1_T0_S1 >1)
         stop("P(Y=1|T=1,I_S=1) and P(Y=1|T=1,I_S=1) cannot be smaller than 0 or larger than 1.")
 
-      boundRDs = max((pY1_T0_S1 * (BFU - 1)), (pY1_T1_S1 * (1 - 1 / BFU)))
+      boundRDs = round((max((pY1_T0_S1 * (BFU - 1)), (pY1_T1_S1 * (1 - 1 / BFU)))), 2)
     }
   }
 
