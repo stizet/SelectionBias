@@ -39,7 +39,7 @@ SVboundsharp <- function(BF_U, prob, SVbound=NULL, AFbound=NULL)
 {
   # A function that tests if the SV bound is sharp.
 
-  # Check if 0<P(Y=1|T=0,I_S=1)<1 and BF_U>=1. If not, throw an error.
+  # Check if 0 < P(Y = 1|T = 0, I_S = 1) < 1 and BF_U >= 1. If not, throw an error.
   if(any(prob < 0 | prob > 1)) stop('P(Y=1|T=0,I_S=1) not between 0 and 1.')
   if(BF_U < 1) stop('BF_U must be greater than or equal to 1.')
 
@@ -70,7 +70,8 @@ SVboundsharp <- function(BF_U, prob, SVbound=NULL, AFbound=NULL)
     # that it is inconclusive and if the AF is smaller than SV return
     # the message that it is not sharp.
     if(BF_U <= sharpLim & SVbound <= AFbound)
-    {returnMat = "SV bound is sharp."}else if(SVbound > AFbound){returnMat = "SV bound is not sharp."}else{returnMat = "Inconclusive."}
+    {returnMat = "SV bound is sharp."}else if(SVbound > AFbound)
+      {returnMat = "SV bound is not sharp."}else{returnMat = "Inconclusive."}
   }
   return(returnMat)
 }

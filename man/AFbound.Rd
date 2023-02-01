@@ -49,7 +49,7 @@ AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RD_tot")
 
 }
 \references{
-Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and multiple
-inclusion criteria in observational studies" Epidemiologic Methods 11, no.
-1 (2022): 20220108.
+Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and
+multiple inclusion criteria in observational studies" Epidemiologic
+Methods 11, no. 1 (2022): 20220108.
 }

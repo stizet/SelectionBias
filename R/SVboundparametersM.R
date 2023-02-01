@@ -75,8 +75,7 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   # Functions used in the code.
   #genprob()
   #calcselbias()
-  #calcSVbound())
-
+  #calcSVbound()
 
   ### RUN SOME CHECKS OF THE INPUT ###
 
@@ -100,8 +99,10 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   if(any(Uval[ , 2] < 0)) stop('At least one of the categories of U has a negative probability.')
 
   # Check if the probabilities of V and U are equal to 0. If they are, throw an error.
-  if(any(Vval[ , 2] == 0)) stop('At least one of the categories of V has a probability equal to 0. Remove that category, or change to a positive value.')
-  if(any(Uval[ , 2] == 0)) stop('At least one of the categories of U has a probability equal to 0. Remove that category, or change to a positive value.')
+  if(any(Vval[ , 2] == 0)) stop('At least one of the categories of V has a probability
+                                equal to 0. Remove that category, or change to a positive value.')
+  if(any(Uval[ , 2] == 0)) stop('At least one of the categories of U has a probability
+                                equal to 0. Remove that category, or change to a positive value.')
 
   ### END CHECKS OF THE INPUT ###
 
@@ -137,11 +138,13 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   testSelBias = biasAndObsProb[1]
 
   # Check if the selection bias is a numerical value. If not, throw an error.
-  if(is.nan(testSelBias)) stop('Input parameters result in 0/0. This can for instance happen if P(T=t|V)=0 or P(I_S=1|U,V)=0.')
+  if(is.nan(testSelBias)) stop('Input parameters result in 0/0. This can for
+                               instance happen if P(T=t|V)=0 or P(I_S=1|U,V)=0.')
 
   biasLimit = ifelse(whichEst == "RD_sub" | whichEst == "RD_tot", 0, 1)
 
-  # Check if the bias is negative, and if it is re-code treatment and calculate the new bias and treatment effect.
+  # Check if the bias is negative, and if it is re-code treatment and calculate
+  # the new bias and treatment effect.
   if(testSelBias < biasLimit)
   {
     revTreat = TRUE
@@ -174,8 +177,10 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
     heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0", "Reverse treatment")
     values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], as.logical(revTreat))
   }else if(whichEst == "RD_tot"){
-    heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
-    values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], SVbound[8], SVbound[9], as.logical(revTreat))
+    heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0",
+                "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
+    values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6],
+                  SVbound[7], SVbound[8], SVbound[9], as.logical(revTreat))
   }else if(whichEst == "RR_sub"){
     heading = c("BF_U", "RR_UY|S=1", "RR_TU|S=1", "Reverse treatment")
     values = list(SVbound[2], SVbound[3], SVbound[4], as.logical(revTreat))
