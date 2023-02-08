@@ -4,21 +4,21 @@
 \alias{AFbound}
 \title{Assumption free bound for a data set}
 \usage{
-AFbound(outcome, treatment, selection, whichEst)
+AFbound(whichEst, outcome, treatment, selection)
 }
 \arguments{
+\item{whichEst}{Input string. Defining the population parameter of interest.
+Available options are as follows. (1) Relative risk in the total
+population: "RR_tot", (2) Risk difference in the total population:
+"RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
+difference in the subpopulation: "RD_sub".}
+
 \item{outcome}{Input vector. A binary outcome variable.}
 
 \item{treatment}{Input vector. A binary treatment variable.}
 
 \item{selection}{Input vector or input scalar. A binary selection variable or
 a selection probability.}
-
-\item{whichEst}{Input string. Defining the population parameter of interest.
-Available options are as follows. (1) Relative risk in the total
-population: "RR_tot", (2) Risk difference in the total population:
-"RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
-difference in the subpopulation: "RD_sub".}
 }
 \value{
 A list with the assumption free bound.
@@ -33,19 +33,19 @@ the recoding of the treatment has to be done manually.
 y = c(0, 0, 0, 0, 1, 1, 1, 1)
 tr = c(0, 0, 1, 1, 0, 0, 1, 1)
 sel = c(0, 1, 0, 1, 0, 1, 0, 1)
-AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
+AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
 
 # Example with selection probability.
 selprob = mean(sel)
-AFbound(outcome = y[sel==1], treatment = tr[sel==1],
- selection = selprob, whichEst = "RR_tot")
+AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
+ selection = selprob)
 
 # Example with simulated data.
 n = 1000
 tr = rbinom(n, 1, 0.5)
 y = rbinom(n, 1, 0.2 + 0.05 * tr)
 sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
-AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RD_tot")
+AFbound(whichEst = "RD_tot", outcome = y, treatment = tr, selection = sel)
 
 }
 \references{

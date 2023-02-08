@@ -4,15 +4,15 @@
 #' an outcome, a treatment and a selection variable. If the bias is negative,
 #' the recoding of the treatment has to be done manually.
 #'
-#' @param outcome Input vector. A binary outcome variable.
-#' @param treatment Input vector. A binary treatment variable.
-#' @param selection Input vector or input scalar. A binary selection variable or
-#'   a selection probability.
 #' @param whichEst Input string. Defining the population parameter of interest.
 #'   Available options are as follows. (1) Relative risk in the total
 #'   population: "RR_tot", (2) Risk difference in the total population:
 #'   "RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
 #'   difference in the subpopulation: "RD_sub".
+#' @param outcome Input vector. A binary outcome variable.
+#' @param treatment Input vector. A binary treatment variable.
+#' @param selection Input vector or input scalar. A binary selection variable or
+#'   a selection probability.
 #'
 #' @return A list with the assumption free bound.
 #' @export
@@ -22,25 +22,25 @@
 #' y = c(0, 0, 0, 0, 1, 1, 1, 1)
 #' tr = c(0, 0, 1, 1, 0, 0, 1, 1)
 #' sel = c(0, 1, 0, 1, 0, 1, 0, 1)
-#' AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
+#' AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
 #'
 #' # Example with selection probability.
 #' selprob = mean(sel)
-#' AFbound(outcome = y[sel==1], treatment = tr[sel==1],
-#'  selection = selprob, whichEst = "RR_tot")
+#' AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
+#'  selection = selprob)
 #'
 #' # Example with simulated data.
 #' n = 1000
 #' tr = rbinom(n, 1, 0.5)
 #' y = rbinom(n, 1, 0.2 + 0.05 * tr)
 #' sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
-#' AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RD_tot")
+#' AFbound(whichEst = "RD_tot", outcome = y, treatment = tr, selection = sel)
 #'
 #' @references Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and
 #'   multiple inclusion criteria in observational studies" Epidemiologic
 #'   Methods 11, no. 1 (2022): 20220108.
 #'
-AFbound <- function(outcome, treatment, selection, whichEst)
+AFbound <- function(whichEst, outcome, treatment, selection)
 {
   # A function that calculates the assumption free bound for the bias due to
   # selection, for multiple selection variables. The input is the data and
