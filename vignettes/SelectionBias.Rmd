@@ -28,7 +28,7 @@ The SV bounds can be calculated using the R package `EValue` and an online calcu
 
 * `zika_learner`: a simulated dataset inspired by the study in @de2018association and the zika example in @smith2019bounding. 
 * `SVboundparametersM()`: a function that calculates the sensitivity parameters that comprise the SV bound for a generalization of the M-structure defined by the user. 
-* `SVbound()`: a function that calculates the SV bound for sensitivity paramters given by the user, either inserted directly or as output from `SVboundparametersM()`. The SV bound can be calculated for the relative risk and risk difference in either the total or subpopulation.
+* `SVbound()`: a function that calculates the SV bound for sensitivity parameters given by the user, either inserted directly or as output from `SVboundparametersM()`. The SV bound can be calculated for the relative risk and risk difference in either the total or subpopulation.
 * `AFbound()`: a function that calculates the AF bound for a dataset supplied by the user. The dataset must include an outcome, a treatment and either a selection variable or a selection probability.
 * `SVboundsharp()`: a function that evaluates if the SV bound for the subpopulation is sharp for data supplied by the user.
 
@@ -212,15 +212,16 @@ The dataset and data generating process (DGP) can be used to test the functions 
 The sensitivity parameters for the SV bound are calculated for the M-structure using the function `SVboundparametersM()`. Note that neither the SV bound or the sensitivity parameters are available for observed data, since they depend on the unobserved variables, *U*. Instead, the input in the code is the assumed model structure. In this example, the input is exactly the DGP in Table 3. The code and the output are:
 
 ```{r eval = TRUE}
-SVboundparametersM(Vval = matrix(c(1, 0, 0.85, 0.15), ncol = 2),
+SVboundparametersM(whichEst = "RR_sub",
+                   Vval = matrix(c(1, 0, 0.85, 0.15), ncol = 2),
                    Uval = matrix(c(1, 0, 0.5, 0.5), ncol = 2 ),
                    Tcoef = c(-6.2, 1.75),
                    Ycoef = c(-5.2, 5.0, -1.0),
                    Scoef = matrix(c(1.2, 2.2, 0.0, 0.5,
                                     2.0, -2.75, -4.0, 0.0),
                                   ncol = 4),
-                   whichEst = "RR_sub",
-                   Mmodel = "L")
+                   Mmodel = "L",
+                   prob = c(0.286, 0.004))
 ```
 First, the matrix for *V* is given, where the first column contains the values that *V* can take, and the second column contains the probabilities for the corresponding values. In the zika example, we have a binary random variable so that the first two elements in the matrix are 1 and 0, although any discrete *V* can be used. A continuous *V* can be used in the function if it is approximated with a discrete variable with many categories, as long as the probabilities sum to 1. Second, the matrix for *U* is given, where the first column contains the values that *U* can take, and the second column contains the probabilities for the corresponding values. *U* has a similar structure as *V*. The matrices *V* and *U* will always have two columns. Third, the coefficients used in the model for *T* are stated, where the first entry is the intercept and the second the slope for *V*. The fourth input is the coefficient vector for the outcome model, where the first entry is the intercept, the second the slope coefficient for *T* and third is the slope coefficient for *U*. The fifth input is the coefficient matrix for the selection variables. The matrix has as many rows as there are selection variables, in this case two, and four columns. The columns represent the intercept, and slope coefficients for *V*, *U* and *T*, respectively. A summary of the code notation is seen in the last column of Table 3. Lastly, the causal estimand, `RR_tot`, `RD_tot`, `RR_sub` or `RD_sub`, of interest is given and an argument indicating whether the models are probit (`Mmodel = "P"`)  or logistic models (`Mmodel = "L"`). In this example, the estimand of interest is the relative risk in the subpopulation, `whichEst = RR_sub`, and logistic models are used in the DGP. The output is the sensitivity parameters for SV bound and an indicator stating if the bias is negative and the coding for the treatment has been reversed. Here, it is the subpopulation that is of interest, and therefore, the sensitivity parameters in the second column in Table 1 are presented. Here, $RR_{TU|S=1}=2.33$ and $RR_{UY|S=1}=2.71$, which gives $BF_U=1.56$, and the treatment coding is reversed.
 
@@ -241,10 +242,10 @@ The function `AFbound()` takes data as input. Using the `zika_learner` data as i
 ```{r eval = TRUE}
 attach(zika_learner)
 
-AFbound(outcome = mic_ceph,
+AFbound(whichEst = "RR_sub",
+        outcome = mic_ceph,
         treatment = 1 - zika,
-        selection = sel_ind,
-        whichEst = "RR_sub")
+        selection = sel_ind)
 ```
 Four inputs are given to the code: the outcome variable, the treatment variable, the selection indicator, and the relevant causal estimand (`RR_tot`, `RD_tot`, `RR_sub` or `RD_sub`). Here, the outcome, treatment, and selection are the variables microcephaly, zika and the selection indicator formed from the selection variables birth and public hospital, and the causal estimand of interest is the relative risk in the subpopulation. In this setting, the bias is negative, and we have reversed the coding of the treatment. Note that the coding has to be done manually since no causal structure is assumed, and the sign of the bias is unknown. The output is the AF bound, which is 3.00 in this example.
 
@@ -254,10 +255,10 @@ mean(sel_ind)
 ```
 In this case, the code and output are:
 ```{r eval = TRUE}
-AFbound(outcome = mic_ceph[sel_ind == 1],
+AFbound(whichEst = "RR_sub",
+        outcome = mic_ceph[sel_ind == 1],
         treatment = 1 - zika[sel_ind == 1], 
-        selection = mean(sel_ind), 
-        whichEst = "RR_sub")
+        selection = mean(sel_ind))
 ```
 This setting is supposed to mimic the case when there is no data available on the non-selected subjects, and thus only the subjects with $I_S=1$ are included. The result is the same for both functions, since, in this example, the selection probability is calculated from the complete dataset.
 

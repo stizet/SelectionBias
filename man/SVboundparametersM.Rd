@@ -4,9 +4,15 @@
 \alias{SVboundparametersM}
 \title{Sensitivity parameters for the Smith and VanderWeele bound}
 \usage{
-SVboundparametersM(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
+SVboundparametersM(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel, prob)
 }
 \arguments{
+\item{whichEst}{Input string. Defining the causal estimand of interest.
+Available options are as follows. (1) Relative risk in the total
+population: "RR_tot", (2) Risk difference in the total population:
+"RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
+difference in the subpopulation: "RD_sub".}
+
 \item{Vval}{Input matrix. The first column is the values of the categories of
 V. The second column is the probabilities of the categories of V. If V is
 continuous, use a fine grid of values and probabilities.}
@@ -32,15 +38,14 @@ models for the selection variables. The third column is the slopes for U in
 the models for the selection variables. The fourth column is the slopes for
 T in the models for the selection variables.}
 
-\item{whichEst}{Input string. Defining the causal estimand of interest.
-Available options are as follows. (1) Relative risk in the total
-population: "RR_tot", (2) Risk difference in the total population:
-"RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
-difference in the subpopulation: "RD_sub".}
-
 \item{Mmodel}{Input string. Defining the models for the variables in the M
 structure. If "P", the probit model is used. If "L", the logit model is
 used.}
+
+\item{prob}{Input vector. Two numerical elements. The first element is
+the observed probability of success in the treated group, P(Y=1|T=1, I_S=1),
+and the second element is the observed probability of success in the
+untreated group, P(Y=1|T=0, I_S=1).}
 }
 \value{
 A list containing the sensitivity parameters and an indicator if the
@@ -59,17 +64,19 @@ U = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
 Tr = c(0, 1)
 Y = c(0, 0, 1)
 S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
-SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y,
- Scoef = S, whichEst = "RR_tot", Mmodel = "P")
+obsOutcome = c(0.534, 0.534)
+SVboundparametersM(whichEst = "RR_tot", Vval = V, Uval = U, Tcoef = Tr,
+  Ycoef = Y, Scoef = S, Mmodel = "P", prob = obsOutcome)
 
 # Example with selection bias. DGP from the zika example.
 V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
-U = matrix(c(1, 0, 0.5, 0.5), ncol =2 )
+U = matrix(c(1, 0, 0.5, 0.5), ncol = 2)
 Tr = c(-6.2, 1.75)
 Y = c(-5.2, 5.0, -1.0)
 S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
-SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
- whichEst = "RR_sub", Mmodel = "L")
+obsOutcome = c(0.289, 0.004)
+SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
+  Ycoef = Y, Scoef = S, Mmodel = "L", prob = obsOutcome)
 
 }
 \references{

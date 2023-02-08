@@ -4,6 +4,11 @@
 #' indicator if bias is negative and the treatment coding is reversed for an
 #' assumed model.
 #'
+#' @param whichEst Input string. Defining the causal estimand of interest.
+#'   Available options are as follows. (1) Relative risk in the total
+#'   population: "RR_tot", (2) Risk difference in the total population:
+#'   "RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
+#'   difference in the subpopulation: "RD_sub".
 #' @param Vval Input matrix. The first column is the values of the categories of
 #'   V. The second column is the probabilities of the categories of V. If V is
 #'   continuous, use a fine grid of values and probabilities.
@@ -24,14 +29,13 @@
 #'   models for the selection variables. The third column is the slopes for U in
 #'   the models for the selection variables. The fourth column is the slopes for
 #'   T in the models for the selection variables.
-#' @param whichEst Input string. Defining the causal estimand of interest.
-#'   Available options are as follows. (1) Relative risk in the total
-#'   population: "RR_tot", (2) Risk difference in the total population:
-#'   "RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
-#'   difference in the subpopulation: "RD_sub".
 #' @param Mmodel Input string. Defining the models for the variables in the M
 #'   structure. If "P", the probit model is used. If "L", the logit model is
 #'   used.
+#' @param prob Input vector. Two numerical elements. The first element is
+#'   the observed probability of success in the treated group, P(Y=1|T=1, I_S=1),
+#'   and the second element is the observed probability of success in the
+#'   untreated group, P(Y=1|T=0, I_S=1).
 #'
 #' @return A list containing the sensitivity parameters and an indicator if the
 #'   treatment has been reversed.
@@ -45,17 +49,19 @@
 #' Tr = c(0, 1)
 #' Y = c(0, 0, 1)
 #' S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
-#' SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y,
-#'  Scoef = S, whichEst = "RR_tot", Mmodel = "P")
+#' obsOutcome = c(0.534, 0.534)
+#' SVboundparametersM(whichEst = "RR_tot", Vval = V, Uval = U, Tcoef = Tr,
+#'   Ycoef = Y, Scoef = S, Mmodel = "P", prob = obsOutcome)
 #'
 #' # Example with selection bias. DGP from the zika example.
 #' V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
-#' U = matrix(c(1, 0, 0.5, 0.5), ncol =2 )
+#' U = matrix(c(1, 0, 0.5, 0.5), ncol = 2)
 #' Tr = c(-6.2, 1.75)
 #' Y = c(-5.2, 5.0, -1.0)
 #' S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
-#' SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
-#'  whichEst = "RR_sub", Mmodel = "L")
+#' obsOutcome = c(0.286, 0.004)
+#' SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
+#'   Ycoef = Y, Scoef = S, Mmodel = "L", prob = obsOutcome)
 #'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
 #'   to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
@@ -64,7 +70,7 @@
 #'   inclusion criteria in observational studies" Epidemiologic Methods 11, no.
 #'   1 (2022): 20220108.
 #'
-SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel)
+SVboundparametersM <- function(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel, prob)
 {
   # A function that calculates the sensitivity parameters for the SV bound
   # for multiple selection variables. The input is the hyper parameters used
@@ -104,6 +110,9 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   if(any(Uval[ , 2] == 0)) stop('At least one of the categories of U has a probability
                                 equal to 0. Remove that category, or change to a positive value.')
 
+  if(any(prob < 0)) stop('The observed probabilities must be greater than 0 and smaller than 1.')
+  if(any(prob > 1)) stop('The observed probabilities must be greater than 0 and smaller than 1.')
+
   ### END CHECKS OF THE INPUT ###
 
 
@@ -116,6 +125,8 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
 
   Y1coef = c(Ycoef[1] + Ycoef[2], Ycoef[3])
   Y0coef = c(Ycoef[1], Ycoef[3])
+
+  obsProb = prob
 
   # Using the data generating function to get the probabilities in the model.
   dataProb = genprob(Vval, Uval, Tcoef, Y1coef, Y0coef, constS, slopeSV, slopeSU, slopeST, Mmodel)
@@ -132,7 +143,7 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   ### CALCULATING THE BIAS AND THE OBSERVED PROBABILITIES ###
 
   # Calculate the bias and treatment effect for the parameter of interest
-  biasAndObsProb = calcselbias(pY1, pY0, pT, pSmat, pU, pV, whichEst)
+  biasAndObsProb = calcselbias(pY1, pY0, pT, pSmat, pU, pV, whichEst, obsProb)
 
   # To check if the bias is negative and re-coding of the treatment is needed.
   testSelBias = biasAndObsProb[1]
@@ -148,17 +159,16 @@ SVboundparametersM <- function(Vval, Uval, Tcoef, Ycoef, Scoef, whichEst, Mmodel
   if(testSelBias < biasLimit)
   {
     revTreat = TRUE
+    obsProb = c(prob[2], prob[1])
     pTnew = rbind(pT[2, ], pT[1, ])
     lenS = length(pSmat[ , 1])
     pSmatNew = as.data.frame(matrix(rbind(as.matrix(pSmat[(lenS / 4 + 1) : (lenS / 2), ]),
                                           as.matrix(pSmat[1 : (lenS / 4), ]),
                                           as.matrix(pSmat[(3 * lenS / 4 + 1) : lenS, ]),
                                           as.matrix(pSmat[(lenS / 2 + 1) : (3 * lenS / 4), ])), nrow = lenS))
-    biasAndObsProbnew = calcselbias(pY0, pY1, pTnew, pSmatNew, pU, pV, whichEst)
+    biasAndObsProbnew = calcselbias(pY0, pY1, pTnew, pSmatNew, pU, pV, whichEst, obsProb)
     selBias = biasAndObsProbnew[1]
-    obsProb = biasAndObsProbnew[2 : 3]
   }else {selBias = biasAndObsProb[1]
-  obsProb = biasAndObsProb[2 : 3]
   revTreat = FALSE}
 
   ### END CALCULATING THE BIAS AND THE OBSERVED PROBABILITIES ###
