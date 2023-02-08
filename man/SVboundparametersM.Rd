@@ -74,7 +74,7 @@ U = matrix(c(1, 0, 0.5, 0.5), ncol = 2)
 Tr = c(-6.2, 1.75)
 Y = c(-5.2, 5.0, -1.0)
 S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
-obsOutcome = c(0.289, 0.004)
+obsOutcome = c(0.286, 0.004)
 SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
   Ycoef = Y, Scoef = S, Mmodel = "L", prob = obsOutcome)
 
