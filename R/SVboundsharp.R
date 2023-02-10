@@ -7,7 +7,7 @@
 #' @param BF_U Input scalar. The bounding factor for the SV bounds in the
 #'   subpopulation. Must be equal to or above 1. Can be inserted directly or as
 #'   output from `SVboundparametersM()`.
-#' @param prob Input scalar. The probability P(Y=1|T=0,I_S=1).
+#' @param pY1_T0_S1 Input scalar. The probability P(Y=1|T=0,I_S=1).
 #' @param SVbound Optional input scalar. The SV bound, can be inserted directly
 #'   or as output from `SVbound()`. Only necessary if one wants to know if the
 #'   SV bound is not sharp.
@@ -21,13 +21,13 @@
 #' @examples
 #'
 #' # Example where the SV bound is sharp.
-#' SVboundsharp(BF_U = 1.56, prob = 0.33, SVbound = 1.56, AFbound = 3.0)
+#' SVboundsharp(BF_U = 1.56, pY1_T0_S1 = 0.33, SVbound = 1.56, AFbound = 3.0)
 #'
 #' # Example where the SV bound is not sharp.
-#' SVboundsharp(BF_U = 2, prob = 0.9, SVbound = 2, AFbound = 1.8)
+#' SVboundsharp(BF_U = 2, pY1_T0_S1 = 0.9, SVbound = 2, AFbound = 1.8)
 #'
 #' # Example where the SV bound is inconclusive.
-#' SVboundsharp(BF_U = 2, prob = 0.8, SVbound = 2, AFbound = 3)
+#' SVboundsharp(BF_U = 2, pY1_T0_S1 = 0.8, SVbound = 2, AFbound = 3)
 #'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
 #'   to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
@@ -35,16 +35,16 @@
 #'   Zetterstrom, Stina and Waernbaum, Ingeborg. MANUSCRIPT XXX
 #'
 #'
-SVboundsharp <- function(BF_U, prob, SVbound=NULL, AFbound=NULL)
+SVboundsharp <- function(BF_U, pY1_T0_S1, SVbound=NULL, AFbound=NULL)
 {
   # A function that tests if the SV bound is sharp.
 
   # Check if 0 < P(Y = 1|T = 0, I_S = 1) < 1 and BF_U >= 1. If not, throw an error.
-  if(any(prob < 0 | prob > 1)) stop('P(Y=1|T=0,I_S=1) not between 0 and 1.')
+  if(any(pY1_T0_S1 < 0 | pY1_T0_S1 > 1)) stop('P(Y=1|T=0,I_S=1) not between 0 and 1.')
   if(BF_U < 1) stop('BF_U must be greater than or equal to 1.')
 
   # Calculate the sharp limit.
-  sharpLim = 1 / prob
+  sharpLim = 1 / pY1_T0_S1
 
   # If SVbound and AFbound are not provided, just calculate the sharp limit.
   if(is.null(SVbound) & is.null(AFbound))

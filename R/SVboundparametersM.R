@@ -31,12 +31,9 @@
 #'   T in the models for the selection variables.
 #' @param Mmodel Input string. Defining the models for the variables in the M
 #'   structure. If "P", the probit model is used. If "L", the logit model is
+#' @param pY1_T1_S1 Input scalar. The observed probabiltiy P(Y=1|T=1,I_S=1).
+#' @param pY1_T0_S1 Input scalar. The observed probabiltiy P(Y=1|T=0,I_S=1).
 #'   used.
-#' @param prob Input vector. Two numerical elements. The first element is
-#'   the observed probability of success in the treated group, P(Y=1|T=1, I_S=1),
-#'   and the second element is the observed probability of success in the
-#'   untreated group, P(Y=1|T=0, I_S=1).
-#'
 #' @return A list containing the sensitivity parameters and an indicator if the
 #'   treatment has been reversed.
 #' @export
@@ -51,7 +48,8 @@
 #' S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
 #' obsOutcome = c(0.534, 0.534)
 #' SVboundparametersM(whichEst = "RR_tot", Vval = V, Uval = U, Tcoef = Tr,
-#'   Ycoef = Y, Scoef = S, Mmodel = "P", prob = obsOutcome)
+#'   Ycoef = Y, Scoef = S, Mmodel = "P", pY1_T1_S1 = obsOutcome[1],
+#'   pY1_T0_S1 = obsOutcome[2])
 #'
 #' # Example with selection bias. DGP from the zika example.
 #' V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
@@ -61,7 +59,8 @@
 #' S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
 #' obsOutcome = c(0.286, 0.004)
 #' SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
-#'   Ycoef = Y, Scoef = S, Mmodel = "L", prob = obsOutcome)
+#'   Ycoef = Y, Scoef = S, Mmodel = "L", pY1_T1_S1 = obsOutcome[1],
+#'   pY1_T0_S1 = obsOutcome[2])
 #'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
 #'   to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
@@ -70,7 +69,7 @@
 #'   inclusion criteria in observational studies" Epidemiologic Methods 11, no.
 #'   1 (2022): 20220108.
 #'
-SVboundparametersM <- function(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel, prob)
+SVboundparametersM <- function(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel, pY1_T1_S1, pY1_T0_S1)
 {
   # A function that calculates the sensitivity parameters for the SV bound
   # for multiple selection variables. The input is the hyper parameters used
@@ -110,8 +109,8 @@ SVboundparametersM <- function(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel
   if(any(Uval[ , 2] == 0)) stop('At least one of the categories of U has a probability
                                 equal to 0. Remove that category, or change to a positive value.')
 
-  if(any(prob < 0)) stop('The observed probabilities must be greater than 0 and smaller than 1.')
-  if(any(prob > 1)) stop('The observed probabilities must be greater than 0 and smaller than 1.')
+  if(any(c(pY1_T1_S1, pY1_T0_S1) < 0)) stop('The observed probabilities must be greater than 0 and smaller than 1.')
+  if(any(c(pY1_T1_S1, pY1_T0_S1) > 1)) stop('The observed probabilities must be greater than 0 and smaller than 1.')
 
   ### END CHECKS OF THE INPUT ###
 
@@ -126,7 +125,7 @@ SVboundparametersM <- function(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel
   Y1coef = c(Ycoef[1] + Ycoef[2], Ycoef[3])
   Y0coef = c(Ycoef[1], Ycoef[3])
 
-  obsProb = prob
+  obsProb = c(pY1_T1_S1, pY1_T0_S1)
 
   # Using the data generating function to get the probabilities in the model.
   dataProb = genprob(Vval, Uval, Tcoef, Y1coef, Y0coef, constS, slopeSV, slopeSU, slopeST, Mmodel)
@@ -159,7 +158,7 @@ SVboundparametersM <- function(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel
   if(testSelBias < biasLimit)
   {
     revTreat = TRUE
-    obsProb = c(prob[2], prob[1])
+    obsProb = c(pY1_T0_S1, pY1_T1_S1)
     pTnew = rbind(pT[2, ], pT[1, ])
     lenS = length(pSmat[ , 1])
     pSmatNew = as.data.frame(matrix(rbind(as.matrix(pSmat[(lenS / 4 + 1) : (lenS / 2), ]),

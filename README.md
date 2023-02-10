@@ -45,7 +45,8 @@ Y = c(-5.2, 5, -1)
 S = matrix(c(1.2, 2.2, 0, 0.5, 2, -2.75, -4, 0), ncol = 4)
 
 SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
-                   Ycoef = Y, Scoef = S, Mmodel = "L", prob = c(0.286, 0.004))
+                   Ycoef = Y, Scoef = S, Mmodel = "L", pY1_T1_S1 = 0.286,
+                   pY1_T0_S1 = 0.004)
 #>      [,1]                [,2]  
 #> [1,] "BF_U"              1.5625
 #> [2,] "RR_UY|S=1"         2.7089
@@ -90,12 +91,12 @@ sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
 selprob = mean(sel)
 
 AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
-#>      [,1]       [,2] 
-#> [1,] "AF bound" 12.41
+#>      [,1]       [,2]
+#> [1,] "AF bound" 9.53
 AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
         selection = selprob)
-#>      [,1]       [,2] 
-#> [1,] "AF bound" 12.41
+#>      [,1]       [,2]
+#> [1,] "AF bound" 9.53
 ```
 
 The output is the AF bound. Note that the eventual recoding of the
@@ -139,7 +140,7 @@ output from previous functions:
 
 ``` r
 # library(SelectionBias)
-SVboundsharp(BF_U = 1.56, prob = 0.27)
+SVboundsharp(BF_U = 1.56, pY1_T0_S1 = 0.27)
 #> [1] "SV bound is sharp."
 ```
 
@@ -149,7 +150,7 @@ entered if one wish to know if the bound is *not* sharp.
 
 ``` r
 # library(SelectionBias)
-SVboundsharp(BF_U = 1.56, prob = 0.27, SVbound = 1.56, AFbound = 3.5)
+SVboundsharp(BF_U = 1.56, pY1_T0_S1 = 0.27, SVbound = 1.56, AFbound = 3.5)
 #> [1] "SV bound is sharp."
 ```
 
