@@ -44,12 +44,12 @@ Tr = c(-6.2, 1.75)
 Y = c(-5.2, 5, -1)
 S = matrix(c(1.2, 2.2, 0, 0.5, 2, -2.75, -4, 0), ncol = 4)
 
-SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
-         whichEst = "RR_sub", Mmodel = "L")
-#>      [,1]                [,2]    
-#> [1,] "BF_U"              1.562533
-#> [2,] "RR_UY|S=1"         2.708855
-#> [3,] "RR_TU|S=1"         2.329313
+SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
+                   Ycoef = Y, Scoef = S, Mmodel = "L", prob = c(0.286, 0.004))
+#>      [,1]                [,2]  
+#> [1,] "BF_U"              1.5625
+#> [2,] "RR_UY|S=1"         2.7089
+#> [3,] "RR_TU|S=1"         2.3293
 #> [4,] "Reverse treatment" TRUE
 ```
 
@@ -66,8 +66,8 @@ an example where the input from is the output from
 ``` r
 library(SelectionBias)
 SVbound(whichEst = "RR_sub", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
-#>      [,1]       [,2]    
-#> [1,] "SV bound" 1.562946
+#>      [,1]       [,2]
+#> [1,] "SV bound" 1.56
 ```
 
 The output is the SV bound. Note that the eventual recoding of the
@@ -89,13 +89,13 @@ y = rbinom(n, 1, 0.2 + 0.05 * tr)
 sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
 selprob = mean(sel)
 
-AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
+AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 10.88
-AFbound(outcome = y[sel==1], treatment = tr[sel==1],
-        selection = selprob, whichEst = "RR_tot")
+#> [1,] "AF bound" 12.41
+AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
+        selection = selprob)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 10.88
+#> [1,] "AF bound" 12.41
 ```
 
 The output is the AF bound. Note that the eventual recoding of the
@@ -121,10 +121,10 @@ and used to calculate the AF bound as
 ``` r
 # library(SelectionBias)
 attach(zika_learner)
-AFbound(outcome = mic_ceph, treatment = 1-zika, selection = sel_ind,
-        whichEst = "RR_sub")
+AFbound(whichEst = "RR_sub", outcome = mic_ceph, treatment = 1-zika,
+        selection = sel_ind)
 #>      [,1]       [,2]
-#> [1,] "AF bound" 3
+#> [1,] "AF bound" 3.5
 ```
 
 Note that in this example the treatment is reversed as discussed in the
@@ -133,13 +133,13 @@ corresponding article.
 ## Sharp example
 
 The sharpness of the SV bound in the subpopulation can be assessed in
-the function `SVboundsharp()`. The input is $BF_U$ and the probability
-$P(Y=1|T=0,I_S=1)$. Below is an example where the input is the output
-from previous functions:
+the function `SVboundsharp()`. The input is $BF_U$, $P(Y=1|T=0,I_S=1)$
+and the SV and AF bounds. Below is an example where the input is the
+output from previous functions:
 
 ``` r
 # library(SelectionBias)
-SVboundsharp(BF_U = 1.56, prob = 0.33)
+SVboundsharp(BF_U = 1.56, prob = 0.27)
 #> [1] "SV bound is sharp."
 ```
 
@@ -149,7 +149,7 @@ entered if one wish to know if the bound is *not* sharp.
 
 ``` r
 # library(SelectionBias)
-SVboundsharp(BF_U = 1.56, prob = 0.33, SVbound = 1.56, AFbound = 3)
+SVboundsharp(BF_U = 1.56, prob = 0.27, SVbound = 1.56, AFbound = 3.5)
 #> [1] "SV bound is sharp."
 ```
 
