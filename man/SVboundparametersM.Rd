@@ -4,7 +4,17 @@
 \alias{SVboundparametersM}
 \title{Sensitivity parameters for the Smith and VanderWeele bound}
 \usage{
-SVboundparametersM(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel, prob)
+SVboundparametersM(
+  whichEst,
+  Vval,
+  Uval,
+  Tcoef,
+  Ycoef,
+  Scoef,
+  Mmodel,
+  pY1_T1_S1,
+  pY1_T0_S1
+)
 }
 \arguments{
 \item{whichEst}{Input string. Defining the causal estimand of interest.
@@ -39,13 +49,12 @@ the models for the selection variables. The fourth column is the slopes for
 T in the models for the selection variables.}
 
 \item{Mmodel}{Input string. Defining the models for the variables in the M
-structure. If "P", the probit model is used. If "L", the logit model is
-used.}
+structure. If "P", the probit model is used. If "L", the logit model is}
 
-\item{prob}{Input vector. Two numerical elements. The first element is
-the observed probability of success in the treated group, P(Y=1|T=1, I_S=1),
-and the second element is the observed probability of success in the
-untreated group, P(Y=1|T=0, I_S=1).}
+\item{pY1_T1_S1}{Input scalar. The observed probabiltiy P(Y=1|T=1,I_S=1).}
+
+\item{pY1_T0_S1}{Input scalar. The observed probabiltiy P(Y=1|T=0,I_S=1).
+used.}
 }
 \value{
 A list containing the sensitivity parameters and an indicator if the
@@ -66,7 +75,8 @@ Y = c(0, 0, 1)
 S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
 obsOutcome = c(0.534, 0.534)
 SVboundparametersM(whichEst = "RR_tot", Vval = V, Uval = U, Tcoef = Tr,
-  Ycoef = Y, Scoef = S, Mmodel = "P", prob = obsOutcome)
+  Ycoef = Y, Scoef = S, Mmodel = "P", pY1_T1_S1 = obsOutcome[1],
+  pY1_T0_S1 = obsOutcome[2])
 
 # Example with selection bias. DGP from the zika example.
 V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
@@ -76,7 +86,8 @@ Y = c(-5.2, 5.0, -1.0)
 S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
 obsOutcome = c(0.286, 0.004)
 SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
-  Ycoef = Y, Scoef = S, Mmodel = "L", prob = obsOutcome)
+  Ycoef = Y, Scoef = S, Mmodel = "L", pY1_T1_S1 = obsOutcome[1],
+  pY1_T0_S1 = obsOutcome[2])
 
 }
 \references{

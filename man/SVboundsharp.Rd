@@ -4,14 +4,14 @@
 \alias{SVboundsharp}
 \title{Check if the Smith and VanderWeele bound in the subpopulation is sharp}
 \usage{
-SVboundsharp(BF_U, prob, SVbound = NULL, AFbound = NULL)
+SVboundsharp(BF_U, pY1_T0_S1, SVbound = NULL, AFbound = NULL)
 }
 \arguments{
 \item{BF_U}{Input scalar. The bounding factor for the SV bounds in the
 subpopulation. Must be equal to or above 1. Can be inserted directly or as
 output from \code{SVboundparametersM()}.}
 
-\item{prob}{Input scalar. The probability P(Y=1|T=0,I_S=1).}
+\item{pY1_T0_S1}{Input scalar. The probability P(Y=1|T=0,I_S=1).}
 
 \item{SVbound}{Optional input scalar. The SV bound, can be inserted directly
 or as output from \code{SVbound()}. Only necessary if one wants to know if the
@@ -32,13 +32,13 @@ of the treatment has to be done manually.
 \examples{
 
 # Example where the SV bound is sharp.
-SVboundsharp(BF_U = 1.56, prob = 0.33, SVbound = 1.56, AFbound = 3.0)
+SVboundsharp(BF_U = 1.56, pY1_T0_S1 = 0.33, SVbound = 1.56, AFbound = 3.0)
 
 # Example where the SV bound is not sharp.
-SVboundsharp(BF_U = 2, prob = 0.9, SVbound = 2, AFbound = 1.8)
+SVboundsharp(BF_U = 2, pY1_T0_S1 = 0.9, SVbound = 2, AFbound = 1.8)
 
 # Example where the SV bound is inconclusive.
-SVboundsharp(BF_U = 2, prob = 0.8, SVbound = 2, AFbound = 3)
+SVboundsharp(BF_U = 2, pY1_T0_S1 = 0.8, SVbound = 2, AFbound = 3)
 
 }
 \references{
