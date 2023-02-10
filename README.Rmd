@@ -54,8 +54,8 @@ Tr = c(-6.2, 1.75)
 Y = c(-5.2, 5, -1)
 S = matrix(c(1.2, 2.2, 0, 0.5, 2, -2.75, -4, 0), ncol = 4)
 
-SVboundparametersM(Vval = V, Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S,
-         whichEst = "RR_sub", Mmodel = "L")
+SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
+                   Ycoef = Y, Scoef = S, Mmodel = "L", prob = c(0.286, 0.004))
 ```
 The output is the sensitivity parameters and an indicator that states if the
 treatment was recoded, i.e. that the bias in the original coding was negative.
@@ -85,9 +85,9 @@ y = rbinom(n, 1, 0.2 + 0.05 * tr)
 sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
 selprob = mean(sel)
 
-AFbound(outcome = y, treatment = tr, selection = sel, whichEst = "RR_tot")
-AFbound(outcome = y[sel==1], treatment = tr[sel==1],
-        selection = selprob, whichEst = "RR_tot")
+AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
+AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
+        selection = selprob)
 ```
 The output is the AF bound. Note that the eventual recoding of the treatment
 has to be done manually, as discussed in the corresponding article.
@@ -107,8 +107,8 @@ and used to calculate the AF bound as
 ```{r}
 # library(SelectionBias)
 attach(zika_learner)
-AFbound(outcome = mic_ceph, treatment = 1-zika, selection = sel_ind,
-        whichEst = "RR_sub")
+AFbound(whichEst = "RR_sub", outcome = mic_ceph, treatment = 1-zika,
+        selection = sel_ind)
 ```
 Note that in this example the treatment is reversed as discussed in the
 corresponding article.
@@ -116,19 +116,19 @@ corresponding article.
 ## Sharp example
 
 The sharpness of the SV bound in the subpopulation can be assessed in the 
-function `SVboundsharp()`. The input is $BF_U$ and the probability 
-$P(Y=1|T=0,I_S=1)$. Below is an example where the input is the output from
+function `SVboundsharp()`. The input is $BF_U$, $P(Y=1|T=0,I_S=1)$ and the SV
+and AF bounds. Below is an example where the input is the output from
 previous functions:
 ```{r}
 # library(SelectionBias)
-SVboundsharp(BF_U = 1.56, prob = 0.33)
+SVboundsharp(BF_U = 1.56, prob = 0.27)
 ```
 The output states if the bound is sharp, or if it is inconclusive. There are
 two optional arguments as well, SVbound and AFbound. These must be entered if
 one wish to know if the bound is *not* sharp.
 ```{r}
 # library(SelectionBias)
-SVboundsharp(BF_U = 1.56, prob = 0.33, SVbound = 1.56, AFbound = 3)
+SVboundsharp(BF_U = 1.56, prob = 0.27, SVbound = 1.56, AFbound = 3.5)
 ```
 The output states if the bound is sharp, inconclusive or not sharp. Note that
 the eventual recoding of the treatment has to be done manually, as discussed
