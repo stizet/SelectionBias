@@ -1,4 +1,4 @@
-calcselbias <- function(Y1, Y0, Tr, S, U, V, estimand)
+calcselbias <- function(Y1, Y0, Tr, S, U, V, estimand, obsProb)
 {
   # A function that calculates the selection bias. The input is the conditional
   # probabilities necessary for the calculations and the causal estimand of
@@ -28,15 +28,11 @@ calcselbias <- function(Y1, Y0, Tr, S, U, V, estimand)
   ST0mat = matrix(Svec[(length(Svec) / 4 + 1) : (length(Svec) / 2)], nrow = Ulen, ncol = Vlen, byrow = FALSE)
 
   # Calculate the observed estimands.
-  # Calculate P(Y = 1|T = 1, I_S = 1).
-  Y1num = sum(Umat * Vmat * Y1mat * T1mat * ST1mat) #The numerator.
-  Y1denom = sum(Umat * Vmat * T1mat * ST1mat) #The denominator.
-  pY1_T1S1 = (Y1num / Y1denom) #P(Y = 1|T = 1, I_S = 1).
+  # Extract P(Y = 1|T = 1, I_S = 1).
+  pY1_T1S1 = obsProb[1]
 
-  # Calculate P(Y = 1|T = 0, I_S = 1).
-  Y0num = sum(Umat * Vmat * Y0mat * T0mat * ST0mat) #The numerator.
-  Y0denom = sum(Umat * Vmat * T0mat * ST0mat) #The denominator.
-  pY1_T0S1 = (Y0num / Y0denom) #P(Y = 1|T = 0, I_S = 1).
+  # Extract P(Y = 1|T = 0, I_S = 1).
+  pY1_T0S1 = obsProb[2]
 
   # The observed relative risk and risk difference.
   obsRR = pY1_T1S1 / pY1_T0S1
@@ -76,8 +72,8 @@ calcselbias <- function(Y1, Y0, Tr, S, U, V, estimand)
 
   selbias = round(selbias, digits = 14) #Round the selection bias.
 
-  # Return the selection bias and the observed probabilities.
-  returnVal = c(selbias, pY1_T1S1, pY1_T0S1)
+  # Return the selection bias.
+  returnVal = selbias
 
   return(returnVal)
 }

@@ -11,15 +11,16 @@ test_that("No selection bias when no collider is present.", {
                0.977249868, 0.977249868, 0.841344746, 0.001349898, 0.022750132,
                0.022750132, 0.158655254, 0.001349898, 0.022750132, 0.022750132,
                0.158655254), ncol=1, byrow=TRUE)
+  obsProb = c(0.534, 0.534)
 
   # The bias should be 1.
-  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RR_tot")[1], 1)
+  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RR_tot", obsProb)[1], 1)
   # The bias should be 0.
-  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RD_tot")[1], 0)
+  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RD_tot", obsProb)[1], 0)
   # The bias should be 1.
-  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RR_sub")[1], 1)
+  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RR_sub", obsProb)[1], 1)
   # The bias should be 0.
-  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RD_sub")[1], 0)
+  expect_equal(calcselbias(Y1 = Y1, Y0 = Y0, Tr = Tr, S = S, U = U, V = V, "RD_sub", obsProb)[1], 0)
 })
 
 ##########################################################################################################################################
