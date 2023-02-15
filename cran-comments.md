@@ -1,7 +1,7 @@
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
-There were 3 NOTEs:
+There were 4 NOTEs:
 
 * checking CRAN incoming feasibility ... [6s/17s] NOTE
   Maintainer: ‘Stina Zetterstrom <stina.zetterstrom@statistics.uu.se>’
@@ -30,6 +30,16 @@ Only on Fedora Linux, R-devel, clang, gfortran:
   
   I cannot change that Tidy is not on the path, or update Tidy on
   the external Fedora Linux server.
+  
+
+* checking examples ... NOTE
+  Examples with CPU (user + system) or elapsed time > 5s
+                      user system elapsed
+  SVboundparametersM 2.039  0.075    5.33
+  
+  I cannot make the examples smaller, they run in under 10 seconds,
+  and they run in under 5 seconds on the other platforms.
+
 
 
 
