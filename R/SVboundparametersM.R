@@ -46,10 +46,10 @@
 #' Tr = c(0, 1)
 #' Y = c(0, 0, 1)
 #' S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
-#' obsOutcome = c(0.534, 0.534)
+#' probT1 = 0.534
+#' probT0 = 0.534
 #' SVboundparametersM(whichEst = "RR_tot", Vval = V, Uval = U, Tcoef = Tr,
-#'   Ycoef = Y, Scoef = S, Mmodel = "P", pY1_T1_S1 = obsOutcome[1],
-#'   pY1_T0_S1 = obsOutcome[2])
+#'   Ycoef = Y, Scoef = S, Mmodel = "P", pY1_T1_S1 = probT1, pY1_T0_S1 = probT0)
 #'
 #' # Example with selection bias. DGP from the zika example.
 #' V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
@@ -57,10 +57,11 @@
 #' Tr = c(-6.2, 1.75)
 #' Y = c(-5.2, 5.0, -1.0)
 #' S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
-#' obsOutcome = c(0.286, 0.004)
+#' probT1 = 0.286
+#' probT0 = 0.004
 #' SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
-#'   Ycoef = Y, Scoef = S, Mmodel = "L", pY1_T1_S1 = obsOutcome[1],
-#'   pY1_T0_S1 = obsOutcome[2])
+#'   Ycoef = Y, Scoef = S, Mmodel = "L", pY1_T1_S1 = probT1, pY1_T0_S1 = probT0)
+#'
 #'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
 #'   to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
