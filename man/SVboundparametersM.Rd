@@ -51,9 +51,9 @@ T in the models for the selection variables.}
 \item{Mmodel}{Input string. Defining the models for the variables in the M
 structure. If "P", the probit model is used. If "L", the logit model is}
 
-\item{pY1_T1_S1}{Input scalar. The observed probabiltiy P(Y=1|T=1,I_S=1).}
+\item{pY1_T1_S1}{Input scalar. The observed probability P(Y=1|T=1,I_S=1).}
 
-\item{pY1_T0_S1}{Input scalar. The observed probabiltiy P(Y=1|T=0,I_S=1).
+\item{pY1_T0_S1}{Input scalar. The observed probability P(Y=1|T=0,I_S=1).
 used.}
 }
 \value{

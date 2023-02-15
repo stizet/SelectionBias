@@ -96,7 +96,7 @@ has to be done manually, as discussed in the corresponding article.
 ## Data example
 The simulated dataset `zika_learner` is included for the purpose of
 illustration of the bounds. The simulated dataset is created to emulate real
-data as well as a previoys example. See references in corresponding article
+data as well as a previous example. See references in corresponding article
 and the data documentation.
 
 The zika data can be reached through

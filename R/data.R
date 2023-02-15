@@ -13,7 +13,7 @@
 #'   \item{urban}{Indication of the living area of the subject (1=urban, 0=rural)}
 #'   \item{SES}{Indication of the socioeconomic status of the subject (1=high, 0=low)}
 #'   \item{birth}{First selection variable. Indication if the baby is born (1=birth, 0=terminated birth)}
-#'   \item{hospital}{Second selection variable. Indication if the delivery is in a public hosptial (1=public, 0=private)}
+#'   \item{hospital}{Second selection variable. Indication if the delivery is in a public hospital (1=public, 0=private)}
 #'   \item{sel_ind}{Selection indicator variable. Indication if the subject is included in the study (1=included, 0=not included)}
 #' }
 #'
