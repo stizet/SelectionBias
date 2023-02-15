@@ -91,12 +91,12 @@ sel = rbinom(n, 1, 0.4 + 0.1 * tr + 0.3 * y)
 selprob = mean(sel)
 
 AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
-#>      [,1]       [,2]
-#> [1,] "AF bound" 9.53
+#>      [,1]       [,2] 
+#> [1,] "AF bound" 11.94
 AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
         selection = selprob)
-#>      [,1]       [,2]
-#> [1,] "AF bound" 9.53
+#>      [,1]       [,2] 
+#> [1,] "AF bound" 11.94
 ```
 
 The output is the AF bound. Note that the eventual recoding of the
@@ -107,7 +107,7 @@ article.
 
 The simulated dataset `zika_learner` is included for the purpose of
 illustration of the bounds. The simulated dataset is created to emulate
-real data as well as a previoys example. See references in corresponding
+real data as well as a previous example. See references in corresponding
 article and the data documentation.
 
 The zika data can be reached through
