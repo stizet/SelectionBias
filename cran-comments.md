@@ -1,3 +1,10 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Explained acronyms in the DESCRIPTION file.
+
+* Written the references in the proper form in the DESCRIPTION file.
+
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
