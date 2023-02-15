@@ -8,11 +8,13 @@ Authors@R:
     person("Ingeborg", "Waernbaum", email = "ingeborg.waernbaum@statistics.uu.se",
     role = c("aut"), comment = c(ORCID = "0000-0002-4457-5311")))
 Description: Computes bounds and sensitivity parameters as part of sensitivity
-    analysis for selection bias. Two bounds are provided: SV bound and AF bound.
-    The SV bound assumes an additional dependence structure in form of a
-    generalized M-structure (Smith and VanderWeeles, 2019) whereas the AF bound
-    holds for general assumptions in the potential outcomes framework 
-    (Zetterstrom and Waernbaum, 2022).
+    analysis for selection bias. Two bounds are provided: the SV (Smith and
+    VanderWeele) bound and the AF (assumption-free) bound. The SV bound assumes
+    an additional dependence structure in form of a generalized M-structure
+    whereas the AF bound holds for general assumptions in the potential
+    outcomes framework. See Smith and VanderWeele (2019)
+    <doi:10.1097/EDE.0000000000001032> and Zetterstrom and Waernbaum (2022)
+    <doi:10.1515/em-2022-0108>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

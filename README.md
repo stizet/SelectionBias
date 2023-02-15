@@ -7,11 +7,10 @@
 <!-- badges: end -->
 
 The goal of SelectionBias is to calculate two different bounds for the
-selection bias for binary variables in the extended M structure and a
-bound for observed binary data. For the M structure, Smith and
-VanderWeeles and the assumption free bound, are calculated based on user
-input parameters. For the data, the assumption free bound is calculated
-with the data as input.
+selection bias for binary outcome and treatment variables. The SV (Smith
+and VanderWeele) bound is calculated for the generalized M-structure
+based on user input parameters. The AF (assumption-free) bound is
+calculated for a dataset.
 
 ## Installation
 
@@ -92,11 +91,11 @@ selprob = mean(sel)
 
 AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 11.94
+#> [1,] "AF bound" 12.89
 AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
         selection = selprob)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 11.94
+#> [1,] "AF bound" 12.89
 ```
 
 The output is the AF bound. Note that the eventual recoding of the
