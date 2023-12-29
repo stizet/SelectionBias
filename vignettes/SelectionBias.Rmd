@@ -138,11 +138,12 @@ table1::table1(~ mic_ceph + urban + SES | zika, data=zika_learner2, render.conti
 The dataset and data generating process (DGP) can be used to test the functions in `SelectionBias`.
 
 
-## `SVboundparametersM()`
+## `sensitivityparametersM()`
 
 The sensitivity parameters for the SV bound are calculated for the M-structure, illustrated in Figure 1. The sensitivity parameters are only calculated for an assumed model structure, since they depend on the unobserved variable, *U*. However, the observed probabilities of the outcome, $P(Y=1|T=t,I_S=1)$, $t=0,1$ are inputs since they are used to check if the causal estimand for the assumed DGP is greater or smaller than the observed estimand. The code and the output are:
 ```{r eval = TRUE}
-SVboundparametersM(whichEst = "RR_sub",
+sensitivityparametersM(whichEst = "RR_sub",
+                   whichBound = "SV",
                    Vval = matrix(c(1, 0, 0.85, 0.15), ncol = 2),
                    Uval = matrix(c(1, 0, 0.5, 0.5), ncol = 2),
                    Tcoef = c(-6.2, 1.75),

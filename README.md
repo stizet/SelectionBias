@@ -30,7 +30,7 @@ and VanderWeele (2019), which depends on untestable assumptions, and an
 assumption free bound.
 
 The sensitivity parameters in the SV bound is calculated in
-`SVboundparametersM()` for user defined parameters in the extended
+`sensitivityparametersM()` for user defined parameters in the extended
 M-structure, where causal dependencies are modeled with either probit or
 logit models. Below is an example with binary unobserved variables and
 two selection variables (zika example in corresponding article):
@@ -43,7 +43,7 @@ Tr = c(-6.2, 1.75)
 Y = c(-5.2, 5, -1)
 S = matrix(c(1.2, 2.2, 0, 0.5, 2, -2.75, -4, 0), ncol = 4)
 
-SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
+sensitivityparametersM(whichEst = "RR_sub", whichBound = "SV", Vval = V, Uval = U, Tcoef = Tr,
                    Ycoef = Y, Scoef = S, Mmodel = "L", pY1_T1_S1 = 0.286,
                    pY1_T0_S1 = 0.004)
 #>      [,1]                [,2]  
@@ -68,7 +68,7 @@ library(SelectionBias)
 SVbound(whichEst = "RR_sub", pY1_T1_S1 = 0.004, pY1_T0_S1 = 0.286,
         RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
 #>      [,1]       [,2]
-#> [1,] "SV bound" 1.56
+#> [1,] "SV bound" 0.01
 ```
 
 The output is the SV bound. Note that the eventual recoding of the
@@ -92,11 +92,11 @@ selprob = mean(sel)
 
 AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 11.05
+#> [1,] "AF bound" 10.91
 AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
         selection = selprob)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 11.05
+#> [1,] "AF bound" 10.91
 ```
 
 The output is the AF bound. Note that the eventual recoding of the
