@@ -163,6 +163,8 @@ In the zika example, the estimand of interest is the relative risk in the subpop
 The SV bound can be calculated using the function `SVbound()`. The first argument is `whichEst`, indicating the causal estimand of interest (`RR_tot`, `RD_tot`, `RR_sub` or `RD_sub`). The subsequent arguments are the sensitivity parameters provided by the user. The default value for all sensitivity parameters are `NULL`, and the user must then specify numeric values on the sensitivity parameters that are necessary for the bound for the chosen estimand. The sensitivity parameter can either be calculated using `SVboundparametersM()`, or found elsewhere. For sensitivity parameters found elsewhere, `SVbound()` is not restricted to the M-structure. However, the necessary assumptions for the SV bound must still be fulfilled [@smith2019bounding]. The output is the SV bound. The code and output are:
 ```{r eval = TRUE}
 SVbound(whichEst = "RR_sub",
+        pY1_T1_S1 = 0.004,
+        pY1_T0_S1 = 0.286,
         RR_UY_S1 = 2.71,
         RR_TU_S1 = 2.33)
 ```

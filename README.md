@@ -65,7 +65,8 @@ an example where the input from is the output from
 
 ``` r
 library(SelectionBias)
-SVbound(whichEst = "RR_sub", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
+SVbound(whichEst = "RR_sub", pY1_T1_S1 = 0.004, pY1_T0_S1 = 0.286,
+        RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
 #>      [,1]       [,2]
 #> [1,] "SV bound" 1.56
 ```
@@ -91,11 +92,11 @@ selprob = mean(sel)
 
 AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 12.89
+#> [1,] "AF bound" 11.05
 AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
         selection = selprob)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 12.89
+#> [1,] "AF bound" 11.05
 ```
 
 The output is the AF bound. Note that the eventual recoding of the

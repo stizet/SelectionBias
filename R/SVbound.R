@@ -34,19 +34,20 @@
 #'
 #' @examples
 #' # Example for relative risk in the total population.
-#' SVbound(whichEst = "RR_tot", RR_UY_T1 = 2, RR_UY_T0 = 2,
-#'  RR_SU_T1 = 1.7, RR_SU_T0 = 1.5)
+#' SVbound(whichEst = "RR_tot", pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01,
+#'  RR_UY_T1 = 2, RR_UY_T0 = 2, RR_SU_T1 = 1.7, RR_SU_T0 = 1.5)
 #'
 #' # Example for risk difference in the total population.
-#' SVbound(whichEst = "RD_tot", RR_UY_T1 = 2, RR_UY_T0 = 2,
-#'  RR_SU_T1 = 1.7, RR_SU_T0 = 1.5, pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01)
+#' SVbound(whichEst = "RD_tot", pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01,
+#'  RR_UY_T1 = 2, RR_UY_T0 = 2, RR_SU_T1 = 1.7, RR_SU_T0 = 1.5)
 #'
 #' # Example for relative risk in the subpopulation.
-#' SVbound(whichEst = "RR_sub", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
+#' SVbound(whichEst = "RR_sub", pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01,
+#'  RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
 #'
 #' # Example for risk difference in the subpopulation.
-#' SVbound(whichEst = "RD_sub", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33,
-#'  pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01)
+#' SVbound(whichEst = "RD_sub", pY1_T1_S1 = 0.05, pY1_T0_S1 = 0.01,
+#'  RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
 #'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
 #'   to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.

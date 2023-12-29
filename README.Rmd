@@ -67,7 +67,8 @@ in `SVboundparametersM()`, or from another source. Below is an example where the
 input from is the output from `SVboundparametersM()` above:
 ```{r}
 library(SelectionBias)
-SVbound(whichEst = "RR_sub", RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
+SVbound(whichEst = "RR_sub", pY1_T1_S1 = 0.004, pY1_T0_S1 = 0.286,
+        RR_UY_S1 = 2.71, RR_TU_S1 = 2.33)
 ```
 The output is the SV bound. Note that the eventual recoding of the treatment
 has to be done manually, as discussed in the corresponding article.
