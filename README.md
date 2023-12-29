@@ -84,6 +84,7 @@ selection vector and probability:
 
 ``` r
 library(SelectionBias)
+set.seed(1)
 n = 1000
 tr = rbinom(n, 1, 0.5)
 y = rbinom(n, 1, 0.2 + 0.05 * tr)
@@ -92,11 +93,11 @@ selprob = mean(sel)
 
 AFbound(whichEst = "RR_tot", outcome = y, treatment = tr, selection = sel)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 10.91
+#> [1,] "AF bound" 11.02
 AFbound(whichEst = "RR_tot", outcome = y[sel==1], treatment = tr[sel==1],
         selection = selprob)
 #>      [,1]       [,2] 
-#> [1,] "AF bound" 10.91
+#> [1,] "AF bound" 11.02
 ```
 
 The output is the AF bound. Note that the eventual recoding of the

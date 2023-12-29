@@ -80,6 +80,7 @@ selection vector or probability, and which causal estimand is of interest.
 Below is an example illustrating both the selection vector and probability:
 ```{r}
 library(SelectionBias)
+set.seed(1)
 n = 1000
 tr = rbinom(n, 1, 0.5)
 y = rbinom(n, 1, 0.2 + 0.05 * tr)
