@@ -98,6 +98,7 @@ sensitivityparametersM <- function(whichEst, whichBound, Vval, Uval, Tcoef, Ycoe
   #genprob()
   #calcselbias()
   #calcSVbound()
+  #calcGAFparameters()
 
   ### RUN SOME CHECKS OF THE INPUT ###
 
@@ -204,7 +205,7 @@ sensitivityparametersM <- function(whichEst, whichBound, Vval, Uval, Tcoef, Ycoe
 
   ### CALCULATING THE GAF PARAMETERS ###
 
-  GAFpar = calcGAFbound(pY1, pY0, whichEst)
+  GAFpar = calcGAFparameters(pY1, pY0, whichEst)
 
   ### END CALCULATING THE GAF PARAMETERS ###
 

@@ -66,7 +66,7 @@ SVbound <- function(whichEst, pY1_T1_S1, pY1_T0_S1,
 
   # Check if the probabilities are valid.
   if((pY1_T1_S1 < 0 | pY1_T1_S1 > 1 | pY1_T0_S1 < 0 | pY1_T0_S1 > 1))
-    stop("P(Y=1|T=1,I_S=1) and P(Y=1|T=1,I_S=1) cannot be smaller than 0 or larger than 1.")
+    stop("P(Y=1|T=1,I_S=1) and P(Y=1|T=0,I_S=1) cannot be smaller than 0 or larger than 1.")
 
   # The observational estimands.
   RRobs = pY1_T1_S1 / pY1_T0_S1
