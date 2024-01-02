@@ -1,6 +1,6 @@
 ##########################################################################################################################################
 
-test_that("Bounds are eqaul to 0, 1 or -1 when there is no selection bias or
+test_that("Bounds are equal to 0, 1 or -1 when there is no selection bias or
           observed effect.", {
 
   # Bound for the relative risk in the total population should equal 1.

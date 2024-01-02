@@ -60,7 +60,6 @@
 #'
 GAFbound <- function(whichEst, M, m, outcome, treatment, selection = NULL)
 {
-  print(selection)
   if(whichEst == "RR_tot" | whichEst == "RD_tot")
   {
     if(is.null(selection[1])){stop('The argument "selection" must be specified for total population estimands.')}
@@ -76,10 +75,10 @@ GAFbound <- function(whichEst, M, m, outcome, treatment, selection = NULL)
 
   # Calculate the GAF bound.
   bound = calcGAFbound(whichEst, M, m, outcome, treatment, selection, "GAF")
-
+  bound = round(bound, 2)
   # Output.
   heading = c("GAF lower bound", "GAF upper bound")
-  values = list(bound)
+  values = list(bound[1], bound[2])
   returnDat = matrix(cbind(heading, values), ncol = 2)
   return(returnDat)
 }
