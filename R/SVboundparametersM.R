@@ -1,8 +1,17 @@
 #' Sensitivity parameters for the Smith and VanderWeele bound
 #'
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#' `SVboundparametersM()` has been deprecated and is replaced by
+#' `sensitivityparametersM()`.
+#'
+#'
 #' `SVboundparametersM()` returns a list with the sensitivity parameters and an
-#' indicator if bias is negative and the treatment coding is reversed for an
+#' indicator if the bias is negative and the treatment coding is reversed for an
 #' assumed model.
+#'
+#'
+
 #'
 #' @param whichEst Input string. Defining the causal estimand of interest.
 #'   Available options are as follows. (1) Relative risk in the total
@@ -36,31 +45,6 @@
 #'   used.
 #' @return A list containing the sensitivity parameters and an indicator if the
 #'   treatment has been reversed.
-#' @export
-#'
-#' @examples
-#'
-#' # Example with no selection bias.
-#' V = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
-#' U = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
-#' Tr = c(0, 1)
-#' Y = c(0, 0, 1)
-#' S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
-#' probT1 = 0.534
-#' probT0 = 0.534
-#' SVboundparametersM(whichEst = "RR_tot", Vval = V, Uval = U, Tcoef = Tr,
-#'   Ycoef = Y, Scoef = S, Mmodel = "P", pY1_T1_S1 = probT1, pY1_T0_S1 = probT0)
-#'
-#' # Example with selection bias. DGP from the zika example.
-#' V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
-#' U = matrix(c(1, 0, 0.5, 0.5), ncol = 2)
-#' Tr = c(-6.2, 1.75)
-#' Y = c(-5.2, 5.0, -1.0)
-#' S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
-#' probT1 = 0.286
-#' probT0 = 0.004
-#' SVboundparametersM(whichEst = "RR_sub", Vval = V, Uval = U, Tcoef = Tr,
-#'   Ycoef = Y, Scoef = S, Mmodel = "L", pY1_T1_S1 = probT1, pY1_T0_S1 = probT0)
 #'
 #'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
@@ -82,6 +66,8 @@ SVboundparametersM <- function(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel
   #genprob()
   #calcselbias()
   #calcSVbound()
+
+  lifecycle::deprecate_warn("1.0.0", "SVboundparametersM()", "sensitivityparametersM()")
 
   ### RUN SOME CHECKS OF THE INPUT ###
 

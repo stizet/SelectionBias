@@ -2,6 +2,6 @@
 
 export(AFbound)
 export(SVbound)
-export(SVboundparametersM)
 export(SVboundsharp)
 export(sensitivityparametersM)
+importFrom(lifecycle,deprecated)
