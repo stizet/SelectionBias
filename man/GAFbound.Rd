@@ -2,7 +2,7 @@
 % Please edit documentation in R/GAFbound.R
 \name{GAFbound}
 \alias{GAFbound}
-\title{GAF bound}
+\title{Generalized assumption-free bound}
 \usage{
 GAFbound(whichEst, M, m, outcome, treatment, selection = NULL)
 }

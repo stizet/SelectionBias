@@ -2,31 +2,33 @@
 % Please edit documentation in R/AFbound.R
 \name{AFbound}
 \alias{AFbound}
-\title{Assumption free bound for a data set}
+\title{Assumption-free bound}
 \usage{
-AFbound(whichEst, outcome, treatment, selection)
+AFbound(whichEst, outcome, treatment, selection = NULL)
 }
 \arguments{
-\item{whichEst}{Input string. Defining the population parameter of interest.
+\item{whichEst}{Input string. Defining the causal estimand of interest.
 Available options are as follows. (1) Relative risk in the total
 population: "RR_tot", (2) Risk difference in the total population:
 "RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
 difference in the subpopulation: "RD_sub".}
 
-\item{outcome}{Input vector. A binary outcome variable.}
+\item{outcome}{Input vector. A binary outcome variable. Either the data
+vector (length>=3) or two conditional outcome probabilities with
+P(Y=1|T=1,I_s=1) and P(Y=1|T=0,I_s=1) as first and second element.}
 
-\item{treatment}{Input vector. A binary treatment variable.}
+\item{treatment}{Input vector. A binary treatment variable. Either the data
+vector (length>=3) or two conditional treatment probabilities with
+P(T=1|I_s=1) and P(T=0|I_s=1) as first and second element.}
 
 \item{selection}{Input vector or input scalar. A binary selection variable or
-a selection probability.}
+a selection probability. Can be omitted for subpopulation estimands.}
 }
 \value{
-A list with the assumption free bound.
+A list containing the upper and lower AF bounds.
 }
 \description{
-\code{AFbound()} returns the assumption free bound for a dataset that consists of
-an outcome, a treatment and a selection variable. If the bias is negative,
-the recoding of the treatment has to be done manually.
+\code{AFbound()} returns a list with the AF upper and lower bounds.
 }
 \examples{
 # Example with selection indicator variable.
@@ -52,4 +54,7 @@ AFbound(whichEst = "RD_tot", outcome = y, treatment = tr, selection = sel)
 Zetterstrom, Stina and Waernbaum, Ingeborg. "Selection bias and
 multiple inclusion criteria in observational studies" Epidemiologic
 Methods 11, no. 1 (2022): 20220108.
+
+Zetterstrom, Stina. "Bounds for selection bias using outcome
+probabilities" Epidemiologic Methods
 }

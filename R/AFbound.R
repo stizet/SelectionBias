@@ -1,20 +1,22 @@
-#' Assumption free bound for a data set
+#' Assumption-free bound
 #'
-#' `AFbound()` returns the assumption free bound for a dataset that consists of
-#' an outcome, a treatment and a selection variable. If the bias is negative,
-#' the recoding of the treatment has to be done manually.
+#' `AFbound()` returns a list with the AF upper and lower bounds.
 #'
-#' @param whichEst Input string. Defining the population parameter of interest.
+#' @param whichEst Input string. Defining the causal estimand of interest.
 #'   Available options are as follows. (1) Relative risk in the total
 #'   population: "RR_tot", (2) Risk difference in the total population:
 #'   "RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
 #'   difference in the subpopulation: "RD_sub".
-#' @param outcome Input vector. A binary outcome variable.
-#' @param treatment Input vector. A binary treatment variable.
+#' @param outcome Input vector. A binary outcome variable. Either the data
+#' vector (length>=3) or two conditional outcome probabilities with
+#' P(Y=1|T=1,I_s=1) and P(Y=1|T=0,I_s=1) as first and second element.
+#' @param treatment Input vector. A binary treatment variable. Either the data
+#' vector (length>=3) or two conditional treatment probabilities with
+#' P(T=1|I_s=1) and P(T=0|I_s=1) as first and second element.
 #' @param selection Input vector or input scalar. A binary selection variable or
-#'   a selection probability.
+#'   a selection probability. Can be omitted for subpopulation estimands.
 #'
-#' @return A list with the assumption free bound.
+#' @return A list containing the upper and lower AF bounds.
 #' @export
 #'
 #' @examples
@@ -40,75 +42,24 @@
 #'   multiple inclusion criteria in observational studies" Epidemiologic
 #'   Methods 11, no. 1 (2022): 20220108.
 #'
-AFbound <- function(whichEst, outcome, treatment, selection)
+#'  Zetterstrom, Stina. "Bounds for selection bias using outcome
+#'  probabilities" Epidemiologic Methods
+#'
+AFbound <- function(whichEst, outcome, treatment, selection = NULL)
 {
-  # A function that calculates the assumption free bound for the bias due to
-  # selection, for multiple selection variables. The input is the data and
-  # which causal estimand the calculations are performed for.
-
-  # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_sub", "RD_sub".
-  if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_sub" & whichEst != "RD_sub")
-    stop('The estimand must be "RR_tot", "RD_tot", "RR_sub" or "RD_sub".')
-
-  y = outcome
-  tr = treatment
-  Is = selection
-
-  # If the selection indicator variable is included.
-  if(length(Is) > 1)
+  if(whichEst == "RR_tot" | whichEst == "RD_tot")
   {
-    # P(I_s = 1) and P(I_s = 0).
-    pIs1 = length(Is[Is == 1]) / length(Is)
-    pIs0 = 1 - pIs1
-
-    # P(T = 1|I_s = 1) and P(T = 0|I_s = 1).
-    pT1_Is1 = length(tr[tr == 1 & Is == 1]) / length(Is[Is == 1])
-    pT0_Is1 = length(tr[tr == 0 & Is == 1]) / length(Is[Is == 1])
-
-    # P(Y = 1|T = 1, I_s = 1) and P(Y = 1|T = 0, I_s = 1).
-    pY1_T1_Is1 = length(y[y == 1 & tr == 1 & Is == 1]) / length(tr[tr == 1 & Is == 1])
-    pY1_T0_Is1 = length(y[y == 1 & tr == 0 & Is == 1]) / length(tr[tr == 0 & Is == 1])
-  }else{
-    # If the selection probability is included.
-
-    # Check if the selection probability is valid, else stop.
-    if(any(Is < 0 | Is > 1)) stop('P(I_s=1) not between 0 and 1.')
-
-    # P(I_s = 1) and P(I_s = 0).
-    pIs1 = Is
-    pIs0 = 1 - pIs1
-
-    # P(T = 1|I_s = 1) and P(T = 0|I_s = 1).
-    pT1_Is1 = length(tr[tr == 1]) / length(tr)
-    pT0_Is1 = length(tr[tr == 0]) / length(tr)
-
-    # P(Y = 1|T = 1, I_s = 1) and P(Y = 1|T = 0, I_s = 1).
-    pY1_T1_Is1 = length(y[y == 1 & tr == 1]) / length(tr[tr == 1])
-    pY1_T0_Is1 = length(y[y == 1 & tr == 0]) / length(tr[tr == 0])
+    if(is.null(selection[1])){stop('The argument "selection" must be specified for total population estimands.')}
   }
 
-  if(is.nan(pY1_T1_Is1)) stop('Input data result in 0/0. This can for instance happen if P(T=t|I_s=1)=0 or P(Y=1|T=t,I_s=1)=0.')
-  if(is.nan(pY1_T0_Is1)) stop('Input data result in 0/0. This can for instance happen if P(T=t|I_s=1)=0 or P(Y=1|T=t,I_s=1)=0.')
-  if(is.nan(pT1_Is1)) stop('Input data result in 0/0. This can for instance happen if P(T=t|I_s=1)=0 or P(Y=1|T=t,I_s=1)=0.')
-  if(is.nan(pT0_Is1)) stop('Input data result in 0/0. This can for instance happen if P(T=t|I_s=1)=0 or P(Y=1|T=t,I_s=1)=0.')
+  if(is.null(selection[1])){selection = 1} # Give arbitrary value in case of NULL.
 
-  # Calculate the assumption free bound for the relevant parameter.
-  if(whichEst == "RR_tot"){
-    AFbound = round(min((pT1_Is1 * pIs1 + 2*pIs0 + pY1_T0_Is1 * pT0_Is1 * pIs1), 1) /
-                      (pY1_T0_Is1 * pT1_Is1 * pIs1), 2)
-  }else if(whichEst == "RD_tot"){
-    AFbound = round(min((pT1_Is1 * pIs1 + 2 * pIs0 + pY1_T0_Is1 * pT0_Is1 * pIs1), 1) +
-                      pY1_T1_Is1 * (1 - pT1_Is1 * pIs1) - pY1_T0_Is1, 2)
-  }else if(whichEst == "RR_sub"){
-    AFbound = round(min((pT1_Is1 + pY1_T0_Is1 * pT0_Is1), 1) / (pY1_T0_Is1 * pT1_Is1), 2)
-  }else{
-    AFbound = round(min((pT1_Is1 + pY1_T0_Is1 * pT0_Is1), 1) +
-                      pY1_T1_Is1 * (1 - pT1_Is1) - pY1_T0_Is1, 2)
-  }
-
-  heading = "AF bound"
-  values = list(AFbound)
+  # Calculate the GAF bound.
+  bound = calcGAFbound(whichEst, 1, 0, outcome, treatment, selection, "AF")
+  bound = round(bound, 2)
+  # Output.
+  heading = c("AF lower bound", "AF upper bound")
+  values = list(bound[1], bound[2])
   returnDat = matrix(cbind(heading, values), ncol = 2)
-
   return(returnDat)
 }

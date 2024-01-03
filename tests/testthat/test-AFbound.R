@@ -1,57 +1,87 @@
-
 ##########################################################################################################################################
 
-test_that("AFbound works for a small dataset for all estimands.", {
+test_that("Bounds are equal to specific values.", {
 
-  # The small dataset.
-  y = c(0, 0, 0, 0, 1, 1, 1, 1)
-  tr = c(0, 0, 1, 1, 0, 0, 1, 1)
-  sel = c(0, 1, 0, 1, 0, 1, 0, 1)
-  selprob = 0.5
+  # Lower bound for the relative risk in the total population should equal 0.29.
+  expect_equal(as.numeric(AFbound(whichEst = "RR_tot", outcome = c(0.5, 0.5),
+                                   treatment = c(0.5, 0.5), selection = 0.9)[1, 2]), 0.29)
 
-  # Should equal 8 for "RR_tot".
-  expect_equal(as.numeric(AFbound("RR_tot", y, tr, sel)[1,2]), 8)
-  expect_equal(as.numeric(AFbound("RR_tot", y, tr, selprob)[1,2]), 8)
+  # Upper bound for the relative risk in the total population should equal 3.44.
+  expect_equal(as.numeric(AFbound(whichEst = "RR_tot", outcome = c(0.5, 0.5),
+                                   treatment = c(0.5, 0.5), selection = 0.9)[2, 2]), 3.44)
 
-  # Should equal 0.875 for "RD_tot".
-  expect_equal(as.numeric(AFbound("RD_tot", y, tr, sel)[1,2]), 0.88)
-  expect_equal(as.numeric(AFbound("RD_tot", y, tr, selprob)[1,2]), 0.88)
+  # Lower bound for the risk difference in the total population should equal -0.6.
+  expect_equal(as.numeric(AFbound(whichEst = "RD_tot", outcome = c(0.5, 0.5),
+                                   treatment = c(0.5, 0.5), selection = 0.8)[1, 2]), -0.6)
 
-  # Should equal 3 for "RR_sub".
-  expect_equal(as.numeric(AFbound("RR_sub", y, tr, sel)[1,2]), 3)
-  expect_equal(as.numeric(AFbound("RR_sub", y, tr, selprob)[1,2]), 3)
+  # Upper bound for the risk difference in the total population should equal 0.6.
+  expect_equal(as.numeric(AFbound(whichEst = "RD_tot", outcome = c(0.5, 0.5),
+                                   treatment = c(0.5, 0.5), selection = 0.8)[2, 2]), 0.6)
 
-  # Should equal 0.5 for "RD_sub".
-  expect_equal(as.numeric(AFbound("RD_sub", y, tr, sel)[1,2]), 0.5)
-  expect_equal(as.numeric(AFbound("RD_sub", y, tr, selprob)[1,2]), 0.5)
+
+  # Lower bound for the relative risk in the subpopulation should equal 0.33.
+  expect_equal(as.numeric(AFbound(whichEst = "RR_sub", outcome = c(0.5, 0.5),
+                                   treatment = c(0.5, 0.5))[1, 2]), 0.33)
+
+  # Upper bound for the relative risk in the subpopulation should equal 3.
+  expect_equal(as.numeric(AFbound(whichEst = "RR_sub", outcome = c(0.5, 0.5),
+                                   treatment = c(0.5, 0.5))[2, 2]), 3)
+
+  # Lower bound for the risk difference in the subpopulation should equal -0.5.
+  expect_equal(as.numeric(AFbound(whichEst = "RD_sub", outcome = c(0.5, 0.5),
+                                   treatment = c(0.5, 0.5))[1, 2]), -0.5)
+
+  # Upper bound for the risk difference in the subpopulation should equal 0.5.
+  expect_equal(as.numeric(AFbound(whichEst = "RD_sub", outcome = c(0.5, 0.5),
+                                   treatment = c(0.5, 0.5))[2, 2]), 0.5)
 
 })
 
 ##########################################################################################################################################
 
-test_that("AFbound throws an error if the selection probability is not between 0 and 1.", {
-
-  # The small dataset.
-  y = c(0, 0, 0, 0, 1, 1, 1, 1)
-  tr = c(0, 0, 1, 1, 0, 0, 1, 1)
-
-  expect_error(AFbound("RR_tot", y, tr, 2), 'not between 0 and 1.')
-  expect_error(AFbound("RR_tot", y, tr, -2), 'not between 0 and 1.')
-
-})
-
-##########################################################################################################################################
 
 test_that("AFbound throws an error if the estimand is not correctly specified.", {
 
-  # The small dataset.
-  y = c(0, 0, 0, 0, 1, 1, 1, 1)
-  tr = c(0, 0, 1, 1, 0, 0, 1, 1)
-  selprob = 0.5
-
-  expect_error(AFbound("RR_t", y, tr, selprob), 'The estimand must be')
+  expect_error(AFbound(whichEst = "RR_t", outcome = c(0.5, 0.5),
+                        treatment = c(0.5, 0.5), selection = 0.8), 'The estimand must be')
 
 })
 
 ##########################################################################################################################################
+
+
+test_that("AFbound throws an error if P(I_s=1) is equal to NULL for tot pop.", {
+
+  expect_error(AFbound(whichEst = "RR_tot", outcome = c(0.5, 0.5), treatment = c(0.5, 0.5)),
+               'The argument "selection"')
+})
+
+
+##########################################################################################################################################
+
+test_that("AFbound throws an error the wrong dimension of the input is used.", {
+
+  expect_error(AFbound(whichEst = "RR_sub", outcome = c(0.5, 0.5),
+                       treatment = 0.5),
+               'The length of the arguments')
+})
+
+##########################################################################################################################################
+
+test_that("AFbound throws an error if the input takes on incorrect values.", {
+
+  expect_error(AFbound(whichEst = "RR_tot", outcome = c(0.5, 0.5),
+                       treatment = c(0.5, 0.5), selection = 1.2),
+               "The probability")
+  expect_error(AFbound(whichEst = "RR_sub", outcome = c(0.5, 0.5),
+                       treatment = c(1.2, 0.5)),
+               "The probabilities")
+  expect_error(AFbound(whichEst = "RR_sub", outcome = c(0.5, 1.2),
+                       treatment = c(0.5, 0.5)),
+               'The probabilities')
+
+})
+
+##########################################################################################################################################
+
 

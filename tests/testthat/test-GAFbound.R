@@ -52,7 +52,6 @@ test_that("GAFbound throws an error if the estimand is not correctly specified."
 
 test_that("GAFbound throws an error if P(I_s=1) is equal to NULL for tot pop.", {
 
-  #Sensitivity parameters missing.
   expect_error(GAFbound(whichEst = "RR_tot", M = 0.8, m = 0.2,
                         outcome = c(0.5, 0.5), treatment = c(0.5, 0.5)),
                'The argument "selection"')
@@ -60,9 +59,18 @@ test_that("GAFbound throws an error if P(I_s=1) is equal to NULL for tot pop.", 
 
 ##########################################################################################################################################
 
+test_that("GAFbound throws an error the wrong dimension of the input is used.", {
+
+  expect_error(GAFbound(whichEst = "RR_sub", M = 0.8, m = 0.2,
+                        outcome = c(0.5, 0.5), treatment = 0.5),
+               'The length of the arguments')
+})
+
+##########################################################################################################################################
+
+
 test_that("GAFbound throws an error if the input takes on incorrect values.", {
 
-  # Sensitivity parameters smaller than 1.
   expect_error(GAFbound(whichEst = "RR_sub", M = 1.5, m = 0.2,
                         outcome = c(0.5, 0.5), treatment = c(0.5, 0.5)),
                "M and m cannot be smaller")

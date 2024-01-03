@@ -40,11 +40,11 @@ calcGAFbound <- function(estimand, M, m, y, tr, sel, bound)
   if(is.nan(pT0_S1)) stop('Input data result in 0/0. This can for instance happen if P(T=t|I_s=1)=0 or P(Y=1|T=t,I_s=1)=0.')
 
   if((pY1_T1_S1 < 0 | pY1_T1_S1 > 1 | pY1_T0_S1 < 0 | pY1_T0_S1 > 1))
-    stop("P(Y=1|T=1,I_S=1) and P(Y=1|T=1,I_S=1) cannot be smaller than 0 or larger than 1.")
+    stop("The probabilities P(Y=1|T=1,I_s=1) and P(Y=1|T=0,I_s=1) cannot be smaller than 0 or larger than 1.")
   if((pT1_S1 < 0 | pT1_S1 > 1 | pT0_S1 < 0 | pT0_S1 > 1))
-    stop("P(T=1|I_S=1) and P(T=0|I_S=1) cannot be smaller than 0 or larger than 1.")
+    stop("The probabilities P(T=1|I_s=1) and P(T=0|I_s=1) cannot be smaller than 0 or larger than 1.")
   if((pS1 < 0 | pS1 > 1))
-    stop("P(I_S=1) cannot be smaller than 0 or larger than 1.")
+    stop("The probability P(I_s=1) cannot be smaller than 0 or larger than 1.")
 
   if(bound == "GAF")
   {
