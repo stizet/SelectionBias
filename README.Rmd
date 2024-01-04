@@ -128,7 +128,7 @@ treatment probabilities (see the documentation for more details) from the
 dataset:
 ```{r}
 # library(SelectionBias)
-CAFbound(whichEst = "RR_sub", M = 0.5, m = 0.001, outcome = c(0.004, 0.286),
+CAFbound(whichEst = "RR_sub", M = 0.5, m = 0.001, outcome = c(0.286, 0.004),
           treatment = c(0.002, 0.998))
 ```
 The output is the CAF lower and upper bounds. Note that the treatment does not

@@ -141,11 +141,11 @@ the documentation for more details) from the `zika_learner` dataset:
 
 ``` r
 # library(SelectionBias)
-CAFbound(whichEst = "RR_sub", M = 0.5, m = 0.001, outcome = c(0.004, 0.286),
+CAFbound(whichEst = "RR_sub", M = 0.5, m = 0.001, outcome = c(0.286, 0.004),
           treatment = c(0.002, 0.998))
-#>      [,1]              [,2]
-#> [1,] "CAF lower bound" 0   
-#> [2,] "CAF upper bound" 1.75
+#>      [,1]              [,2]  
+#> [1,] "CAF lower bound" 0.31  
+#> [2,] "CAF upper bound" 125.08
 ```
 
 The output is the CAF lower and upper bounds. Note that the treatment
