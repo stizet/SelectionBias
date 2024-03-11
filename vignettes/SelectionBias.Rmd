@@ -182,16 +182,16 @@ in `SelectionBias`.
 
 ## `sensitivityparametersM()`
 
-The sensitivity parameters for the SV bound are calculated for the M-structure,
-illustrated in Figure 1. The sensitivity parameters are only calculated for an
-assumed model structure, since they depend on the unobserved variable, *U*.
-However, the observed probabilities of the outcome, $P(Y=1|T=t,I_S=1)$, $t=0,1$
-are inputs as they are used to check if the causal estimand for the assumed
-DGP is greater or smaller than the observational estimand since the SV bound
-only is defined when the causal estimand is smaller than the observational
-estimand. If not, the treatment variable must be recoded. This is not an issue
-for the CAF bound since both a lower and upper bound is available. The code and
-the output are:
+The sensitivity parameters for the SV and GAF bounds are calculated for the 
+generalized M-structure, illustrated in Figure 1. The sensitivity parameters are 
+only calculated for an assumed model structure, since they depend on the 
+unobserved variable, *U*. However, the observed probabilities of the outcome, 
+$P(Y=1|T=t,I_S=1)$, $t=0,1$, are inputs as they are used to check if the causal 
+estimand for the assumed DGP is greater or smaller than the observational 
+estimand since the SV bound only is defined when the causal estimand is smaller 
+than the observational estimand. If not, the treatment variable must be recoded. 
+This is not an issue for the GAF bound since both a lower and upper bound is 
+available. The code and the output are:
 ```{r eval = TRUE}
 # SV bound
 sensitivityparametersM(whichEst = "RR_sub",
@@ -266,10 +266,10 @@ selection bias itself. The subsequent arguments are the sensitivity parameters
 provided by the user. The default value for all sensitivity parameters are
 `NULL`, and the user must then specify numeric values on the sensitivity
 parameters that are necessary for the bound for the chosen estimand. The 
-sensitivity parameters can either be calculated using teh function
+sensitivity parameters can either be calculated using the function
 `sensitivityparametersM()`, or found elsewhere. For sensitivity parameters found
-elsewhere, `SVbound()` is not restricted to the M-structure. However, the 
-necessary assumptions for the SV bound must still be fulfilled
+elsewhere, `SVbound()` is not restricted to the generalized M-structure. 
+However, the necessary assumptions for the SV bound must still be fulfilled
 [@smith2019bounding]. The output is the SV bound. The code and output are:
 ```{r eval = TRUE}
 SVbound(whichEst = "RR_sub",
@@ -285,6 +285,24 @@ $RR_{UY|S=1}=2.71$ and $RR_{TU|S=1}=2.33$, calculated above in
 estimand is underestimated, the recoding of the treatment must be done manually.
 
 
+## `SVboundsharp()`
+
+The sharpness of an SV bound can be evaluated using `SVboundsharp()` 
+[@zetterstrom2023Rpackage]. The first argument, `BF_U`, is the value of $BF_U$
+which can be calculated using `SVboundparametersM`. The second argument,
+`pY1_T0_S1`, is the probability $P(Y=1|T=0,I_S=1)$. The output is a string 
+stating whether the SV bound is sharp or inconclusive. The code and output are:
+```{r eval = TRUE}
+SVboundsharp(BF_U = 1.56,
+             pY1_T0_S1 = 0.27)
+```
+In the zika example, $BF_U=1.56$ and $P(Y=1|T=0,I_S=1)=0.27$ (calculated from the
+`zika_learner`). Note that if the causal estimand is underestimated, the 
+recoding of the treatment has to be done manually. In this setting, the SV bound 
+is sharp. As before, the bias is negative, and we have reversed the coding of 
+the treatment.
+
+
 ## `AFbound()`
 
 The AF bound is calculated using the function `AFbound()`. The first argument is
@@ -294,9 +312,9 @@ observed numeric vector with the outcome variable or a vector with the
 conditional outcome probabilities, $P(Y=1|T=1,I_S=1)$ and $P(Y=1|T=0,I_S=1)$.
 The third argument is `treatment`, where the user inputs either the observed
 numeric vector with the treatment variable or a vector with the conditional 
-treatment probabilities, $P(T=1|I_S=1)$ and $P(T=1|I_S=1)$. The fourth argument
+treatment probabilities, $P(T=1|I_S=1)$ and $P(T=0|I_S=1)$. The fourth argument
 is `selection` where the user can either input the observed selection vector
-or the selection probability.. Its default value is `NULL` since it is only 
+or the selection probability. Its default value is `NULL` since it is only 
 required when the causal estimands in the total population are of interest. If 
 the subpopulation is of interest and `selection = NULL`, the outcome and
 treatment vectors must only include the selected subjects. The output is the 
@@ -334,20 +352,21 @@ is the causal estimand of interest (`"RR_tot"`, `"RD_tot"`, `"RR_sub"` or
 `"RD_sub"`). The second and third arguments are `M` and `m` which are the two
 sensitivity parameters for the GAF bound. The sensitivity parameters can either
 be calculated using `sensitivityparametersM()`, or found elsewhere.
-For sensitivity parameters found elsewhere, `SVbound()` is not restricted to the
-M-structure. However, the necessary assumptions for the SV bound must still be
-fulfilled [@zetterstrom2024]. The fourth argument is `outcome`, where the user
-inputs either the observed numeric vector with the outcome variable or a vector 
-with the conditional outcome probabilities, $P(Y=1|T=1,I_S=1)$ and 
-$P(Y=1|T=0,I_S=1)$. The fifth argument is `treatment`, where the user inputs
-either the observed numeric vector with the treatment variable or a vector with
-the conditional treatment probabilities, $P(T=1|I_S=1)$ and $P(T=1|I_S=1)$. The
-sixth argument is `selection` where the user can either input the observed 
-selection vector or selection probability. Its default value is `NULL` since it
-is only required when the causal estimands in the total population are of 
-interest. If the subpopulation is of interest and `selection = NULL`, the
-outcome and treatment vectors must only include the selected subjects. The 
-output is the lower and upper GAF bounds. The code and output are:
+For sensitivity parameters found elsewhere, `GAFbound()` is not restricted to 
+the generalized M-structure. However, the necessary assumptions for the GAF 
+bound must still be fulfilled [@zetterstrom2024]. The fourth argument is 
+`outcome`, where the user inputs either the observed numeric vector with the 
+outcome variable or a vector with the conditional outcome probabilities, 
+$P(Y=1|T=1,I_S=1)$ and $P(Y=1|T=0,I_S=1)$. The fifth argument is `treatment`, 
+where the user inputs either the observed numeric vector with the treatment 
+variable or a vector with the conditional treatment probabilities, 
+$P(T=1|I_S=1)$ and $P(T=0|I_S=1)$. The sixth argument is `selection` where the 
+user can either input the observed selection vector or selection probability. 
+Its default value is `NULL` since it is only required when the causal estimands 
+in the total population are of interest. If the subpopulation is of interest and 
+`selection = NULL`, the outcome and treatment vectors must only include the 
+selected subjects. The output is the lower and upper GAF bounds. The code and 
+output are:
 ```{r eval = TRUE}
 GAFbound(whichEst = "RR_sub",
          M = 0.4502,
@@ -379,12 +398,12 @@ variable or a vector with the conditional outcome probabilities,
 $P(Y=1|T=1,I_S=1)$ and $P(Y=1|T=0,I_S=1)$. The fifth argument is `treatment`,
 where the user inputs either the observed numeric vector with the treatment
 variable or a vector with the conditional treatment probabilities, 
-$P(T=1|I_S=1)$ and $P(T=1|I_S=1)$. The sixth argument is `selection` where the
+$P(T=1|I_S=1)$ and $P(T=0|I_S=1)$. The sixth argument is `selection` where the
 user can either input the observed selection vector or selection probability.
 Its default value is `NULL` since it is only required when the causal estimands
 in the total population are of interest. If the subpopulation is of interest and
 `selection = NULL`, the outcome and treatment vectors must only include the
-selected subjects. The output is the lower and upper GAF bounds. The code and
+selected subjects. The output is the lower and upper CAF bounds. The code and
 output are:
 ```{r eval = TRUE}
 CAFbound(whichEst = "RR_sub",
@@ -393,40 +412,17 @@ CAFbound(whichEst = "RR_sub",
          outcome = c(0.286, 0.004),
          treatment = c(0.002, 0.998))
 ```
-Similar to before, `whichEst = "RR_sub"`. The sensitivity parameters are the 
-output from `sensitivityparametersM()`. Furthermore, the outcome and treatment
-variables are microcephaly and zika. The selection variable does not need to be
-specified since the estimand of interest is `"RR_sub"`. 'Note that the other 
-variables are restricted to those subjects with $I_S=1$. The output is the lower
-and upper GAF bounds, which are 0.31 and 125.08 in the zika example.
+Similar to before, `whichEst = "RR_sub"`. The sensitivity parameters are chosen 
+by the user. Furthermore, the outcome and treatment variables are microcephaly 
+and zika. The selection variable does not need to be specified since the 
+estimand of interest is `"RR_sub"`. 'Note that the other variables are 
+restricted to those subjects with $I_S=1$. The output is the lower and upper 
+CAF bounds, which are 0.31 and 125.08 in the zika example.
 
 If the raw data is not available, one can input the conditional probabilities
 instead, similar to the AF and GAF bounds. Note that the treatment does not need
 to be recoded since there is both a lower and upper bound. Please have this in
 mind when comparing the bounds to the SV bound.
 
-## `SVboundsharp()`
-
-The sharpness of an SV bound can be evaluated using `SVboundsharp()` 
-[@zetterstrom2023Rpackage]. The first argument, `BF_U`, is the value of $BF_U$
-which can be calculated using `SVboundparametersM`. The second argument,
-`pY1_T0_S1`, is the probability $P(Y=1|T=0,I_S=1)$. Next, there are two optional
-arguments, `SVbound` and `AFbound`. These are not necessary to check if the SV
-bound is sharp, or if it is inconclusive, but they are necessary if the user
-wants to check if the bound is *not* sharp. If `SVbound` and `AFbound` are
-provided, the output is a string stating if the SV bound is sharp, inconclusive 
-or not sharp. However, if they are not provided, the output is a string stating
-whether the SV bound is sharp or inconclusive. The code and output are:
-```{r eval = TRUE}
-SVboundsharp(BF_U = 1.56,
-             pY1_T0_S1 = 0.27,
-             SVbound = 1.56,
-             AFbound = 3.5)
-```
-In the zika example, $BF_U=1.56$, $P(Y=1|T=0,I_S=1)=0.27$ (calculated from the
-`zika_learner`), and the SV and AF bounds are 1.56 and 3.5. Note that if the
-causal estimand is underestimated, the recoding of the treatment has to be done
-manually. In this setting, the SV bound is sharp. As before, the bias is
-negative, and we have reversed the coding of the treatment.
 
 # References
