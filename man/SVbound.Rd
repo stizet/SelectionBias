@@ -29,22 +29,22 @@ between 0 and 1.}
 \item{pY1_T0_S1}{Input value. The probability P(Y=1|T=0,I_S=1). Must be
 between 0 and 1.}
 
-\item{RR_UY_T1}{Input value. The sensitivity parameter RR_{UY|T=1}. Must be
+\item{RR_UY_T1}{Input value. The sensitivity parameter RR_UY|T=1. Must be
 greater than or equal to 1. Used in the bounds for the total population.}
 
-\item{RR_UY_T0}{Input value. The sensitivity parameter RR_{UY|T=0}. Must be
+\item{RR_UY_T0}{Input value. The sensitivity parameter RR_UY|T=0. Must be
 greater than or equal to 1. Used in the bounds for the total population.}
 
-\item{RR_SU_T1}{Input value. The sensitivity parameter RR_{SU|T=1}. Must be
+\item{RR_SU_T1}{Input value. The sensitivity parameter RR_SU|T=1. Must be
 greater than or equal to 1. Used in the bounds for the total population.}
 
-\item{RR_SU_T0}{Input value. The sensitivity parameter RR_{SU|T=0}. Must be
+\item{RR_SU_T0}{Input value. The sensitivity parameter RR_SU|T=0. Must be
 greater than or equal to 1. Used in the bounds for the total population.}
 
-\item{RR_UY_S1}{Input value. The sensitivity parameter RR_{UY|S=1}. Must be
+\item{RR_UY_S1}{Input value. The sensitivity parameter RR_UY|S=1. Must be
 greater than or equal to 1. Used in the bounds for the subpopulation.}
 
-\item{RR_TU_S1}{Input value. The sensitivity parameter RR_{TU|S=1}. Must be
+\item{RR_TU_S1}{Input value. The sensitivity parameter RR_TU|S=1. Must be
 greater than or equal to 1. Used in the bounds for the subpopulation.}
 }
 \value{
