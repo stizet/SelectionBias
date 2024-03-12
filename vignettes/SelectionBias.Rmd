@@ -194,7 +194,7 @@ This is not an issue for the GAF bound since both a lower and upper bound is
 available. The code and the output are:
 ```{r eval = TRUE}
 # SV bound
-sensitivityparametersM(whichEst = "RR_sub",
+sensitivityparametersM(whichEst = "RR_tot",
                    whichBound = "SV",
                    Vval = matrix(c(1, 0, 0.85, 0.15), ncol = 2),
                    Uval = matrix(c(1, 0, 0.5, 0.5), ncol = 2),
@@ -208,7 +208,7 @@ sensitivityparametersM(whichEst = "RR_sub",
                    pY1_T0_S1 = 0.004)
 
 # GAF bound
-sensitivityparametersM(whichEst = "RR_sub",
+sensitivityparametersM(whichEst = "RR_tot",
                    whichBound = "GAF",
                    Vval = matrix(c(1, 0, 0.85, 0.15), ncol = 2),
                    Uval = matrix(c(1, 0, 0.5, 0.5), ncol = 2),
@@ -249,11 +249,12 @@ bound and, for the SV bound, an indicator stating if the bias is negative and
 the coding for the treatment has been reversed.
 
 In the zika example, the estimand of interest is the relative risk in the
-subpopulation, `whichEst = "RR_sub"`, the DGP is found in Table 1, logistic
+total population, `whichEst = "RR_tot"`, the DGP is found in Table 1, logistic
 models are used in the DGP and the probabilities are found in Table 4. For the
-SV bound, the output is $RR_{TU|S=1}=2.33$ and $RR_{UY|S=1}=2.71$, which gives
-$BF_U=1.56$, and the treatment coding is reversed. For the GAF bound, the output
-is $M=S=0.4502$ and $m_S=0.002$.
+SV bound, the output is $RR_{UY|T=1}=2.71$, $RR_{UY|T=0}=1.94$, 
+$RR_{SU|T=1}=1.80$, and $RR_{SU|T=0}=2.00$, which gives $BF_1=1.39$ and 
+$BF_0=1.32$, and the treatment coding is reversed. For the GAF bound, the output
+is $M_T=0.4502$ and $m_T=0.002$.
 
 ## `SVbound()`
 
@@ -272,31 +273,39 @@ elsewhere, `SVbound()` is not restricted to the generalized M-structure.
 However, the necessary assumptions for the SV bound must still be fulfilled
 [@smith2019bounding]. The output is the SV bound. The code and output are:
 ```{r eval = TRUE}
-SVbound(whichEst = "RR_sub",
+SVbound(whichEst = "RR_tot",
         pY1_T1_S1 = 0.004,
         pY1_T0_S1 = 0.286,
-        RR_UY_S1 = 2.71,
-        RR_TU_S1 = 2.33)
+        RR_UY_T1 = 2.71,
+        RR_UY_T0 = 1.94,
+        RR_SU_T1 = 1.80,
+        RR_SU_T0 = 2.00)
 ```
 As before in the zika example, the causal estimand is the relative risk in the
-subpopulation, `whichEst = "RR_sub"`. The sensitivity parameters are
-$RR_{UY|S=1}=2.71$ and $RR_{TU|S=1}=2.33$, calculated above in
-`sensitivityparametersM()`, which gives an SV bound equal to 1.56. If the causal
-estimand is underestimated, the recoding of the treatment must be done manually.
+subpopulation, `whichEst = "RR_tot"`. The sensitivity parameters are
+$RR_{UY|T=1}=2.71$, $RR_{UY|T=0}=1.94$, $RR_{SU|T=1}=1.80$, and 
+$RR_{SU|T=0}=2.00$, calculated above in `sensitivityparametersM()`, which gives 
+an SV bound equal to 0.01. If the causal estimand is underestimated, the 
+recoding of the treatment must be done manually.
 
 
 ## `SVboundsharp()`
 
 The sharpness of an SV bound can be evaluated using `SVboundsharp()` 
-[@zetterstrom2023Rpackage]. The first argument, `BF_U`, is the value of $BF_U$
-which can be calculated using `SVboundparametersM`. The second argument,
-`pY1_T0_S1`, is the probability $P(Y=1|T=0,I_S=1)$. The output is a string 
-stating whether the SV bound is sharp or inconclusive. The code and output are:
+[@zetterstrom2023Rpackage]. However, it is only bounds for the relative risk in 
+the subpopulation that can be sharp. The first argument, `BF_U`, is the value of 
+$BF_U$ which can be calculated using `sensitivityparametersM`. The second 
+argument, `pY1_T0_S1`, is the probability $P(Y=1|T=0,I_S=1)$. The output is a 
+string stating whether the SV bound is sharp or inconclusive. The code and 
+output are:
 ```{r eval = TRUE}
 SVboundsharp(BF_U = 1.56,
              pY1_T0_S1 = 0.27)
 ```
-In the zika example, $BF_U=1.56$ and $P(Y=1|T=0,I_S=1)=0.27$ (calculated from the
+We are actually interested in bounds for the relative risk in the total 
+population in the zika example but to demonstrate the function we check if the 
+bound for the relative risk in the subpopulation is sharp. Thus, $BF_U=1.56$ 
+and $P(Y=1|T=0,I_S=1)=0.27$ (calculated from `sensitivityparametersM()` and the
 `zika_learner`). Note that if the causal estimand is underestimated, the 
 recoding of the treatment has to be done manually. In this setting, the SV bound 
 is sharp. As before, the bias is negative, and we have reversed the coding of 
@@ -322,24 +331,24 @@ lower and upper AF bounds. The code and output are:
 ```{r eval = TRUE}
 attach(zika_learner)
 
-AFbound(whichEst = "RR_sub",
+AFbound(whichEst = "RR_tot",
         outcome = mic_ceph[sel_ind == 1],
-        treatment = zika[sel_ind == 1])
+        treatment = zika[sel_ind == 1],
+        selection = mean(sel_ind))
 ```
-Similar to before, `whichEst = "RR_sub"`. Furthermore, the outcome and treatment
-variables are microcephaly and zika. The selection variable does not need to be
-specified since the estimand of interest is `"RR_sub"`. 'Note that the other 
-variables are restricted to those subjects with $I_S=1$. The output is the lower
-and upper AF bounds, which are 0.11 and 261 in the zika example.
+Similar to before, `whichEst = "RR_tot"`. Furthermore, the outcome and treatment
+variables are microcephaly and zika. The selection probability is specified 
+since the other variables are restricted to those subjects with $I_S=1$. The 
+output is the lower and upper AF bounds, which are 0 and 454.09 in the zika example.
 
 If the raw data is not available, one can input the conditional probabilities
 instead. In this example, these probabilities are:
 ```{r eval = TRUE}
-AFbound(whichEst = "RR_sub",
+AFbound(whichEst = "RR_tot",
         outcome = c(0.286, 0.004),
-        treatment = c(0.002, 0.998))
+        treatment = c(0.002, 0.998),
+        selection = mean(sel_ind))
 ```
-
 The difference in these two examples comes from rounding errors. Note that the
 treatment does not need to be recoded since there is both a lower and upper
 bound. Please have this in mind when comparing the bounds to the SV bound.
@@ -368,18 +377,19 @@ in the total population are of interest. If the subpopulation is of interest and
 selected subjects. The output is the lower and upper GAF bounds. The code and 
 output are:
 ```{r eval = TRUE}
-GAFbound(whichEst = "RR_sub",
+GAFbound(whichEst = "RR_tot",
          M = 0.4502,
          m = 0.002, 
          outcome = mic_ceph[sel_ind == 1],
-         treatment = zika[sel_ind == 1])
+         treatment = zika[sel_ind == 1],
+         selection = mean(sel_ind))
 ```
-Similar to before, `whichEst = "RR_sub"`. The sensitivity parameters are the 
+Similar to before, `whichEst = "RR_tot"`. The sensitivity parameters are the 
 output from `sensitivityparametersM()`. Furthermore, the outcome and treatment
-variables are microcephaly and zika. The selection variable does not need to be
-specified since the estimand of interest is `"RR_sub"`. 'Note that the other 
-variables are restricted to those subjects with $I_S=1$. The output is the lower
-and upper GAF bounds, which are 0.55 and 117.45 in the zika example.
+variables are microcephaly and zika. The selection probability is specified 
+since the other variables are restricted to those subjects with $I_S=1$. The 
+output is the lower and upper GAF bounds, which are 0.01 and 147.42 in the 
+zika example.
 
 If the raw data is not available, one can input the conditional probabilities
 instead, similar to the AF bound. Note that the treatment does not need to be
@@ -406,18 +416,18 @@ in the total population are of interest. If the subpopulation is of interest and
 selected subjects. The output is the lower and upper CAF bounds. The code and
 output are:
 ```{r eval = TRUE}
-CAFbound(whichEst = "RR_sub",
-         M = 0.5,
-         m = 0.001, 
+CAFbound(whichEst = "RR_tot",
+         M = 0.3,
+         m = 0.005, 
          outcome = c(0.286, 0.004),
-         treatment = c(0.002, 0.998))
+         treatment = c(0.002, 0.998),
+         selection = mean(sel_ind))
 ```
-Similar to before, `whichEst = "RR_sub"`. The sensitivity parameters are chosen 
+Similar to before, `whichEst = "RR_tot"`. The sensitivity parameters are chosen 
 by the user. Furthermore, the outcome and treatment variables are microcephaly 
-and zika. The selection variable does not need to be specified since the 
-estimand of interest is `"RR_sub"`. 'Note that the other variables are 
+and zika. The selection probability is specified since other variables are 
 restricted to those subjects with $I_S=1$. The output is the lower and upper 
-CAF bounds, which are 0.31 and 125.08 in the zika example.
+CAF bounds, which are 0.04 and 67.78 in the zika example.
 
 If the raw data is not available, one can input the conditional probabilities
 instead, similar to the AF and GAF bounds. Note that the treatment does not need
