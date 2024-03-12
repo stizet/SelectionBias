@@ -282,7 +282,7 @@ SVbound(whichEst = "RR_tot",
         RR_SU_T0 = 2.00)
 ```
 As before in the zika example, the causal estimand is the relative risk in the
-subpopulation, `whichEst = "RR_tot"`. The sensitivity parameters are
+total population, `whichEst = "RR_tot"`. The sensitivity parameters are
 $RR_{UY|T=1}=2.71$, $RR_{UY|T=0}=1.94$, $RR_{SU|T=1}=1.80$, and 
 $RR_{SU|T=0}=2.00$, calculated above in `sensitivityparametersM()`, which gives 
 an SV bound equal to 0.01. If the causal estimand is underestimated, the 
