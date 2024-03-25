@@ -84,7 +84,7 @@
 #'   1 (2022): 20220108.
 #'
 #'   Zetterstrom, Stina. "Bounds for selection bias using outcome probabilities"
-#'   Epidemiologic Methods
+#'   Epidemiologic Methods 13, no. 1 (2024): 20230033
 #'
 sensitivityparametersM <- function(whichEst, whichBound, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel, pY1_T1_S1, pY1_T0_S1)
 {

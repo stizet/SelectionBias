@@ -55,7 +55,7 @@
 #'  selection = sel)
 #'
 #' @references Zetterstrom, Stina. "Bounds for selection bias using outcome
-#'  probabilities" Epidemiologic Methods
+#'  probabilities" Epidemiologic Methods 13, no. 1 (2024): 20230033
 #'
 CAFbound <- function(whichEst, M, m, outcome, treatment, selection = NULL)
 {

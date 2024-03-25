@@ -14,8 +14,9 @@ Description: Computes bounds and sensitivity parameters as part of sensitivity
     parameters for the SV and GAF bounds assume an additional dependence 
     structure in form of a generalized M-structure. The bounds can be
     calculated for any structure as long as the necessary assumptions hold. See 
-    Smith and VanderWeele (2019) <doi:10.1097/EDE.0000000000001032> and 
-    Zetterstrom and Waernbaum (2022) <doi:10.1515/em-2022-0108>.
+    Smith and VanderWeele (2019) <doi:10.1097/EDE.0000000000001032>, 
+    Zetterstrom and Waernbaum (2022) <doi:10.1515/em-2022-0108> and
+    Zetterstrom (2024) <doi:10.1515/em-2023-0033>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
