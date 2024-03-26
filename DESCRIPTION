@@ -35,3 +35,5 @@ Depends:
     R (>= 3.5.0)
 LazyData: true
 VignetteBuilder: knitr
+URL: https://github.com/stizet/SelectionBias
+BugReports: https://github.com/stizet/SelectionBias/issues
