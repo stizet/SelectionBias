@@ -1,7 +1,7 @@
 Package: SelectionBias
 Title: Calculates Bounds for the Selection Bias for Binary Treatment
   and Outcome Variables
-Version: 2.0.0
+Version: 1.0.0
 Authors@R: 
     c(person("Stina", "Zetterstrom", email = "stina.zetterstrom@statistics.uu.se",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0003-0730-9425")),
