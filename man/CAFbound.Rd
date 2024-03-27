@@ -71,5 +71,5 @@ CAFbound(whichEst = "RD_tot", M = Mt, m = mt, outcome = y, treatment = tr,
 }
 \references{
 Zetterstrom, Stina. "Bounds for selection bias using outcome
-probabilities" Epidemiologic Methods
+probabilities" Epidemiologic Methods 13, no. 1 (2024): 20230033
 }

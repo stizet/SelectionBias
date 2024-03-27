@@ -6,7 +6,15 @@
 \alias{SelectionBias-package}
 \title{SelectionBias: Calculates Bounds for the Selection Bias for Binary Treatment and Outcome Variables}
 \description{
-Computes bounds and sensitivity parameters as part of sensitivity analysis for selection bias. Different bounds are provided: the SV (Smith and VanderWeele), AF (assumption-free) bound, GAF (generalized AF), and CAF (counterfactual AF) bounds. The calculation of the sensitivity parameters for the SV and GAF bounds assume an additional dependence structure in form of a generalized M-structure. The bounds can be calculated for any structure as long as the necessary assumptions hold. See Smith and VanderWeele (2019) \doi{10.1097/EDE.0000000000001032} and Zetterstrom and Waernbaum (2022) \doi{10.1515/em-2022-0108}.
+Computes bounds and sensitivity parameters as part of sensitivity analysis for selection bias. Different bounds are provided: the SV (Smith and VanderWeele), AF (assumption-free) bound, GAF (generalized AF), and CAF (counterfactual AF) bounds. The calculation of the sensitivity parameters for the SV and GAF bounds assume an additional dependence structure in form of a generalized M-structure. The bounds can be calculated for any structure as long as the necessary assumptions hold. See Smith and VanderWeele (2019) \doi{10.1097/EDE.0000000000001032}, Zetterstrom and Waernbaum (2022) \doi{10.1515/em-2022-0108} and Zetterstrom (2024) \doi{10.1515/em-2023-0033}.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/stizet/SelectionBias}
+  \item Report bugs at \url{https://github.com/stizet/SelectionBias/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Stina Zetterstrom \email{stina.zetterstrom@statistics.uu.se} (\href{https://orcid.org/0000-0003-0730-9425}{ORCID})
