@@ -4,46 +4,36 @@
 \alias{SVboundsharp}
 \title{Check if the Smith and VanderWeele bound in the subpopulation is sharp}
 \usage{
-SVboundsharp(BF_U, pY1_T0_S1, SVbound = NULL, AFbound = NULL)
+SVboundsharp(BF_U, pY1_T0_S1)
 }
 \arguments{
 \item{BF_U}{Input scalar. The bounding factor for the SV bounds in the
 subpopulation. Must be equal to or above 1. Can be inserted directly or as
-output from \code{SVboundparametersM()}.}
+output from \code{sensitivityparametersM()}.}
 
 \item{pY1_T0_S1}{Input scalar. The probability P(Y=1|T=0,I_S=1).}
-
-\item{SVbound}{Optional input scalar. The SV bound, can be inserted directly
-or as output from \code{SVbound()}. Only necessary if one wants to know if the
-SV bound is not sharp.}
-
-\item{AFbound}{Optional input scalar. The AF bound, can be inserted directly
-or as output from \code{AFbound()}. Only necessary if one wants to know if the
-SV bound is not sharp.}
 }
 \value{
-A string stating if the SV bound is sharp, inconclusive or not sharp.
+A string stating if the SV bound is sharp or inconclusive.
 }
 \description{
-\code{SVboundsharp()} returns a string that indicates if the SV bound is sharp, if
-it's inconclusive or if it's not sharp. If the bias is negative, the recoding
-of the treatment has to be done manually.
+\code{SVboundsharp()} returns a string that indicates if the SV bound is sharp or
+if it's inconclusive. If the bias is negative, the recoding of the treatment
+has to be done manually.
 }
 \examples{
 
 # Example where the SV bound is sharp.
-SVboundsharp(BF_U = 1.56, pY1_T0_S1 = 0.33, SVbound = 1.56, AFbound = 3.0)
-
-# Example where the SV bound is not sharp.
-SVboundsharp(BF_U = 2, pY1_T0_S1 = 0.9, SVbound = 2, AFbound = 1.8)
+SVboundsharp(BF_U = 1.56, pY1_T0_S1 = 0.33)
 
 # Example where the SV bound is inconclusive.
-SVboundsharp(BF_U = 2, pY1_T0_S1 = 0.8, SVbound = 2, AFbound = 3)
+SVboundsharp(BF_U = 2, pY1_T0_S1 = 0.8)
 
 }
 \references{
 Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
 to selection." Epidemiology (Cambridge, Mass.) 30.4 (2019): 509.
 
-Zetterstrom, Stina and Waernbaum, Ingeborg. MANUSCRIPT XXX
+Zetterstrom, Stina, and Ingeborg Waernbaum. "SelectionBias: An R Package
+for Bounding Selection Bias." arXiv preprint arXiv:2302.06518 (2023).
 }

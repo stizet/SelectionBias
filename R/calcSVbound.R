@@ -4,7 +4,7 @@ calcSVbound <- function(Y1, Y0, Tr, S, U, V, estimand, obsProb)
   # probabilities necessary for the calculations and the causal estimand
   # of interest. The output is the SV bound and the sensitivity parameters.
 
-  # The observed probabilites.
+  # The observed probabilities.
   pY_T1 = obsProb[1]
   pY_T0 = obsProb[2]
 

@@ -1,23 +1,16 @@
-#' Sensitivity parameters for the Smith and VanderWeele bound
+#' Sensitivity parameters for the Smith and VanderWeele bound and the GAF bound
 #'
-#' @description
-#' `r lifecycle::badge("deprecated")`
-#' `SVboundparametersM()` has been deprecated and is replaced by
-#' `sensitivityparametersM()`.
-#'
-#'
-#' `SVboundparametersM()` returns a list with the sensitivity parameters and an
-#' indicator if the bias is negative and the treatment coding is reversed for an
-#' assumed model.
-#'
-#'
-
+#' `sensitivityparametersM()` returns a list with the sensitivity parameters
+#' and an indicator if bias is negative and the treatment coding is reversed
+#' for an assumed model.
 #'
 #' @param whichEst Input string. Defining the causal estimand of interest.
 #'   Available options are as follows. (1) Relative risk in the total
 #'   population: "RR_tot", (2) Risk difference in the total population:
 #'   "RD_tot", (3) Relative risk in the subpopulation: "RR_sub", (4) Risk
 #'   difference in the subpopulation: "RD_sub".
+#' @param whichBound Input string. Defining the bound of interest.
+#'   Available options are as follows. (1) SV bound: "SV", (2) GAF bound: "GAF".
 #' @param Vval Input matrix. The first column is the values of the categories of
 #'   V. The second column is the probabilities of the categories of V. If V is
 #'   continuous, use a fine grid of values and probabilities.
@@ -43,8 +36,44 @@
 #' @param pY1_T1_S1 Input scalar. The observed probability P(Y=1|T=1,I_S=1).
 #' @param pY1_T0_S1 Input scalar. The observed probability P(Y=1|T=0,I_S=1).
 #'   used.
-#' @return A list containing the sensitivity parameters and an indicator if the
-#'   treatment has been reversed.
+#' @return A list containing the sensitivity parameters and, for the SV bound,
+#'   an indicator if the treatment has been reversed.
+#' @export
+#'
+#' @examples
+#'
+#' # Examples with no selection bias.
+#' V = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+#' U = matrix(c(1, 0, 0.1, 0.9), ncol = 2)
+#' Tr = c(0, 1)
+#' Y = c(0, 0, 1)
+#' S = matrix(c(1, 0, 0, 0, 1, 0, 0, 0), nrow = 2, byrow = TRUE)
+#' probT1 = 0.534
+#' probT0 = 0.534
+#' sensitivityparametersM(whichEst = "RR_tot", whichBound = "SV", Vval = V,
+#'  Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S, Mmodel = "P",
+#'  pY1_T1_S1 = probT1, pY1_T0_S1 = probT0)
+#'
+#' sensitivityparametersM(whichEst = "RR_tot", whichBound = "GAF", Vval = V,
+#'  Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S, Mmodel = "P",
+#'  pY1_T1_S1 = probT1, pY1_T0_S1 = probT0)
+#'
+#'
+#' # Examples with selection bias. DGP from the zika example.
+#' V = matrix(c(1, 0, 0.85, 0.15), ncol = 2)
+#' U = matrix(c(1, 0, 0.5, 0.5), ncol = 2)
+#' Tr = c(-6.2, 1.75)
+#' Y = c(-5.2, 5.0, -1.0)
+#' S = matrix(c(1.2, 2.2, 0.0, 0.5, 2.0, -2.75, -4.0, 0.0), ncol = 4)
+#' probT1 = 0.286
+#' probT0 = 0.004
+#' sensitivityparametersM(whichEst = "RR_sub", whichBound = "SV", Vval = V,
+#'  Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S, Mmodel = "L",
+#'  pY1_T1_S1 = probT1, pY1_T0_S1 = probT0)
+#'
+#' sensitivityparametersM(whichEst = "RR_sub", whichBound = "GAF", Vval = V,
+#'  Uval = U, Tcoef = Tr, Ycoef = Y, Scoef = S, Mmodel = "L",
+#'  pY1_T1_S1 = probT1, pY1_T0_S1 = probT0)
 #'
 #'
 #' @references  Smith, Louisa H., and Tyler J. VanderWeele. "Bounding bias due
@@ -54,26 +83,32 @@
 #'   inclusion criteria in observational studies" Epidemiologic Methods 11, no.
 #'   1 (2022): 20220108.
 #'
-SVboundparametersM <- function(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel, pY1_T1_S1, pY1_T0_S1)
+#'   Zetterstrom, Stina. "Bounds for selection bias using outcome probabilities"
+#'   Epidemiologic Methods 13, no. 1 (2024): 20230033
+#'
+sensitivityparametersM <- function(whichEst, whichBound, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel, pY1_T1_S1, pY1_T0_S1)
 {
-  # A function that calculates the sensitivity parameters for the SV bound
-  # for multiple selection variables. The input is the hyper parameters used
-  # in the M-structure and which causal estimand the calculations are performed
-  # for. The output is the sensitivity parameters and an indicator for
-  # coding of treatment.
+  # A function that calculates the sensitivity parameters for the SV bound and
+  # the GAF bound for multiple selection variables. The input is the hyper
+  # parameters used in the M-structure and which causal estimand the
+  # calculations are performed for. The output is the sensitivity parameters
+  # and an indicator for coding of treatment.
 
   # Functions used in the code.
   #genprob()
   #calcselbias()
   #calcSVbound()
-
-  lifecycle::deprecate_warn("1.0.0", "SVboundparametersM()", "sensitivityparametersM()")
+  #calcGAFparameters()
 
   ### RUN SOME CHECKS OF THE INPUT ###
 
   # Check if the estimand is one of the four "RR_tot", "RD_tot", "RR_sub", "RD_sub".
   if(whichEst != "RR_tot" & whichEst != "RD_tot" & whichEst != "RR_sub" & whichEst != "RD_sub")
     stop('The estimand must be "RR_tot", "RD_tot", "RR_sub" or "RD_sub".')
+
+  # Check if the bound is one of "SV" and "GAF".
+  if(whichBound != "SV" & whichBound != "GAF")
+    stop('The bound must be "SV" or "GAF".')
 
   # Check dimensions of the input arguments.
   if(length(Vval[1, ]) != 2) stop('The number of columns in Vval must be equal to 2.')
@@ -168,21 +203,39 @@ SVboundparametersM <- function(whichEst, Vval, Uval, Tcoef, Ycoef, Scoef, Mmodel
 
   ### END CALCULATING THE SV BOUND ###
 
+  ### CALCULATING THE GAF PARAMETERS ###
+
+  GAFpar = calcGAFparameters(pY1, pY0, whichEst)
+
+  ### END CALCULATING THE GAF PARAMETERS ###
+
   # The return list.
-  if(whichEst == "RR_tot"){
-    heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0", "Reverse treatment")
-    values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], as.logical(revTreat))
-  }else if(whichEst == "RD_tot"){
-    heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0",
-                "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
-    values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6],
-                  SVbound[7], SVbound[8], SVbound[9], as.logical(revTreat))
-  }else if(whichEst == "RR_sub"){
-    heading = c("BF_U", "RR_UY|S=1", "RR_TU|S=1", "Reverse treatment")
-    values = list(SVbound[2], SVbound[3], SVbound[4], as.logical(revTreat))
+  if(whichBound == "GAF")
+  {
+    if(whichEst == "RR_tot" | whichEst == "RD_tot")
+    {
+      heading = c("m_T", "M_T")
+      values = list(GAFpar[1], GAFpar[2])
+    }else{
+      heading = c("m_S", "M_S")
+      values = list(GAFpar[1], GAFpar[2])
+    }
   }else{
-    heading = c("BF_U", "RR_UY|S=1", "RR_TU|S=1", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
-    values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], as.logical(revTreat))
+    if(whichEst == "RR_tot"){
+      heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0", "Reverse treatment")
+      values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], SVbound[7], as.logical(revTreat))
+    }else if(whichEst == "RD_tot"){
+      heading = c("BF_1", "BF_0", "RR_UY|T=1", "RR_UY|T=0", "RR_SU|T=1", "RR_SU|T=0",
+                  "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
+      values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6],
+                    SVbound[7], SVbound[8], SVbound[9], as.logical(revTreat))
+    }else if(whichEst == "RR_sub"){
+      heading = c("BF_U", "RR_UY|S=1", "RR_TU|S=1", "Reverse treatment")
+      values = list(SVbound[2], SVbound[3], SVbound[4], as.logical(revTreat))
+    }else{
+      heading = c("BF_U", "RR_UY|S=1", "RR_TU|S=1", "P(Y=1|T=1,I_S=1)", "P(Y=1|T=0,I_S=1)", "Reverse treatment")
+      values = list(SVbound[2], SVbound[3], SVbound[4], SVbound[5], SVbound[6], as.logical(revTreat))
+    }
   }
 
   returnDat = matrix(cbind(heading, values), ncol = 2)

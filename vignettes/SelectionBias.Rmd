@@ -21,15 +21,44 @@ library(SelectionBias)
 
 # Introduction
 
-Selecting a study population from a larger source population, based on the research question, is a common procedure, for example in an observational study with data from a population register. Subjects who fulfill all the selection criteria are included in the study population, and subjects who do not fulfill at least one selection criterion are excluded from the study population. These selections might introduce a systematic error when estimating a causal effect, commonly referred to as selection bias. Selection bias can also arise if the selections are involuntary, for example, if there are dropouts or other missing values for some individuals in the study. In an applied study, it is often of interest to assess the magnitude of potential biases using a sensitivity analysis, such as bounding the bias. Two bounds, the SV (Smith and VanderWeele) and AF (assumption-free), for selection bias can be calculated in the R package `SelectionBias`. The content in `SelectionBias` is:
+Selecting a study population from a larger source population, based on the
+research question, is a common procedure, for example in an observational study
+with data from a population register. Subjects who fulfill all the selection
+criteria are included in the study population, and subjects who do not fulfill
+at least one selection criterion are excluded from the study population. These
+selections might introduce a systematic error when estimating a causal effect,
+commonly referred to as selection bias. Selection bias can also arise if the
+selections are involuntary, for example, if there are dropouts or other missing
+values for some individuals in the study. In an applied study, it is often of
+interest to assess the magnitude of potential biases using a sensitivity
+analysis, such as bounding the bias. Different bounds, the SV (Smith and
+VanderWeele), AF (assumption-free), GAF (generalized assumption-free), and CAF 
+(counterfactual assumption-free), for the causal estimand under selection bias
+can be calculated in this R package `SelectionBias`. The content is:
 
-* `zika_learner`: a simulated dataset of zika virus and microcephaly inspired both by data and a previous example [@de2018association;@smith2019bounding]. 
-* `SVboundparametersM()`: a function that calculates the sensitivity parameters for the SV bound for an assumed model following the M-structure in Figure 1. 
-* `SVbound()`: a function that calculates the SV bound for the relative risk or risk difference in either the total or subpopulation for sensitivity parameters given by the user, or calculated from `SVboundparametersM()`.
-* `AFbound()`: a function that calculates the AF bound, for the relative risk or risk difference in either the total or subpopulation, for a dataset that includes observations on an outcome and treatment variable, and either a selection variable or a selection probability.
-* `SVboundsharp()`: a function that evaluates if the SV bound for the subpopulation is sharp, inconclusive or not sharp.
+* `zika_learner`: a simulated dataset of zika virus and microcephaly inspired
+both by data and a previous example [@de2018association;@smith2019bounding]. 
+* `sensitivityparametersM()`: a function that calculates the sensitivity
+parameters for the SV and GAF bounds for an assumed model following the
+M-structure in Figure 1. 
+* `SVbound()`: a function that calculates the SV bound for the relative risk or
+risk difference in either the total or subpopulation for sensitivity parameters
+given by the user, or calculated from `sensitivityparametersM()`.
+* `AFbound()`: a function that calculates the AF lower and upper bounds for the
+relative risk or risk difference in either the total or subpopulation for a
+dataset or probabilities from the data.
+* `GAFbound()`: a function that calculates the GAF lower and upper bounds for
+the relative risk or risk difference in either the total or subpopulation for a
+dataset or probabilities from the data and sensitivity parameters either given
+by the user, or calculated from `sensitivityparametersM()`.
+* `CAFbound()`: a function that calculates the CAF lower and upper bounds for
+the relative risk or risk difference in either the total or subpopulation for a
+dataset or probabilities from the data and sensitivity parameters.
+* `SVboundsharp()`: a function that evaluates if the SV bound for the
+subpopulation is sharp, inconclusive or not sharp.
 
-For the formulas of the bounds as well as the theory behind them, we refer to the original papers [@smith2019bounding;@zetterstrom2022selection;@zetterstrom2023Rpackage].
+For the formulas of the bounds as well as the theory behind them, we refer to
+the original papers [@smith2019bounding;@zetterstrom2022selection;@zetterstrom2023Rpackage;@zetterstrom2024].
 
 ![Figure 1. The generalized M-structure.](Figures/genM.png){width=30%}
 
@@ -38,7 +67,10 @@ For the formulas of the bounds as well as the theory behind them, we refer to th
 
 ## Simulated zika dataset
 
-To illustrate the bounds, a simulated dataset, `zika_learner`, is constructed. It is inspired by a numerical zika example used in @smith2019bounding together with a case-control study that investigates the effect of zika virus on microcephaly [@de2018association]. The variables included are: 
+To illustrate the bounds, a simulated dataset, `zika_learner`, is constructed.
+It is inspired by a numerical zika example used in @smith2019bounding together
+with a case-control study that investigates the effect of zika virus on
+microcephaly [@de2018association]. The variables included are: 
 
 * *Living area* $(V)$
 * *Socioeconomic status, SES* $(U)$
@@ -47,13 +79,20 @@ To illustrate the bounds, a simulated dataset, `zika_learner`, is constructed. I
 * *Birth* $(S_1)$
 * *Public hospital* $(S_2)$
 
-The relationships between the variables are illustrated in Figure 2 and Table 1. The prevalences of the variables, and strengths of dependencies between them, are chosen to mimic real data and the assumed values for the sensitivity parameters in @smith2019bounding. The simulated data mimics a cohort with 5000 observations, even though the original study is a case-control study. For more details of the variables and the models, see @zetterstrom2023Rpackage.
+The relationships between the variables are illustrated in Figure 2 and Table 1.
+The prevalences of the variables, and strengths of dependencies between them,
+are chosen to mimic real data and the assumed values for the sensitivity
+parameters in @smith2019bounding. The simulated data mimics a cohort with 5000
+observations, even though the original study is a case-control study. For more
+details of the variables and the models, see @zetterstrom2023Rpackage.
 
 ![Figure 2. Causal model for the `zika_learner` dataset.](Figures/zikaDag.png){width=50%}
 
-The causal dependencies are generated by the logistic models described in Table 3. 
+The causal dependencies are generated by the logit models described in Table 3. 
 
-Table: Table 1. Data generating process for the dataset `zika_learner`. Models generating causal dependencies are logistic, $g(X'\theta)$, for predictor variable $X$ and model parameter $\theta$.
+Table: Table 1. Data generating process for the dataset `zika_learner`. Models
+generating causal dependencies are logistic, $g(X'\theta)$, for predictor
+variable $X$ and model parameter $\theta$.
 
 | Model                                 | Coefficients ($\theta$)/Proportions | Function argument    |
 | :-----------------------------------: | :---------------------------------: | -------------------: |
@@ -64,7 +103,8 @@ Table: Table 1. Data generating process for the dataset `zika_learner`. Models g
 | $P(S_1=1|T,U)=g[(V,U,T)'\theta_{S1}]$ | $(1.20,0.00,2.00,-4.00)$            | `Scoef`              |
 | $P(S_2=1|T,U)=g[(V,U,T)'\theta_{S1}]$ | $(2.20,0.50,-2.75,0.00)$            | `Scoef`              |
 
-The data was generated in `R`, version 4.2.0, using the package `arm`, version 1.13-1, with the following code:
+The data was generated in `R`, version 4.2.0, using the package `arm`,
+version 1.13-1, with the following code:
 
 ```{r eval = FALSE}
 # Seed.
@@ -98,7 +138,8 @@ hospital = rbinom(nObs, 1, hospital_prob)
 # The selection indicator.
 sel_ind = birth * hospital
 ```
-The resulting proportions of the `zika_learner` data, for the total dataset, the subset with $S_1=1$ and the subset with $S_1=S_2=1$ are seen in Tables 2-4.
+The resulting proportions of the `zika_learner` data, for the total dataset, the
+subset with $S_1=1$ and the subset with $S_1=S_2=1$ are seen in Tables 2-4.
 
 ```{r echo = FALSE}
 zika_learner2 = zika_learner
@@ -135,14 +176,40 @@ table1::label(zika_learner2$SES) = "SES"
 table1::table1(~ mic_ceph + urban + SES | zika, data=zika_learner2, render.continuous = my.render.cont,
        caption = "Table 4. Proportions for the simulated dataset, by treatment status and overall, after both selections.")
 ```
-The dataset and data generating process (DGP) can be used to test the functions in `SelectionBias`.
+The dataset and data generating process (DGP) can be used to test the functions
+in `SelectionBias`.
 
 
-## `SVboundparametersM()`
+## `sensitivityparametersM()`
 
-The sensitivity parameters for the SV bound are calculated for the M-structure, illustrated in Figure 1. The sensitivity parameters are only calculated for an assumed model structure, since they depend on the unobserved variable, *U*. However, the observed probabilities of the outcome, $P(Y=1|T=t,I_S=1)$, $t=0,1$ are inputs since they are used to check if the causal estimand for the assumed DGP is greater or smaller than the observed estimand. The code and the output are:
+The sensitivity parameters for the SV and GAF bounds are calculated for the 
+generalized M-structure, illustrated in Figure 1. The sensitivity parameters are 
+only calculated for an assumed model structure, since they depend on the 
+unobserved variable, *U*. However, the observed probabilities of the outcome, 
+$P(Y=1|T=t,I_S=1)$, $t=0,1$, are inputs as they are used to check if the causal 
+estimand for the assumed DGP is greater or smaller than the observational 
+estimand since the SV bound only is defined when the causal estimand is smaller 
+than the observational estimand. If not, the treatment variable must be recoded. 
+This is not an issue for the GAF bound since both a lower and upper bound is 
+available. The code and the output are:
 ```{r eval = TRUE}
-SVboundparametersM(whichEst = "RR_sub",
+# SV bound
+sensitivityparametersM(whichEst = "RR_tot",
+                   whichBound = "SV",
+                   Vval = matrix(c(1, 0, 0.85, 0.15), ncol = 2),
+                   Uval = matrix(c(1, 0, 0.5, 0.5), ncol = 2),
+                   Tcoef = c(-6.2, 1.75),
+                   Ycoef = c(-5.2, 5.0, -1.0),
+                   Scoef = matrix(c(1.2, 2.2, 0.0, 0.5,
+                                    2.0, -2.75, -4.0, 0.0),
+                                  ncol = 4),
+                   Mmodel = "L",
+                   pY1_T1_S1 = 0.286,
+                   pY1_T0_S1 = 0.004)
+
+# GAF bound
+sensitivityparametersM(whichEst = "RR_tot",
+                   whichBound = "GAF",
                    Vval = matrix(c(1, 0, 0.85, 0.15), ncol = 2),
                    Uval = matrix(c(1, 0, 0.5, 0.5), ncol = 2),
                    Tcoef = c(-6.2, 1.75),
@@ -154,57 +221,218 @@ SVboundparametersM(whichEst = "RR_sub",
                    pY1_T1_S1 = 0.286,
                    pY1_T0_S1 = 0.004)
 ```
-The first argument is `whichEst`, where the user inputs the causal estimand of interest. It must be one of the four `RR_tot`, `RD_tot`, `RR_sub` or `RD_sub`. Second, the argument `Vval` takes the matrix for *V* as input. The first column contains the values that *V* can take, and the second column contains the corresponding probabilities. In this example, *V* is binary, so the first two elements in the matrix are 1 and 0. However, any discrete *V* can be used. An approximation of a continuous *V* can be used, if it is discretized. The third argument is `Uval`, which takes the matrix for *U* as input. The matrix *U* has a similar structure as *V*. The fourth argument is `Tcoef`, containing the coefficients used in the model for *T*. The first entry in `Tcoef` is the intercept of the model, and the second the slope for *V*. The fifth argument is `Ycoef`, containing the coefficient vector for the outcome model, where the first entry is the intercept, the second the slope coefficient for *T* and third is the slope coefficient for *U*. The sixth argument is `Scoef`. `Scoef` is the coefficient matrix for the selection variables. The number of rows is equal to the number of selection variables, and the number of columns is equal to four. The columns represent the intercept, and slope coefficients for *V*, *U* and *T*, respectively. A summary of the code notation is seen in the last column of Table 3. The seventh argument is `Mmodel`, which indicates whether the models in the M-structure are probit (`Mmodel = "P"`)  or logit (`Mmodel = "L"`). The eighth and ninth arguments are `pY1_T1_S1` and `pY1_T0_S1`. They are the observed probabilities $P(Y=1|T=1,I_S=1)$ and $P(Y=1|T=0,I_S=1)$. The output is the sensitivity parameters for SV bound and an indicator stating if the bias is negative and the coding for the treatment has been reversed.
+The first argument is `whichEst`, where the user inputs the causal estimand of
+interest. It must be one of the four `"RR_tot"`, `"RD_tot"`, `"RR_sub"` or 
+`"RD_sub"`. The second argument is `whichBound`, where the user inputs the bound
+they want to use, either `"SV"` or `"GAF"`. Third, the argument `Vval` takes the
+matrix for *V* as input. The first column contains the values that *V* can take,
+and the second column contains the corresponding probabilities. In this example,
+*V* is binary, so the first two elements in the matrix are 1 and 0. However, any
+discrete *V* can be used. An approximation of a continuous *V* can be used, if
+it is discretized. The fourth argument is `Uval`, which takes the matrix for *U*
+as input. The matrix *U* has a similar structure as *V*. The fifth argument is
+`Tcoef`, containing the coefficients used in the model for *T*. The first entry
+in `Tcoef` is the intercept of the model, and the second the slope for *V*. The
+sixth argument is `Ycoef`, containing the coefficient vector for the outcome
+model, where the first entry is the intercept, the second the slope coefficient
+for *T* and third is the slope coefficient for *U*. The seventh argument is
+`Scoef`. `Scoef` is the coefficient matrix for the selection variables. The
+number of rows is equal to the number of selection variables, and the number of
+columns is equal to four. The columns represent the intercept, and slope
+coefficients for *V*, *U* and *T*, respectively. A summary of the code notation
+is seen in the last column of Table 3. The eighth argument is `Mmodel`, which
+indicates whether the models in the M-structure are probit (`Mmodel = "P"`) or
+logit (`Mmodel = "L"`). The ninth and tenth arguments are `pY1_T1_S1` and
+`pY1_T0_S1`. They are the observed probabilities $P(Y=1|T=1,I_S=1)$ and
+$P(Y=1|T=0,I_S=1)$. The output is the sensitivity parameters for the chosen 
+bound and, for the SV bound, an indicator stating if the bias is negative and 
+the coding for the treatment has been reversed.
 
-In the zika example, the estimand of interest is the relative risk in the subpopulation, `whichEst = RR_sub`, the DGP is found in Table 1, logistic models are used in the DGP and the probabilities are found in Table 4.The output is $RR_{TU|S=1}=2.33$ and $RR_{UY|S=1}=2.71$, which gives $BF_U=1.56$, and the treatment coding is reversed.
+In the zika example, the estimand of interest is the relative risk in the
+total population, `whichEst = "RR_tot"`, the DGP is found in Table 1, logistic
+models are used in the DGP and the probabilities are found in Table 4. For the
+SV bound, the output is $RR_{UY|T=1}=2.71$, $RR_{UY|T=0}=1.94$, 
+$RR_{SU|T=1}=1.80$, and $RR_{SU|T=0}=2.00$, which gives $BF_1=1.39$ and 
+$BF_0=1.32$, and the treatment coding is reversed. For the GAF bound, the output
+is $M_T=0.4502$ and $m_T=0.002$.
 
 ## `SVbound()`
 
-The SV bound can be calculated using the function `SVbound()`. The first argument is `whichEst`, indicating the causal estimand of interest (`RR_tot`, `RD_tot`, `RR_sub` or `RD_sub`). The subsequent arguments are the sensitivity parameters provided by the user. The default value for all sensitivity parameters are `NULL`, and the user must then specify numeric values on the sensitivity parameters that are necessary for the bound for the chosen estimand. The sensitivity parameter can either be calculated using `SVboundparametersM()`, or found elsewhere. For sensitivity parameters found elsewhere, `SVbound()` is not restricted to the M-structure. However, the necessary assumptions for the SV bound must still be fulfilled [@smith2019bounding]. The output is the SV bound. The code and output are:
+The SV bound can be calculated using the function `SVbound()`. The first
+argument is `whichEst`, indicating the causal estimand of interest (`"RR_tot"`,
+`"RD_tot"`, `"RR_sub"` or `"RD_sub"`). The second and third arguments are the
+observed conditional probabilities $P(Y=1|T=1,I_S=1)$ and $P(Y=1|T=0,I_S=1)$, 
+which are needed to calculate bounds for the causal estimands and not the 
+selection bias itself. The subsequent arguments are the sensitivity parameters
+provided by the user. The default value for all sensitivity parameters are
+`NULL`, and the user must then specify numeric values on the sensitivity
+parameters that are necessary for the bound for the chosen estimand. The 
+sensitivity parameters can either be calculated using the function
+`sensitivityparametersM()`, or found elsewhere. For sensitivity parameters found
+elsewhere, `SVbound()` is not restricted to the generalized M-structure. 
+However, the necessary assumptions for the SV bound must still be fulfilled
+[@smith2019bounding]. The output is the SV bound. The code and output are:
 ```{r eval = TRUE}
-SVbound(whichEst = "RR_sub",
-        RR_UY_S1 = 2.71,
-        RR_TU_S1 = 2.33)
+SVbound(whichEst = "RR_tot",
+        pY1_T1_S1 = 0.004,
+        pY1_T0_S1 = 0.286,
+        RR_UY_T1 = 2.71,
+        RR_UY_T0 = 1.94,
+        RR_SU_T1 = 1.80,
+        RR_SU_T0 = 2.00)
 ```
-As before in the zika example, the causal estimand is the relative risk in the subpopulation, `whichEst = RR_sub`. The sensitivity parameters are $RR_{UY|S=1}=2.71$ and $RR_{TU|S=1}=2.33$, calculated above in `SVboundparametersM()`, which gives an SV bound equal to 1.56. If the causal estimand is underestimated, the recoding of the treatment must be done manually.
-
-
-## `AFbound()`
-
-The AF bound is calculated using the function `AFbound()`. The first argument is the causal estimand of interest (`RR_tot`, `RD_tot`, `RR_sub` or `RD_sub`). The second argument is `outcome`, where the user inputs the observed numeric vector with the outcome variable. The third argument is `treatment`, where the user inputs the observed treatment vector. The fourth argument is `selection`, where the user can either input the observed selection vector, or the selection probability. The output is the AF bound. The code and output are:
-```{r eval = TRUE}
-attach(zika_learner)
-
-AFbound(whichEst = "RR_sub",
-        outcome = mic_ceph,
-        treatment = 1 - zika,
-        selection = sel_ind)
-```
-Similar to before, `whichEst = "RR_sub"`. Furthermore, the outcome, treatment, and selection are the variables microcephaly, zika and the selection indicator. The coding of the treatment is manually reversed if needed. The output is the AF bound, which is 3.50 in this example.
-
-In the above example, all observations are included in the vectors, even those with $I_S=0$. However, if data is not available for those subjects with $I_S=0$, as could be the case with missing data, one can input the selection probability instead of the vector with the selection indicator variable. In this example, the selection probability is calculated as
-```{r eval = TRUE}
-mean(sel_ind)
-```
-The code and output are:
-```{r eval = TRUE}
-AFbound(whichEst = "RR_sub",
-        outcome = mic_ceph[sel_ind == 1],
-        treatment = 1 - zika[sel_ind == 1], 
-        selection = mean(sel_ind))
-```
-When using the selection probability instead of the selection indicator variable, the other two vectors must be restricted to only include subjects with $I_S=1$. The result is the same for both functions, since, in this example, the selection probability is calculated from the complete dataset.
+As before in the zika example, the causal estimand is the relative risk in the
+total population, `whichEst = "RR_tot"`. The sensitivity parameters are
+$RR_{UY|T=1}=2.71$, $RR_{UY|T=0}=1.94$, $RR_{SU|T=1}=1.80$, and 
+$RR_{SU|T=0}=2.00$, calculated above in `sensitivityparametersM()`, which gives 
+an SV bound equal to 0.01. If the causal estimand is underestimated, the 
+recoding of the treatment must be done manually.
 
 
 ## `SVboundsharp()`
 
-The sharpness of an SV bound can be evaluated using `SVboundsharp()` [@zetterstrom2023Rpackage]. The first argument, `BF_U`, is the value of $BF_U$ which can be calculated using `SVboundparametersM`. The second argument, `pY1_T0_S1`, is the probability $P(Y=1|T=0,I_S=1)$. Next, there are two optional arguments, `SVbound` and `AFbound`. These are not necessary to check if the SV bound is sharp, or if it is inconclusive, but they are necessary if the user wants to check if the bound is *not* sharp. If `SVbound` and `AFbound` are provided, the output is a string stating if the SV bound is sharp, inconclusive or not sharp. However, if they are not provided, the output is a string stating whether the SV bound is sharp or inconclusive. The code and output are:
+The sharpness of an SV bound can be evaluated using `SVboundsharp()` 
+[@zetterstrom2023Rpackage]. However, it is only bounds for the relative risk in 
+the subpopulation that can be sharp. The first argument, `BF_U`, is the value of 
+$BF_U$ which can be calculated using `sensitivityparametersM`. The second 
+argument, `pY1_T0_S1`, is the probability $P(Y=1|T=0,I_S=1)$. The output is a 
+string stating whether the SV bound is sharp or inconclusive. The code and 
+output are:
 ```{r eval = TRUE}
 SVboundsharp(BF_U = 1.56,
-             pY1_T0_S1 = 0.27,
-             SVbound = 1.56,
-             AFbound = 3.5)
+             pY1_T0_S1 = 0.27)
 ```
-In the zika example, $BF_U=1.56$, $P(Y=1|T=0,I_S=1)=0.27$ (calculated from the `zika_learner`), and the SV and AF bounds are 1.56 and 3.5. Note that if the causal estimand is underestimated, the recoding of the treatment has to be done manually. In this setting, the SV bound is sharp. As before, the bias is negative, and we have reversed the coding of the treatment.
+We are actually interested in bounds for the relative risk in the total 
+population in the zika example but to demonstrate the function we check if the 
+bound for the relative risk in the subpopulation is sharp. Thus, $BF_U=1.56$ 
+and $P(Y=1|T=0,I_S=1)=0.27$ (calculated from `sensitivityparametersM()` and the
+`zika_learner`). Note that if the causal estimand is underestimated, the 
+recoding of the treatment has to be done manually. In this setting, the SV bound 
+is sharp. As before, the bias is negative, and we have reversed the coding of 
+the treatment.
+
+
+## `AFbound()`
+
+The AF bound is calculated using the function `AFbound()`. The first argument is
+the causal estimand of interest (`"RR_tot"`, `"RD_tot"`, `"RR_sub"` or
+`"RD_sub"`). The second argument is `outcome`, where the user inputs either the
+observed numeric vector with the outcome variable or a vector with the
+conditional outcome probabilities, $P(Y=1|T=1,I_S=1)$ and $P(Y=1|T=0,I_S=1)$.
+The third argument is `treatment`, where the user inputs either the observed
+numeric vector with the treatment variable or a vector with the conditional 
+treatment probabilities, $P(T=1|I_S=1)$ and $P(T=0|I_S=1)$. The fourth argument
+is `selection` where the user can either input the observed selection vector
+or the selection probability. Its default value is `NULL` since it is only 
+required when the causal estimands in the total population are of interest. If 
+the subpopulation is of interest and `selection = NULL`, the outcome and
+treatment vectors must only include the selected subjects. The output is the 
+lower and upper AF bounds. The code and output are:
+```{r eval = TRUE}
+attach(zika_learner)
+
+AFbound(whichEst = "RR_tot",
+        outcome = mic_ceph[sel_ind == 1],
+        treatment = zika[sel_ind == 1],
+        selection = mean(sel_ind))
+```
+Similar to before, `whichEst = "RR_tot"`. Furthermore, the outcome and treatment
+variables are microcephaly and zika. The selection probability is specified 
+since the other variables are restricted to those subjects with $I_S=1$. The 
+output is the lower and upper AF bounds, which are 0 and 454.09 in the zika example.
+
+If the raw data is not available, one can input the conditional probabilities
+instead. In this example, these probabilities are:
+```{r eval = TRUE}
+AFbound(whichEst = "RR_tot",
+        outcome = c(0.286, 0.004),
+        treatment = c(0.002, 0.998),
+        selection = mean(sel_ind))
+```
+The difference in these two examples comes from rounding errors. Note that the
+treatment does not need to be recoded since there is both a lower and upper
+bound. Please have this in mind when comparing the bounds to the SV bound.
+
+
+## `GAFbound()`
+
+The GAF bound is calculated using the function `GAFbound()`. The first argument
+is the causal estimand of interest (`"RR_tot"`, `"RD_tot"`, `"RR_sub"` or
+`"RD_sub"`). The second and third arguments are `M` and `m` which are the two
+sensitivity parameters for the GAF bound. The sensitivity parameters can either
+be calculated using `sensitivityparametersM()`, or found elsewhere.
+For sensitivity parameters found elsewhere, `GAFbound()` is not restricted to 
+the generalized M-structure. However, the necessary assumptions for the GAF 
+bound must still be fulfilled [@zetterstrom2024]. The fourth argument is 
+`outcome`, where the user inputs either the observed numeric vector with the 
+outcome variable or a vector with the conditional outcome probabilities, 
+$P(Y=1|T=1,I_S=1)$ and $P(Y=1|T=0,I_S=1)$. The fifth argument is `treatment`, 
+where the user inputs either the observed numeric vector with the treatment 
+variable or a vector with the conditional treatment probabilities, 
+$P(T=1|I_S=1)$ and $P(T=0|I_S=1)$. The sixth argument is `selection` where the 
+user can either input the observed selection vector or selection probability. 
+Its default value is `NULL` since it is only required when the causal estimands 
+in the total population are of interest. If the subpopulation is of interest and 
+`selection = NULL`, the outcome and treatment vectors must only include the 
+selected subjects. The output is the lower and upper GAF bounds. The code and 
+output are:
+```{r eval = TRUE}
+GAFbound(whichEst = "RR_tot",
+         M = 0.4502,
+         m = 0.002, 
+         outcome = mic_ceph[sel_ind == 1],
+         treatment = zika[sel_ind == 1],
+         selection = mean(sel_ind))
+```
+Similar to before, `whichEst = "RR_tot"`. The sensitivity parameters are the 
+output from `sensitivityparametersM()`. Furthermore, the outcome and treatment
+variables are microcephaly and zika. The selection probability is specified 
+since the other variables are restricted to those subjects with $I_S=1$. The 
+output is the lower and upper GAF bounds, which are 0.01 and 147.42 in the 
+zika example.
+
+If the raw data is not available, one can input the conditional probabilities
+instead, similar to the AF bound. Note that the treatment does not need to be
+recoded since there is both a lower and upper bound. Please have this in mind
+when comparing the bounds to the SV bound.
+
+
+## `CAFbound()`
+
+The CAF bound is calculated using the function `CAFbound()`. The first argument
+is the causal estimand of interest (`"RR_tot"`, `"RD_tot"`, `"RR_sub"` or
+`"RD_sub"`). The second and third arguments are `M` and `m` which are the two
+sensitivity parameters for the CAF bound. The fourth argument is `outcome`,
+where the user inputs either the observed numeric vector with the outcome
+variable or a vector with the conditional outcome probabilities,
+$P(Y=1|T=1,I_S=1)$ and $P(Y=1|T=0,I_S=1)$. The fifth argument is `treatment`,
+where the user inputs either the observed numeric vector with the treatment
+variable or a vector with the conditional treatment probabilities, 
+$P(T=1|I_S=1)$ and $P(T=0|I_S=1)$. The sixth argument is `selection` where the
+user can either input the observed selection vector or selection probability.
+Its default value is `NULL` since it is only required when the causal estimands
+in the total population are of interest. If the subpopulation is of interest and
+`selection = NULL`, the outcome and treatment vectors must only include the
+selected subjects. The output is the lower and upper CAF bounds. The code and
+output are:
+```{r eval = TRUE}
+CAFbound(whichEst = "RR_tot",
+         M = 0.3,
+         m = 0.005, 
+         outcome = c(0.286, 0.004),
+         treatment = c(0.002, 0.998),
+         selection = mean(sel_ind))
+```
+Similar to before, `whichEst = "RR_tot"`. The sensitivity parameters are chosen 
+by the user. Furthermore, the outcome and treatment variables are microcephaly 
+and zika. The selection probability is specified since other variables are 
+restricted to those subjects with $I_S=1$. The output is the lower and upper 
+CAF bounds, which are 0.04 and 67.78 in the zika example.
+
+If the raw data is not available, one can input the conditional probabilities
+instead, similar to the AF and GAF bounds. Note that the treatment does not need
+to be recoded since there is both a lower and upper bound. Please have this in
+mind when comparing the bounds to the SV bound.
+
 
 # References
