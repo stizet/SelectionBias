@@ -1,3 +1,5 @@
+# SelectionBias (development version)
+
 # SelectionBias 2.0.0
 
 * SVboundparametersM() will be deprecated and is replaced by sensitivityparametersM()
